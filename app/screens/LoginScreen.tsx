@@ -17,7 +17,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [attemptsCount, setAttemptsCount] = useState(0)
   const {
-    authenticationStore: { authEmail, setAuthEmail, setAuthToken, validationError },
+    authenticationStore: { authEmail, setAuthEmail, setAuthToken, distributeAuthToken, validationError },
   } = useStores()
 
   const {
@@ -53,7 +53,10 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
     setAuthEmail("")
 
     // We'll mock this with a fake token.
-    setAuthToken(String(Date.now()))
+    let token = String(Date.now())
+
+    setAuthToken(token)
+    distributeAuthToken(token)
   }
 
   const PasswordRightAccessory: ComponentType<TextFieldAccessoryProps> = useMemo(

@@ -1,4 +1,5 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { api } from "@/services/api"
 
 export const AuthenticationStoreModel = types
   .model("AuthenticationStore")
@@ -24,6 +25,10 @@ export const AuthenticationStoreModel = types
     },
     setAuthEmail(value: string) {
       store.authEmail = value.replace(/ /g, "")
+    },
+    distributeAuthToken(value?: string) {
+      const token = value || store.authToken;
+      api.apisauce.setHeader("API_KEY", `${token}`);
     },
     logout() {
       store.authToken = undefined
