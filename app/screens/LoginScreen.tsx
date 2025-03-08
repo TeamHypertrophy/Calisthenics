@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite"
 import { ComponentType, FC, useEffect, useMemo, useRef, useState } from "react"
-import { TextInput, TextStyle, ViewStyle } from "react-native"
-import { Button, Icon, Screen, Text, TextField, TextFieldAccessoryProps } from "../components"
+import { TextInput, TextStyle, ViewStyle, ImageStyle } from "react-native"
+import { AutoImage, Button, Icon, Screen, Text, TextField, TextFieldAccessoryProps } from "../components"
 import { useStores } from "../models"
 import { AppStackScreenProps } from "../navigators"
 import type { ThemedStyle } from "@/theme"
@@ -11,6 +11,7 @@ interface LoginScreenProps extends AppStackScreenProps<"Login"> {}
 
 export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_props) {
   const authPasswordInput = useRef<TextInput>(null)
+  const { navigation } = _props
 
   const [authPassword, setAuthPassword] = useState("")
   const [isAuthPasswordHidden, setIsAuthPasswordHidden] = useState(true)
@@ -57,6 +58,14 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
 
     setAuthToken(token)
     distributeAuthToken(token)
+
+    let mfa = true
+
+    if (mfa == true) {
+      navigation.navigate("MFA")
+    } else {
+      navigation.navigate("Home", { screen: "Main" })
+    }
   }
 
   const PasswordRightAccessory: ComponentType<TextFieldAccessoryProps> = useMemo(
@@ -82,6 +91,9 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       safeAreaEdges={["top", "bottom"]}
     >
       <Text testID="login-heading" tx="loginScreen:logIn" preset="heading" style={themed($logIn)} />
+
+      <AutoImage source={{ uri: "https://files.catbox.moe/025e3m.png"}} maxHeight={200} maxWidth={200} style={themed($loginLogo)}/>
+
       <Text tx="loginScreen:enterDetails" preset="subheading" style={themed($enterDetails)} />
       {attemptsCount > 2 && (
         <Text tx="loginScreen:hint" size="sm" weight="light" style={themed($hint)} />
@@ -135,10 +147,19 @@ const $screenContentContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 
 const $logIn: ThemedStyle<TextStyle> = ({ spacing }) => ({
   marginBottom: spacing.sm,
+  textAlign: "center",
+})
+
+const $loginLogo: ThemedStyle<ImageStyle> = ({ spacing }) => ({
+  marginBottom: spacing.sm,
+  overflow: "hidden",
+  borderRadius: 25,
+  margin: "auto"
 })
 
 const $enterDetails: ThemedStyle<TextStyle> = ({ spacing }) => ({
   marginBottom: spacing.lg,
+  textAlign: "center",
 })
 
 const $hint: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({

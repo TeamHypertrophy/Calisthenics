@@ -1,38 +1,38 @@
 const palette = {
-  neutral100: "#FFFFFF",
-  neutral200: "#F4F2F1",
-  neutral300: "#D7CEC9",
-  neutral400: "#B6ACA6",
-  neutral500: "#978F8A",
-  neutral600: "#564E4A",
-  neutral700: "#3C3836",
-  neutral800: "#191015",
-  neutral900: "#000000",
+  neutral100: "#FFFFFF", // White
+  neutral200: "#F8F9FA", // Off-white background
+  neutral300: "#E9ECEF", // Light gray
+  neutral400: "#CED4DA", // Mid-light gray
+  neutral500: "#ADB5BD", // Medium gray
+  neutral600: "#6C757D", // Medium-dark gray
+  neutral700: "#343A40", // Dark gray
+  neutral800: "#212529", // Near black
+  neutral900: "#000000", // Black
 
-  primary100: "#F4E0D9",
-  primary200: "#E8C1B4",
-  primary300: "#DDA28E",
-  primary400: "#D28468",
-  primary500: "#C76542",
-  primary600: "#A54F31",
+  primary100: "#E6F0FF", // Lightest blue
+  primary200: "#CCE0FF", // Lighter blue
+  primary300: "#99C2FF", // Light blue
+  primary400: "#6699FF", // Medium blue
+  primary500: "#0A3977", // Dark blue (main brand color)
+  primary600: "#062856", // Darker blue
 
-  secondary100: "#DCDDE9",
-  secondary200: "#BCC0D6",
-  secondary300: "#9196B9",
-  secondary400: "#626894",
-  secondary500: "#41476E",
+  secondary100: "#F8F9FA", // Light background
+  secondary200: "#E9ECEF", // Light alternate
+  secondary300: "#DEE2E6", // Mid-light alternate
+  secondary400: "#212529", // Dark alternate
+  secondary500: "#0A3977", // Dark blue accent
 
-  accent100: "#FFEED4",
-  accent200: "#FFE1B2",
-  accent300: "#FDD495",
-  accent400: "#FBC878",
-  accent500: "#FFBB50",
+  accent100: "#E6F0FF", // Light accent
+  accent200: "#CCE0FF", // Medium-light accent
+  accent300: "#99C2FF", // Medium accent
+  accent400: "#6699FF", // Strong accent
+  accent500: "#0A3977", // Main accent (dark blue)
 
-  angry100: "#F2D6CD",
-  angry500: "#C03403",
+  angry100: "#FEE2E2", // Light error
+  angry500: "#DC2626", // Error color
 
-  overlay20: "rgba(25, 16, 21, 0.2)",
-  overlay50: "rgba(25, 16, 21, 0.5)",
+  overlay20: "rgba(0, 0, 0, 0.2)",
+  overlay50: "rgba(0, 0, 0, 0.5)",
 } as const
 
 export const colors = {

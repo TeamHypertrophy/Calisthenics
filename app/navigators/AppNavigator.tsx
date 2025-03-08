@@ -38,6 +38,8 @@ export type AppStackParamList = {
 	Main: undefined
 	Trainer: undefined
 	TrainerAnnouncement: undefined
+	Settings: undefined
+	MFA: undefined
 	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
 
@@ -90,6 +92,8 @@ const AppStack = observer(function AppStack() {
       {/** 🔥 Your screens go here */}
 			<Stack.Screen name="Trainer" component={Screens.TrainerScreen} />
 			<Stack.Screen name="TrainerAnnouncement" component={Screens.TrainerAnnouncementScreen} />
+			<Stack.Screen name="Settings" component={Screens.SettingsScreen} />
+			<Stack.Screen name="MFA" component={Screens.MfaScreen} />
 			{/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>
   )

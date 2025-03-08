@@ -24,7 +24,7 @@ export const WelcomeScreen: FC<WelcomeScreenProps> = observer(function WelcomeSc
   } = useStores()
 
   function goNext() {
-    navigation.navigate("Home", { screen: "Profile"})
+    navigation.navigate("Home", { screen: "Main"})
   }
 
   useHeader(

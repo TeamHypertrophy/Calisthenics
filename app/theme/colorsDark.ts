@@ -1,38 +1,38 @@
 const palette = {
-  neutral900: "#FFFFFF",
-  neutral800: "#F4F2F1",
-  neutral700: "#D7CEC9",
-  neutral600: "#B6ACA6",
-  neutral500: "#978F8A",
-  neutral400: "#564E4A",
-  neutral300: "#3C3836",
-  neutral200: "#191015",
-  neutral100: "#000000",
+  neutral100: "#121212", // Near black (background)
+  neutral200: "#1E1E1E", // Dark background
+  neutral300: "#2C2C2C", // Light-dark gray
+  neutral400: "#3D3D3D", // Mid-dark gray
+  neutral500: "#505050", // Medium gray
+  neutral600: "#8F8F8F", // Medium-light gray
+  neutral700: "#BDBDBD", // Light gray
+  neutral800: "#E0E0E0", // Very light gray
+  neutral900: "#FFFFFF", // White
 
-  primary600: "#F4E0D9",
-  primary500: "#E8C1B4",
-  primary400: "#DDA28E",
-  primary300: "#D28468",
-  primary200: "#C76542",
-  primary100: "#A54F31",
+  primary100: "#0A1E3B", // Darkest blue
+  primary200: "#0F2D59", // Darker blue
+  primary300: "#154077", // Dark blue
+  primary400: "#1E5099", // Medium blue
+  primary500: "#0A3977", // Main brand blue
+  primary600: "#3A75B9", // Lighter blue accent
 
-  secondary500: "#DCDDE9",
-  secondary400: "#BCC0D6",
-  secondary300: "#9196B9",
-  secondary200: "#626894",
-  secondary100: "#41476E",
+  secondary100: "#121212", // Dark background
+  secondary200: "#1E1E1E", // Dark alternate
+  secondary300: "#2C2C2C", // Mid-dark alternate
+  secondary400: "#E0E0E0", // Light alternate
+  secondary500: "#0A3977", // Dark blue accent
 
-  accent500: "#FFEED4",
-  accent400: "#FFE1B2",
-  accent300: "#FDD495",
-  accent200: "#FBC878",
-  accent100: "#FFBB50",
+  accent100: "#0A1E3B", // Dark accent
+  accent200: "#0F2D59", // Medium-dark accent
+  accent300: "#154077", // Medium accent
+  accent400: "#1E5099", // Medium-light accent
+  accent500: "#0A3977", // Main accent (dark blue)
 
-  angry100: "#F2D6CD",
-  angry500: "#C03403",
+  angry100: "#2C1212", // Dark error background
+  angry500: "#E53E3E", // Bright error color
 
-  overlay20: "rgba(25, 16, 21, 0.2)",
-  overlay50: "rgba(25, 16, 21, 0.5)",
+  overlay20: "rgba(255, 255, 255, 0.2)",
+  overlay50: "rgba(255, 255, 255, 0.5)",
 } as const
 
 export const colors = {
