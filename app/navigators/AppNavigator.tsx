@@ -29,18 +29,18 @@ import { ComponentProps } from "react"
  *   https://reactnavigation.org/docs/typescript/#organizing-types
  */
 export type AppStackParamList = {
-  Welcome: undefined
   Login: undefined
   Home: NavigatorScreenParams<HomeTabParamList>
   // 🔥 Your screens go here
   Profile: undefined
   Logs: undefined
-	Main: undefined
-	Trainer: undefined
-	TrainerAnnouncement: undefined
-	Settings: undefined
-	MFA: undefined
-	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+  Main: undefined
+  Trainer: undefined
+  TrainerAnnouncement: undefined
+  Settings: undefined
+  MFA: undefined
+  Signup: undefined
+  // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
 
 /**
@@ -75,12 +75,10 @@ const AppStack = observer(function AppStack() {
           backgroundColor: colors.background,
         },
       }}
-      initialRouteName={isAuthenticated ? "Welcome" : "Login"}
+      initialRouteName={isAuthenticated ? "Home" : "Login"}
     >
       {isAuthenticated ? (
         <>
-          <Stack.Screen name="Welcome" component={Screens.WelcomeScreen} />
-
           <Stack.Screen name="Home" component={HomeNavigator} />
         </>
       ) : (
@@ -90,11 +88,15 @@ const AppStack = observer(function AppStack() {
       )}
 
       {/** 🔥 Your screens go here */}
-			<Stack.Screen name="Trainer" component={Screens.TrainerScreen} />
-			<Stack.Screen name="TrainerAnnouncement" component={Screens.TrainerAnnouncementScreen} />
-			<Stack.Screen name="Settings" component={Screens.SettingsScreen} />
-			<Stack.Screen name="MFA" component={Screens.MfaScreen} />
-			{/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
+      <Stack.Screen name="Main" component={Screens.MainScreen} />
+      <Stack.Screen name="Profile" component={Screens.ProfileScreen} />
+      <Stack.Screen name="Logs" component={Screens.LogsScreen} />
+      <Stack.Screen name="Trainer" component={Screens.TrainerScreen} />
+      <Stack.Screen name="TrainerAnnouncement" component={Screens.TrainerAnnouncementScreen} />
+      <Stack.Screen name="Settings" component={Screens.SettingsScreen} />
+      <Stack.Screen name="MFA" component={Screens.MfaScreen} />
+      <Stack.Screen name="Signup" component={Screens.SignupScreen} />
+      {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>
   )
 })

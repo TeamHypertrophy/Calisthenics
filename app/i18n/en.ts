@@ -32,11 +32,10 @@ const en = {
   },
   loginScreen: {
     logIn: "Hypertrophy",
-    enterDetails:
-      "Enter Your 📧 and 🔏",
-    emailFieldLabel: "Email",
+    enterDetails: "Enter Your 👤 and 🔏",
+    emailFieldLabel: "Username",
     passwordFieldLabel: "Password",
-    emailFieldPlaceholder: "Enter your email address",
+    emailFieldPlaceholder: "Enter your username",
     passwordFieldPlaceholder: "Super secret password here",
     tapToLogIn: "Login",
     hint: "Hint: you can use any email address and your favorite password :)",
@@ -45,7 +44,7 @@ const en = {
     profileTab: "Profile",
     logsTab: "Logs",
     mainTab: "Main",
-    trainerTab: "Trainers"
+    trainerTab: "Trainers",
   },
 }
 

@@ -1,5 +1,5 @@
 import { FC } from "react"
-import { observer } from "mobx-react-lite" 
+import { observer } from "mobx-react-lite"
 import { View, ViewStyle } from "react-native"
 import { $styles } from "@/theme"
 import { AppStackScreenProps } from "@/navigators"
@@ -12,33 +12,35 @@ import { useAppTheme } from "@/utils/useAppTheme"
 
 export const ProfileScreen: FC<HomeTabScreenProps<"Profile">> = observer(
   function ProfileScreen(_props) {
-  
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
-  const {
-    authenticationStore: { logout },
-  } = useStores()
-  
-  const {
+    // Pull in one of our MST stores
+    // const { someStore, anotherStore } = useStores()
+    const {
+      authenticationStore: { logout },
+    } = useStores()
+
+    const {
       themed,
       theme: { colors },
-  } = useAppTheme()
+    } = useAppTheme()
 
+    // Pull in navigation via hook
+    // const navigation = useNavigation()
+    return (
+      <Screen
+        style={$root}
+        preset="auto"
+        safeAreaEdges={["top"]}
+        contentContainerStyle={themed($screenContentContainer)}
+      >
+        <Text text="Profile" preset="heading" />
 
-  // Pull in navigation via hook
-  // const navigation = useNavigation()
-  return (
-    <Screen style={$root} preset="fixed" safeAreaEdges={["top"]} contentContainerStyle={themed($screenContentContainer)}>
-      <Text text="Profile" preset="heading" />
-
-      <View style={themed($buttonContainer)}>
-        <Button style={themed($button)} tx="common:logOut" onPress={logout} />
-      </View>
-
-    </Screen>
-  )
-
-})
+        <View style={themed($buttonContainer)}>
+          <Button style={themed($button)} tx="common:logOut" onPress={logout} />
+        </View>
+      </Screen>
+    )
+  },
+)
 
 const $root: ViewStyle = {
   flex: 1,

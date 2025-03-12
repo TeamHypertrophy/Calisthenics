@@ -97,8 +97,6 @@ export function HomeNavigator() {
           ),
         }}
       />
-
-
     </Tab.Navigator>
   )
 }

@@ -1,11 +1,21 @@
 import { observer } from "mobx-react-lite"
 import { ComponentType, FC, useEffect, useMemo, useRef, useState } from "react"
 import { TextInput, TextStyle, ViewStyle, ImageStyle } from "react-native"
-import { AutoImage, Button, Icon, Screen, Text, TextField, TextFieldAccessoryProps } from "../components"
-import { useStores } from "../models"
-import { AppStackScreenProps } from "../navigators"
+import {
+  AutoImage,
+  Button,
+  Icon,
+  Screen,
+  Text,
+  TextField,
+  TextFieldAccessoryProps,
+} from "../../components"
+import { setupRootStore, useStores } from "../../models"
+import { AppStackScreenProps } from "../../navigators"
 import type { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
+import { api } from "@/services/api"
+import { loadString, saveString } from "@/utils/storage"
 
 interface LoginScreenProps extends AppStackScreenProps<"Login"> {}
 
@@ -14,11 +24,19 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
   const { navigation } = _props
 
   const [authPassword, setAuthPassword] = useState("")
+  const [loginError, setLoginError] = useState("")
   const [isAuthPasswordHidden, setIsAuthPasswordHidden] = useState(true)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [attemptsCount, setAttemptsCount] = useState(0)
   const {
-    authenticationStore: { authEmail, setAuthEmail, setAuthToken, distributeAuthToken, validationError },
+    authenticationStore: {
+      authUsername,
+      setAuthUsername,
+      setAuthToken,
+      distributeAuthToken,
+      setUserID,
+      validationError,
+    },
   } = useStores()
 
   const {
@@ -27,45 +45,55 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
   } = useAppTheme()
 
   useEffect(() => {
-    // Here is where you could fetch credentials from keychain or storage
-    // and pre-fill the form fields.
-    setAuthEmail("ignite@infinite.red")
-    setAuthPassword("ign1teIsAwes0m3")
+    setAuthUsername(loadString("authUsername") || "")
+    setAuthPassword(loadString("authPassword") || "")
 
-    // Return a "cleanup" function that React will run when the component unmounts
     return () => {
       setAuthPassword("")
-      setAuthEmail("")
+      setAuthUsername("")
     }
-  }, [setAuthEmail])
+  }, [setAuthUsername])
 
   const error = isSubmitted ? validationError : ""
 
-  function login() {
+  async function login() {
     setIsSubmitted(true)
     setAttemptsCount(attemptsCount + 1)
 
     if (validationError) return
 
-    // Make a request to your server to get an authentication token.
-    // If successful, reset the fields and set the token.
+    const login_res = await api.login(authUsername, authPassword)
+
+    saveString("authUsername", authUsername)
+    saveString("authPassword", authPassword)
+
+    if (!login_res.ok) {
+      setLoginError("Internal Error, Try Again")
+      return
+    }
+
+    if (login_res.status == 401) {
+      setLoginError("Invalid Email or Password")
+      return
+    }
+
+    if (!login_res.data?.user_id) {
+      setLoginError("Could Not Find User ID")
+      return
+    } else {
+      setUserID(login_res.data?.user_id)
+    }
+
+    if (login_res.data?.message == "MFA Code Required & Sent") {
+      navigation.navigate("MFA")
+    }
+
     setIsSubmitted(false)
     setAuthPassword("")
-    setAuthEmail("")
+    setAuthUsername("")
 
-    // We'll mock this with a fake token.
-    let token = String(Date.now())
-
-    setAuthToken(token)
-    distributeAuthToken(token)
-
-    let mfa = true
-
-    if (mfa == true) {
-      navigation.navigate("MFA")
-    } else {
-      navigation.navigate("Home", { screen: "Main" })
-    }
+    setAuthToken(login_res.data?.api_key)
+    distributeAuthToken(login_res.data?.api_key)
   }
 
   const PasswordRightAccessory: ComponentType<TextFieldAccessoryProps> = useMemo(
@@ -92,7 +120,12 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
     >
       <Text testID="login-heading" tx="loginScreen:logIn" preset="heading" style={themed($logIn)} />
 
-      <AutoImage source={{ uri: "https://files.catbox.moe/025e3m.png"}} maxHeight={200} maxWidth={200} style={themed($loginLogo)}/>
+      <AutoImage
+        source={{ uri: "https://files.catbox.moe/025e3m.png" }}
+        maxHeight={200}
+        maxWidth={200}
+        style={themed($loginLogo)}
+      />
 
       <Text tx="loginScreen:enterDetails" preset="subheading" style={themed($enterDetails)} />
       {attemptsCount > 2 && (
@@ -100,13 +133,13 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       )}
 
       <TextField
-        value={authEmail}
-        onChangeText={setAuthEmail}
+        value={authUsername}
+        onChangeText={setAuthUsername}
         containerStyle={themed($textField)}
         autoCapitalize="none"
-        autoComplete="email"
+        autoComplete="username"
         autoCorrect={false}
-        keyboardType="email-address"
+        keyboardType="default"
         labelTx="loginScreen:emailFieldLabel"
         placeholderTx="loginScreen:emailFieldPlaceholder"
         helper={error}
@@ -129,6 +162,15 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         RightAccessory={PasswordRightAccessory}
       />
 
+      <Text
+        text="New To Hypertrophy?"
+        style={themed($signUpText)}
+        onPress={() => navigation.navigate("Signup")}
+      />
+
+      {loginError ? (
+        <Text text={loginError} style={themed($errorText)} preset="formHelper" />
+      ) : null}
       <Button
         testID="login-button"
         tx="loginScreen:tapToLogIn"
@@ -154,7 +196,15 @@ const $loginLogo: ThemedStyle<ImageStyle> = ({ spacing }) => ({
   marginBottom: spacing.sm,
   overflow: "hidden",
   borderRadius: 25,
-  margin: "auto"
+  margin: "auto",
+})
+
+const $signUpText: ThemedStyle<TextStyle> = ({ spacing, colors }) => ({
+  textAlign: "left",
+  fontWeight: "normal",
+  fontSize: 15,
+  color: colors.textDim,
+  textDecorationLine: "underline",
 })
 
 const $enterDetails: ThemedStyle<TextStyle> = ({ spacing }) => ({
@@ -173,4 +223,10 @@ const $textField: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 
 const $tapButton: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   marginTop: spacing.xs,
+})
+
+const $errorText: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
+  color: colors.error,
+  marginBottom: spacing.md,
+  textAlign: "center",
 })

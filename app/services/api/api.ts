@@ -8,7 +8,7 @@
 import { ApiResponse, ApisauceInstance, create } from "apisauce"
 import Config from "../../config"
 import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
-import type { ApiConfig } from "./api.types"
+import type { ApiConfig, LoginResponse, MFACheckResponse, SignupResponse } from "./api.types"
 
 /**
  * Configuring the apisauce instance.
@@ -25,11 +25,13 @@ export const DEFAULT_API_CONFIG: ApiConfig = {
 export class Api {
   apisauce: ApisauceInstance
   config: ApiConfig
+  user_id: string
 
   /**
    * Set up our API instance. Keep this lightweight!
    */
   constructor(config: ApiConfig = DEFAULT_API_CONFIG) {
+    this.user_id = ""
     this.config = config
     this.apisauce = create({
       baseURL: this.config.url,
@@ -38,6 +40,34 @@ export class Api {
         Accept: "application/json",
       },
     })
+  }
+
+  async validateMFA(code: string): Promise<ApiResponse<MFACheckResponse>> {
+    const response: ApiResponse<MFACheckResponse> = await this.apisauce.get(
+      `/users/mfa/check/${code}?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async login(username: string, password: string): Promise<ApiResponse<LoginResponse>> {
+    const response: ApiResponse<LoginResponse> = await this.apisauce.post("/users/login", {
+      username,
+      password,
+    })
+    return response
+  }
+
+  async signup(
+    username: string,
+    email: string,
+    password: string,
+  ): Promise<ApiResponse<SignupResponse>> {
+    const response: ApiResponse<SignupResponse> = await this.apisauce.post("/users/signup", {
+      username,
+      email,
+      password,
+    })
+    return response
   }
 }
 

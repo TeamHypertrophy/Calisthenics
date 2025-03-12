@@ -13,7 +13,7 @@ const fallbackLocale = "en-US"
 
 const systemLocales = Localization.getLocales()
 
-const resources = { en, es, fr}
+const resources = { en, es, fr }
 const supportedTags = Object.keys(resources)
 
 // Checks to see if the device locale matches any of the supported locales
@@ -29,7 +29,7 @@ const pickSupportedLocale: () => Localization.Locale | undefined = () => {
 
 const locale = pickSupportedLocale()
 
-export let isRTL = false
+export const isRTL = false
 
 I18nManager.allowRTL(isRTL)
 I18nManager.forceRTL(isRTL)

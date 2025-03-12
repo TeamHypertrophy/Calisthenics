@@ -48,7 +48,7 @@ const es: Translations = {
     profileTab: "Profiles",
     logsTab: "Logs",
     mainTab: "Main",
-    trainerTab: "Trainers"
+    trainerTab: "Trainers",
   },
 }
 
