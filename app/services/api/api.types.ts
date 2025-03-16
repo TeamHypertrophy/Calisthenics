@@ -18,7 +18,7 @@ export interface ApiConfig {
  * API endpoint, assuming it's a JSON object like we have.
  */
 
-export type ActivityLevel = "light" | "moderate" | "veryextremely"
+export type ActivityLevel = "light" | "moderate" | "very" | "extremely"
 export type Diet = "anything" | "keto" | "vegan" | "vegetarian"
 export type Difficulty = "advanced" | "beginner" | "intermediate"
 export type Equipment =
@@ -126,25 +126,25 @@ export interface ExerciseLog {
 }
 
 export interface Profile {
-  profile_id?: number
+  profile_id: number
   user_id: string
   first_name: string
   last_name: string
   age: number
-  weight?: number
-  height?: number
+  weight: number
+  height: number
   gender: Gender
-  preferred_weight_unit?: PreferredWeight
-  preferred_height_unit?: PreferredHeight
-  public?: boolean
-  bio?: string
-  streak?: number
-  avatar_url?: string
-  activity_level?: ActivityLevel
-  fitness_goal?: FitnessGoal
-  diet?: Diet
-  created_at?: Date
-  updated_at?: Date
+  preferred_weight_unit: PreferredWeight
+  preferred_height_unit: PreferredHeight
+  public: boolean
+  bio: string
+  streak: number
+  avatar_url: string
+  activity_level: ActivityLevel
+  fitness_goal: FitnessGoal
+  diet: Diet
+  created_at: Date
+  updated_at: Date
 }
 
 export interface ProteinLog {
@@ -191,7 +191,7 @@ export interface User {
   username: string
   password: string
   email: string
-  email_verified?: boolean
+  email_verified: boolean
   email_verified_at?: Date | null
   email_verification_token?: string
   mfa_enabled?: boolean

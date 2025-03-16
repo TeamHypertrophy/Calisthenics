@@ -43,6 +43,7 @@ export const SignupScreen: FC<SignupScreenProps> = observer(function SignupScree
       setAuthToken,
       distributeAuthToken,
       setUserID,
+      setUserData,
       validationError,
     },
   } = useStores()
@@ -98,6 +99,20 @@ export const SignupScreen: FC<SignupScreenProps> = observer(function SignupScree
 
     if (signup_res.status == 401) {
       setLoginError("Invalid Email")
+      return
+    }
+
+    if (!signup_res.data?.user.user_id) {
+      setLoginError("Could Not Find User ID")
+      return
+    } else {
+      setUserID(signup_res.data?.user.user_id)
+    }
+
+    if (signup_res.data?.user) {
+      setUserData(signup_res.data.user)
+    } else {
+      setLoginError("Internal Error Setting User Data")
       return
     }
 

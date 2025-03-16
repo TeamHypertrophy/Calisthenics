@@ -8,7 +8,8 @@
 import { ApiResponse, ApisauceInstance, create } from "apisauce"
 import Config from "../../config"
 import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
-import type { ApiConfig, LoginResponse, MFACheckResponse, SignupResponse } from "./api.types"
+import type { ApiConfig, LoginResponse, MFACheckResponse, SignupResponse, Profile } from "./api.types"
+import { loadString } from "@/utils/storage"
 
 /**
  * Configuring the apisauce instance.
@@ -40,6 +41,42 @@ export class Api {
         Accept: "application/json",
       },
     })
+
+    this.setupFromStorage()
+  }
+
+  setupFromStorage() {
+    try {
+      // Load user_id from storage
+      const userId = loadString("userID")
+      if (userId) {
+        this.user_id = userId
+      }
+      
+      // Load API key from storage
+      const apiKey = loadString("API_KEY")
+      if (apiKey) {
+        this.setApiKey(apiKey)
+      }
+      
+      console.log("API initialized with stored credentials")
+    } catch (error) {
+      console.error("Error loading API credentials from storage:", error)
+    }
+  }
+
+  setApiKey(apiKey: string) {
+    this.apisauce.setHeader("API_KEY", apiKey)
+  }
+
+  setUserId(userId: string) {
+    this.user_id = userId
+  }
+
+  async ensureAuthLoaded() {
+    if (!this.user_id || !this.apisauce.headers["API_KEY"]) {
+      await this.setupFromStorage()
+    }
   }
 
   async validateMFA(code: string): Promise<ApiResponse<MFACheckResponse>> {
@@ -69,7 +106,22 @@ export class Api {
     })
     return response
   }
+
+  async getProfile(): Promise<ApiResponse<Profile>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<Profile> = await this.apisauce.get(`/profile?user_id=${this.user_id}`)
+    return response
+  }
+
+  async updateProfile(
+    profile: Profile,
+  ): Promise<ApiResponse<Profile>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<Profile> = await this.apisauce.post(`/profile/update?user_id=${this.user_id}`, profile)
+    return response
+  }
 }
 
 // Singleton instance of the API for convenience
 export const api = new Api()
+

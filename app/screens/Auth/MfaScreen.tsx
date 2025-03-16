@@ -9,6 +9,7 @@ import { useStores } from "@/models"
 import { useAppTheme } from "@/utils/useAppTheme"
 import type { ThemedStyle } from "@/theme"
 import { View } from "react-native"
+import { saveString } from "@/utils/storage"
 
 interface MfaScreenProps extends AppStackScreenProps<"MFA"> {}
 
@@ -17,13 +18,14 @@ export const MfaScreen: FC<MfaScreenProps> = observer(function MfaScreen(_props)
   const [mfaError, setMfaError] = useState("")
 
   const {
-    authenticationStore: {setAuthToken, distributeAuthToken},
+    authenticationStore: {setAuthToken, distributeAuthToken, setUserData},
   } = useStores()
 
   async function validateMFA(text: string) {
     const mfa_res = await api.validateMFA(text)
 
     if (mfa_res.data?.status == 200) {
+      setUserData(mfa_res.data.user)
       setAuthToken(mfa_res.data?.api_key)
       distributeAuthToken(mfa_res.data?.api_key)
 

@@ -38,7 +38,7 @@ const en = {
     emailFieldPlaceholder: "Enter your username",
     passwordFieldPlaceholder: "Super secret password here",
     tapToLogIn: "Login",
-    hint: "Hint: you can use any email address and your favorite password :)",
+    hint: "Hint: Make sure username is spelt correctly!",
   },
   homeNavigator: {
     profileTab: "Profile",

@@ -35,6 +35,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       setAuthToken,
       distributeAuthToken,
       setUserID,
+      setUserData,
       validationError,
     },
   } = useStores()
@@ -86,6 +87,19 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
 
     if (login_res.data?.message == "MFA Code Required & Sent") {
       navigation.navigate("MFA")
+    }
+
+    if (login_res.data?.user) {
+      try {
+        setUserData(login_res.data?.user)
+      } catch (error) {
+        console.error("Failed to set user data:", error)
+        setLoginError("Failed Setting User Data")
+        return
+      }
+    } else {
+      setLoginError("Could Not Find User Data")
+      return
     }
 
     setIsSubmitted(false)
