@@ -23,16 +23,25 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/app-icon-android-adaptive-foreground.png",
         "backgroundImage": "./assets/images/app-icon-android-adaptive-background.png"
+      },
+      "splash": {
+        "backgroundColor": "#0a0d0c"
       }
     },
     "ios": {
       "icon": "./assets/images/app-icon-ios.png",
       "supportsTablet": true,
-      "bundleIdentifier": "com.ghoul.hypertrophy"
+      "bundleIdentifier": "com.ghoul.hypertrophy",
+      "splash": {
+        "backgroundColor": "#0a0d0c"
+      }
     },
     "web": {
       "favicon": "./assets/images/app-icon-web-favicon.png",
-      "bundler": "metro"
+      "bundler": "metro",
+      "splash": {
+        "backgroundColor": "#0a0d0c"
+      }
     },
     "plugins": [
       "expo-localization",
@@ -49,6 +58,9 @@
     ],
     "experiments": {
       "tsconfigPaths": true
+    },
+    "splash": {
+      "backgroundColor": "#0a0d0c"
     }
   },
   "ignite": {
