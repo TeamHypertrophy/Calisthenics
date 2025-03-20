@@ -1,7 +1,7 @@
 export * from "./Auth/LoginScreen"
 export * from "./ErrorScreen/ErrorBoundary"
 // export other screens here
-export * from "./Main/ProfileScreen"
+export * from "./Main/profile/EditProfileScreen"
 export * from "./Main/LogsScreen"
 export * from "./Main/MainScreen"
 export * from "./Trainer/TrainerScreen"
@@ -9,3 +9,4 @@ export * from "./Main/TrainerAnnouncementScreen"
 export * from "./App/SettingsScreen"
 export * from "./Auth/MfaScreen"
 export * from "./Auth/SignupScreen"
+export * from "./Main/profile/ProfileScreen"

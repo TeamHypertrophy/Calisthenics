@@ -25,7 +25,7 @@
         "backgroundImage": "./assets/images/app-icon-android-adaptive-background.png"
       },
       "splash": {
-        "backgroundColor": "#0a0d0c"
+        "backgroundColor": "#FFFFFF"
       }
     },
     "ios": {
@@ -33,14 +33,14 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.ghoul.hypertrophy",
       "splash": {
-        "backgroundColor": "#0a0d0c"
+        "backgroundColor": "#FFFFFF"
       }
     },
     "web": {
       "favicon": "./assets/images/app-icon-web-favicon.png",
       "bundler": "metro",
       "splash": {
-        "backgroundColor": "#0a0d0c"
+        "backgroundColor": "#FFFFFF"
       }
     },
     "plugins": [
@@ -50,9 +50,9 @@
         "expo-splash-screen",
         {
           "image": "./assets/images/app-icon-android-adaptive-foreground.png",
-          "imageWidth": 300,
+          "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#191015"
+          "backgroundColor": "#FFFFFF"
         }
       ]
     ],
@@ -60,7 +60,7 @@
       "tsconfigPaths": true
     },
     "splash": {
-      "backgroundColor": "#0a0d0c"
+      "backgroundColor": "#FFFFFF"
     }
   },
   "ignite": {

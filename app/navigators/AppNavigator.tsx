@@ -40,7 +40,8 @@ export type AppStackParamList = {
   Settings: undefined
   MFA: undefined
   Signup: undefined
-  // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+  EditProfile: undefined
+	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
 
 /**
@@ -96,7 +97,8 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="Settings" component={Screens.SettingsScreen} />
       <Stack.Screen name="MFA" component={Screens.MfaScreen} />
       <Stack.Screen name="Signup" component={Screens.SignupScreen} />
-      {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
+      <Stack.Screen name="EditProfile" component={Screens.EditProfileScreen} />
+			{/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>
   )
 })

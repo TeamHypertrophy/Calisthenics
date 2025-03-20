@@ -113,12 +113,56 @@ export class Api {
     return response
   }
 
+  async getProfileByID(profile_id: string): Promise<ApiResponse<Profile>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<Profile> = await this.apisauce.get(`/profile?user_id=${profile_id}`)
+    return response
+  }
+
   async updateProfile(
     profile: Profile,
   ): Promise<ApiResponse<Profile>> {
     await this.ensureAuthLoaded()
     const response: ApiResponse<Profile> = await this.apisauce.post(`/profile/update?user_id=${this.user_id}`, profile)
     return response
+  }
+
+  async uploadAvatar(file: any): Promise<ApiResponse<Profile>> {
+    await this.ensureAuthLoaded()
+
+    const formData = new FormData()
+
+    const fileObject = {
+      uri: file.uri,
+      type: "image/jpeg",
+      name: "avatar.jpg",
+    }
+
+    formData.append('avatar', fileObject as any)
+
+    const response: ApiResponse<Profile> = await this.apisauce.post(
+      `/profile/avatar/upload?user_id=${this.user_id}`,
+      formData,
+      {
+        // Special config for form data uploads
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'multipart/form-data',
+        },
+        // Add timeout extension for uploads
+        timeout: 30000, // 30 seconds
+      }
+    )
+
+    console.log('Upload response:', response)
+
+    if (response.ok && response.data) {
+      console.log('Upload successful')
+      return response
+    } else {
+      console.error('Upload failed')
+      return response
+    }
   }
 }
 

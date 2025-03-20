@@ -25,7 +25,7 @@ import { useAppTheme } from "@/utils/useAppTheme"
 interface <%= props.pascalCaseName %>ScreenProps extends AppStackScreenProps<"<%= props.pascalCaseName %>"> {}
 
 
-export const <%= props.pascalCaseName %>Screen: FC<<%= props.pascalCaseName %>ScreenProps> = observer(function <%= props.pascalCaseName %>Screen() {
+export const <%= props.pascalCaseName %>Screen: FC<<%= props.pascalCaseName %>ScreenProps> = observer(function <%= props.pascalCaseName %>Screen(_props) {
   
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
