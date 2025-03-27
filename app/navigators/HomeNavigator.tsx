@@ -4,16 +4,18 @@ import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Icon } from "../components"
 import { translate } from "@/i18n"
-import { LogsScreen, MainScreen, ProfileScreen, TrainerScreen } from "../screens"
+import { LogsScreen, MainScreen, ProfileScreen, SettingsScreen, TrainerScreen } from "../screens"
 import type { ThemedStyle } from "@/theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
 import { useAppTheme } from "@/utils/useAppTheme"
+import { MaterialIcons } from "@expo/vector-icons"
 
 export type HomeTabParamList = {
   Main: undefined
   Logs: undefined
   Profile: undefined
   Trainer: undefined
+  Settings: undefined
 }
 
 /**
@@ -92,6 +94,17 @@ export function HomeNavigator() {
         component={ProfileScreen}
         options={{
           tabBarLabel: translate("homeNavigator:profileTab"),
+          tabBarIcon: ({ focused }) => (
+            <MaterialIcons name="account-circle" color={focused ? colors.tint : colors.tintInactive} size={30} />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          tabBarLabel: translate("homeNavigator:settingsTab"),
           tabBarIcon: ({ focused }) => (
             <Icon icon="settings" color={focused ? colors.tint : colors.tintInactive} size={30} />
           ),

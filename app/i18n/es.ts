@@ -7,13 +7,6 @@ const es: Translations = {
     back: "Volver",
     logOut: "Cerrar sesión",
   },
-  welcomeScreen: {
-    postscript:
-      "psst — Esto probablemente no es cómo se va a ver tu app. (A menos que tu diseñador te haya enviado estas pantallas, y en ese caso, ¡lánzalas en producción!)",
-    readyForLaunch: "Tu app, casi lista para su lanzamiento",
-    exciting: "(¡ohh, esto es emocionante!)",
-    letsGo: "¡Vamos!",
-  },
   errorScreen: {
     title: "¡Algo salió mal!",
     friendlySubtitle:
@@ -49,6 +42,7 @@ const es: Translations = {
     logsTab: "Logs",
     mainTab: "Main",
     trainerTab: "Trainers",
+    settingsTab: "Settings",
   },
 }
 

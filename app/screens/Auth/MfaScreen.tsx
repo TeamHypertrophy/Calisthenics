@@ -1,4 +1,4 @@
-import { FC, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { observer } from "mobx-react-lite"
 import { TextStyle, ViewStyle } from "react-native"
 import { AppStackScreenProps } from "@/navigators"
@@ -10,29 +10,68 @@ import { useAppTheme } from "@/utils/useAppTheme"
 import type { ThemedStyle } from "@/theme"
 import { View } from "react-native"
 import { saveString } from "@/utils/storage"
+import { renderToast } from "@/utils/toastNotification"
 
 interface MfaScreenProps extends AppStackScreenProps<"MFA"> {}
 
 export const MfaScreen: FC<MfaScreenProps> = observer(function MfaScreen(_props) {
   const { navigation } = _props
+
   const [mfaError, setMfaError] = useState("")
+  const [cooldown, setCooldown] = useState(0)
+  const [retryDisabled, setRetryDisabled] = useState(false)
 
   const {
-    authenticationStore: {setAuthToken, distributeAuthToken, setUserData},
+    authenticationStore: { setAuthToken, distributeAuthToken, setUserData },
   } = useStores()
 
-  async function validateMFA(text: string) {
-    const mfa_res = await api.validateMFA(text)
+  useEffect(() => {
+    // Handle cooldown timer
+    if (cooldown > 0) {
+      const timer = setTimeout(() => {
+        setCooldown(cooldown - 1)
+      }, 1000)
 
-    if (mfa_res.data?.status == 200) {
-      setUserData(mfa_res.data.user)
-      setAuthToken(mfa_res.data?.api_key)
-      distributeAuthToken(mfa_res.data?.api_key)
+      return () => clearTimeout(timer)
+    } else if (cooldown === 0 && retryDisabled) {
+      setRetryDisabled(false)
+    }
+
+    // Return a no-op cleanup function for all other cases
+    return () => {}
+  }, [cooldown, retryDisabled])
+
+  async function validateMFA(text: string) {
+    const response = await api.validateMFA(text)
+
+    if (response.data?.status == 200) {
+      setUserData(response.data.user)
+      setAuthToken(response.data?.api_key)
+      distributeAuthToken(response.data?.api_key)
 
       return navigation.navigate("Home", { screen: "Main" })
     } else {
       setMfaError("Invalid MFA code. Please Try Again.")
       return
+    }
+  }
+
+  const handleRetry = async () => {
+    try {
+      setRetryDisabled(true)
+      setCooldown(60) // Set cooldown to 60 seconds
+
+      // Call API to request a new MFA code
+      const response = await api.resendMFA()
+
+      if (response.ok && response.status == 200) {
+        renderToast("MFA", "MFA Code Resent, Check Your Email!")
+      } else {
+        setMfaError("Failed to send new code. Please try again later.")
+      }
+    } catch (error) {
+      setMfaError("An error occurred. Please try again later.")
+      console.error("Error requesting new MFA code:", error)
     }
   }
 
@@ -67,6 +106,16 @@ export const MfaScreen: FC<MfaScreenProps> = observer(function MfaScreen(_props)
           }}
         />
       </View>
+
+      <View style={themed($retryContainer)}>
+        <Button
+          text={retryDisabled ? `Resend Code (${cooldown}s)` : "Resend Code"}
+          preset="filled"
+          style={themed($retryButton)}
+          disabled={retryDisabled}
+          onPress={handleRetry}
+        />
+      </View>
     </Screen>
   )
 })
@@ -98,4 +147,15 @@ const $errorText: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
   color: colors.error,
   marginBottom: spacing.md,
   textAlign: "center",
+})
+
+const $retryContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+  alignItems: "center",
+  marginTop: -60, // Position it below the OTP input
+  paddingBottom: spacing.lg,
+})
+
+const $retryButton: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
+  minWidth: 200,
+  borderRadius: 25,
 })

@@ -44,7 +44,6 @@ const config = {
     Login: {
       path: "",
     },
-    Welcome: "welcome",
     Home: {
       screens: {
         Profile: "profile",

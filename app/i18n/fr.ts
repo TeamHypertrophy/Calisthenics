@@ -7,13 +7,6 @@ const fr: Translations = {
     back: "Retour",
     logOut: "Déconnexion",
   },
-  welcomeScreen: {
-    postscript:
-      "psst  — Ce n'est probablement pas à quoi ressemble votre application. (À moins que votre designer ne vous ait donné ces écrans, dans ce cas, mettez la en prod !)",
-    readyForLaunch: "Votre application, presque prête pour le lancement !",
-    exciting: "(ohh, c'est excitant !)",
-    letsGo: "Allons-y !",
-  },
   errorScreen: {
     title: "Quelque chose s'est mal passé !",
     friendlySubtitle:
@@ -49,6 +42,7 @@ const fr: Translations = {
     logsTab: "Logs",
     mainTab: "Main",
     trainerTab: "Trainers",
+    settingsTab: "Settings",
   },
 }
 

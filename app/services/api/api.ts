@@ -8,7 +8,7 @@
 import { ApiResponse, ApisauceInstance, create } from "apisauce"
 import Config from "../../config"
 import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
-import type { ApiConfig, LoginResponse, MFACheckResponse, SignupResponse, Profile } from "./api.types"
+import type { ApiConfig, LoginResponse, MFACheckResponse, SignupResponse, Profile, MFAResendResponse } from "./api.types"
 import { loadString } from "@/utils/storage"
 
 /**
@@ -79,10 +79,17 @@ export class Api {
     }
   }
 
+  // AUTH FUNCTIONS
+
   async validateMFA(code: string): Promise<ApiResponse<MFACheckResponse>> {
     const response: ApiResponse<MFACheckResponse> = await this.apisauce.get(
       `/users/mfa/check/${code}?user_id=${this.user_id}`,
     )
+    return response
+  }
+
+  async resendMFA(): Promise<ApiResponse<MFAResendResponse>> {
+    const response: ApiResponse<MFAResendResponse> = await this.apisauce.get(`/users/mfa/resend?user_id=${this.user_id}`)
     return response
   }
 
@@ -107,6 +114,8 @@ export class Api {
     return response
   }
 
+
+  // PROFILE FUNCTIONS
   async getProfile(): Promise<ApiResponse<Profile>> {
     await this.ensureAuthLoaded()
     const response: ApiResponse<Profile> = await this.apisauce.get(`/profile?user_id=${this.user_id}`)
@@ -163,6 +172,14 @@ export class Api {
       console.error('Upload failed')
       return response
     }
+  }
+
+
+  // SYSTEM FUNCTIONS
+  async getVersionInfo(): Promise<ApiResponse<any>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<any> = await this.apisauce.get('/health/version')
+    return response
   }
 }
 

@@ -5,17 +5,10 @@ const en = {
     back: "Back",
     logOut: "Log Out",
   },
-  welcomeScreen: {
-    postscript:
-      "psst  — This probably isn't what your app looks like. (Unless your designer handed you these screens, and in that case, ship it!)",
-    readyForLaunch: "Your app, almost ready for launch!",
-    exciting: "(ohh, this is exciting!)",
-    letsGo: "Let's go!",
-  },
   errorScreen: {
     title: "Something went wrong!",
     friendlySubtitle:
-      "This is the screen that your users will see in production when an error is thrown. You'll want to customize this message (located in `app/i18n/en.ts`) and probably the layout as well (`app/screens/ErrorScreen`). If you want to remove this entirely, check `app/app.tsx` for the <ErrorBoundary> component.",
+      "There was an error in the app. Our developers have been notified and will fix it as soon as possible.",
     reset: "RESET APP",
     traceTitle: "Error from %{name} stack",
   },
@@ -45,6 +38,7 @@ const en = {
     logsTab: "Logs",
     mainTab: "Main",
     trainerTab: "Trainers",
+    settingsTab: "Settings",
   },
 }
 

@@ -611,15 +611,6 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
               onPress={saveProfile}
             />
           </View>
-
-          <View style={themed($buttonContainer)}>
-            <Button
-              style={themed($button)}
-              text="Settings"
-              onPress={() => navigation.navigate("Settings")}
-            />
-            <Button style={themed($button)} tx="common:logOut" onPress={logout} />
-          </View>
         </Screen>
 
         <Modalize
@@ -846,26 +837,6 @@ const $saveButton: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
   marginBottom: spacing.xl,
   borderRadius: 8,
   backgroundColor: colors.palette.primary500,
-})
-
-const $errorText: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
-  color: colors.error,
-  marginBottom: spacing.md,
-})
-
-const $successText: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
-  color: "#52b963",
-  marginBottom: spacing.md,
-})
-
-const $button: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-  marginTop: spacing.xl,
-  marginBottom: spacing.xs,
-  borderRadius: 8,
-})
-
-const $buttonContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-  marginBottom: spacing.md,
 })
 
 const $fieldLabel: ThemedStyle<TextStyle> = ({ spacing, colors }) => ({

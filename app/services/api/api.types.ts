@@ -252,6 +252,12 @@ export interface Workout {
   exercises?: number[]
 }
 
+export interface MFAResendResponse {
+  status: number
+  user_id: string
+  message: string
+}
+
 export interface MFACheckResponse {
   status: number
   message: string

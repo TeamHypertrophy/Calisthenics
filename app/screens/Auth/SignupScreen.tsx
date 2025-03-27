@@ -86,31 +86,31 @@ export const SignupScreen: FC<SignupScreenProps> = observer(function SignupScree
     }
 
     // Make a request to your server to get an authentication token.
-    const signup_res = await api.signup(authUsername, authEmail, authPassword)
+    const response = await api.signup(authUsername, authEmail, authPassword)
 
     saveString("authUsername", authUsername)
     saveString("authEmail", authEmail)
     saveString("authPassword", authPassword)
 
-    if (!signup_res.ok) {
+    if (!response.ok) {
       setLoginError("Internal Error, Try Again")
       return
     }
 
-    if (signup_res.status == 401) {
+    if (response.status == 401) {
       setLoginError("Invalid Email")
       return
     }
 
-    if (!signup_res.data?.user.user_id) {
+    if (!response.data?.user.user_id) {
       setLoginError("Could Not Find User ID")
       return
     } else {
-      setUserID(signup_res.data?.user.user_id)
+      setUserID(response.data?.user.user_id)
     }
 
-    if (signup_res.data?.user) {
-      setUserData(signup_res.data.user)
+    if (response.data?.user) {
+      setUserData(response.data.user)
     } else {
       setLoginError("Internal Error Setting User Data")
       return
@@ -120,8 +120,8 @@ export const SignupScreen: FC<SignupScreenProps> = observer(function SignupScree
     setAuthPassword("")
     setAuthUsername("")
 
-    setAuthToken(signup_res.data?.api_key)
-    distributeAuthToken(signup_res.data?.api_key)
+    setAuthToken(response.data?.api_key)
+    distributeAuthToken(response.data?.api_key)
 
     return navigation.navigate("Home", { screen: "Main" })
   }

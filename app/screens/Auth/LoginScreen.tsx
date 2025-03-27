@@ -63,35 +63,35 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
 
     if (validationError) return
 
-    const login_res = await api.login(authUsername, authPassword)
+    const response = await api.login(authUsername, authPassword)
 
     saveString("authUsername", authUsername)
     saveString("authPassword", authPassword)
 
-    if (!login_res.ok) {
+    if (!response.ok) {
       setLoginError("Internal Error, Try Again")
       return
     }
 
-    if (login_res.status == 401) {
+    if (response.status == 401) {
       setLoginError("Invalid Email or Password")
       return
     }
 
-    if (!login_res.data?.user_id) {
+    if (!response.data?.user_id) {
       setLoginError("Could Not Find User ID")
       return
     } else {
-      setUserID(login_res.data?.user_id)
+      setUserID(response.data?.user_id)
     }
 
-    if (login_res.data?.message == "MFA Code Required & Sent") {
+    if (response.data?.message == "MFA Code Required & Sent") {
       navigation.navigate("MFA")
     }
 
-    if (login_res.data?.user) {
+    if (response.data?.user) {
       try {
-        setUserData(login_res.data?.user)
+        setUserData(response.data?.user)
       } catch (error) {
         console.error("Failed to set user data:", error)
         setLoginError("Failed Setting User Data")
@@ -106,8 +106,8 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
     setAuthPassword("")
     setAuthUsername("")
 
-    setAuthToken(login_res.data?.api_key)
-    distributeAuthToken(login_res.data?.api_key)
+    setAuthToken(response.data?.api_key)
+    distributeAuthToken(response.data?.api_key)
   }
 
   const PasswordRightAccessory: ComponentType<TextFieldAccessoryProps> = useMemo(

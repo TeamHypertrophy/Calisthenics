@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react"
+import { FC, useState, useEffect, useCallback } from "react"
 import { observer } from "mobx-react-lite"
 import {
   ActivityIndicator,
@@ -17,6 +17,7 @@ import { HomeTabScreenProps } from "@/navigators/HomeNavigator"
 import { useStores } from "@/models"
 import { api, Profile } from "@/services/api"
 import { AntDesign, MaterialIcons } from "@expo/vector-icons"
+import { useFocusEffect } from "@react-navigation/native"
 
 export const ProfileScreen: FC<HomeTabScreenProps<"Profile">> = observer(
   function ViewProfileScreen(props) {
@@ -41,9 +42,11 @@ export const ProfileScreen: FC<HomeTabScreenProps<"Profile">> = observer(
     const [isOwnProfile, setIsOwnProfile] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
-    useEffect(() => {
-      loadProfile()
-    }, [profileID])
+    useFocusEffect(
+      useCallback(() => {
+        loadProfile()
+      }, [profileID]),
+    )
 
     const loadProfile = async () => {
       setIsLoading(true)
