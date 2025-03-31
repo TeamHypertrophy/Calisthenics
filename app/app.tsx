@@ -34,6 +34,7 @@ import { KeyboardProvider } from "react-native-keyboard-controller"
 import { loadDateFnsLocale } from "./utils/formatDate"
 import Toast from "react-native-toast-message"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
+import { createModalStack, ModalProvider } from "react-native-modalfy"
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
@@ -101,9 +102,12 @@ export function App() {
     config,
   }
 
+  const stack = createModalStack({})
+
   // otherwise, we're ready to render the app
   return (
     <GestureHandlerRootView>
+      <ModalProvider stack={stack}>
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
         <ErrorBoundary catchErrors={Config.catchErrors}>
           <KeyboardProvider>
@@ -116,6 +120,7 @@ export function App() {
           </KeyboardProvider>
         </ErrorBoundary>
       </SafeAreaProvider>
+      </ModalProvider>
     </GestureHandlerRootView>
   )
 }

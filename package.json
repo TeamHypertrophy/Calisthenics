@@ -65,6 +65,7 @@
     "react-native-gesture-handler": "~2.20.2",
     "react-native-keyboard-controller": "^1.12.7",
     "react-native-mmkv": "3.1.0",
+    "react-native-modalfy": "^3.6.0",
     "react-native-modalize": "^2.1.1",
     "react-native-otp-entry": "^1.8.3",
     "react-native-reanimated": "~3.16.1",
