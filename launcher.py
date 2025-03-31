@@ -269,7 +269,7 @@ port_input = console.input("[blue3] Enter ADB Port: [/blue3]")
 
 console.print(f"[blue3] Connecting To Device Using [red]{ip_input}:{port_input}[/red] [/blue3]")
 
-result = subprocess.run(["adb", "connect", f"{ip_port}:{port_input}"], check=True, capture_output=True).stdout.decode("utf-8")
+result = subprocess.run(["adb", "connect", f"{ip_input}:{port_input}"], check=True, capture_output=True).stdout.decode("utf-8")
 
 time.sleep(4)
 
