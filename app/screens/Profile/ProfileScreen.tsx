@@ -18,6 +18,7 @@ import { useStores } from "@/models"
 import { api, Profile } from "@/services/api"
 import { AntDesign, MaterialIcons } from "@expo/vector-icons"
 import { useFocusEffect } from "@react-navigation/native"
+import { useIsConnected } from "react-native-offline"
 
 export const ProfileScreen: FC<HomeTabScreenProps<"Profile">> = observer(
   function ViewProfileScreen(props) {

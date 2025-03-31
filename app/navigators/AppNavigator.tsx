@@ -71,6 +71,9 @@ export type AppStackParamList = {
 	CreateWorkoutLog: undefined
 	ViewWorkoutLog: undefined
 	EditWorkoutLog: undefined
+	ViewWorkoutPlanLog: undefined
+	EditWorkoutPlanLog: undefined
+	ViewWorkoutPlanLogs: undefined
 	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
 
@@ -158,6 +161,9 @@ const AppStack = observer(function AppStack() {
 			<Stack.Screen name="CreateWorkoutLog" component={Screens.CreateWorkoutLogScreen} />
 			<Stack.Screen name="ViewWorkoutLog" component={Screens.ViewWorkoutLogScreen} />
 			<Stack.Screen name="EditWorkoutLog" component={Screens.EditWorkoutLogScreen} />
+			<Stack.Screen name="ViewWorkoutPlanLog" component={Screens.ViewWorkoutPlanLogScreen} />
+			<Stack.Screen name="EditWorkoutPlanLog" component={Screens.EditWorkoutPlanLogScreen} />
+			<Stack.Screen name="ViewWorkoutPlanLogs" component={Screens.ViewWorkoutPlanLogsScreen} />
 			{/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>
   )

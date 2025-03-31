@@ -35,6 +35,7 @@ import { loadDateFnsLocale } from "./utils/formatDate"
 import Toast from "react-native-toast-message"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { createModalStack, ModalProvider } from "react-native-modalfy"
+import { NetworkProvider } from "react-native-offline"
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
@@ -107,6 +108,7 @@ export function App() {
   // otherwise, we're ready to render the app
   return (
     <GestureHandlerRootView>
+      <NetworkProvider>
       <ModalProvider stack={stack}>
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
         <ErrorBoundary catchErrors={Config.catchErrors}>
@@ -121,6 +123,7 @@ export function App() {
         </ErrorBoundary>
       </SafeAreaProvider>
       </ModalProvider>
+      </NetworkProvider>
     </GestureHandlerRootView>
   )
 }

@@ -33,6 +33,7 @@ import { AutoImage } from "@/components"
 import * as ImagePicker from "expo-image-picker"
 import { AppStackParamList } from "@/navigators"
 import { Modalize } from "react-native-modalize"
+import { useIsConnected } from "react-native-offline"
 
 interface EditProfileScreenProps extends AppStackScreenProps<"EditProfile"> {}
 
@@ -68,6 +69,9 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
     const [diet, setDiet] = useState<Diet>("anything")
 
     const modalizeRef = useRef<Modalize>(null)
+
+    const isConnected = useIsConnected()
+    const isEditingDisabled = !isConnected
 
     const {
       themed,
@@ -107,7 +111,6 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
       }
 
       loadProfileData()
-
       ;async () => {
         const { status: cameraStatus } = await ImagePicker.requestCameraPermissionsAsync()
         const { status: libraryStatus } = await ImagePicker.requestMediaLibraryPermissionsAsync()
@@ -221,7 +224,7 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
     const pickImageFromCamera = async () => {
       try {
         const result = await ImagePicker.launchCameraAsync({
-          mediaTypes: ['images'],
+          mediaTypes: ["images"],
           allowsEditing: true,
           aspect: [1, 1],
           quality: 1,
@@ -240,7 +243,7 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
     const pickImageFromGallery = async () => {
       try {
         const result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ['images'],
+          mediaTypes: ["images"],
           allowsEditing: true,
           aspect: [1, 1],
           quality: 1,
@@ -337,6 +340,15 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
         >
           <Text text="Profile" preset="heading" />
 
+          {!isConnected && (
+            <View style={themed($offlineMessage)}>
+              <Text
+                text="You're currently offline. Profile editing is disabled."
+                style={themed($offlineMessageText)}
+              />
+            </View>
+          )}
+
           <View style={themed($formContainer)}>
             <Text text="Personal Information" preset="subheading" style={themed($sectionTitle)} />
 
@@ -344,7 +356,7 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
               <TouchableOpacity
                 style={themed($avatarWrapper)}
                 onPress={handleAvatarSelection}
-                disabled={isUploadingAvatar}
+                disabled={isUploadingAvatar || isEditingDisabled}
               >
                 {isUploadingAvatar ? (
                   <View style={themed($avatarLoading)}>
@@ -376,6 +388,8 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
               value={String(firstName)}
               onChangeText={setFirstName}
               containerStyle={themed($textField)}
+              editable={!isEditingDisabled}
+              status={isEditingDisabled ? "disabled" : undefined}
             />
 
             <TextField
@@ -383,6 +397,8 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
               value={String(lastName)}
               onChangeText={setLastName}
               containerStyle={themed($textField)}
+              editable={!isEditingDisabled}
+              status={isEditingDisabled ? "disabled" : undefined}
             />
 
             <TextField
@@ -391,6 +407,8 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
               onChangeText={(value) => setAge(Number(value))}
               containerStyle={themed($textField)}
               keyboardType="numeric"
+              editable={!isEditingDisabled}
+              status={isEditingDisabled ? "disabled" : undefined}
             />
 
             <TextField
@@ -402,6 +420,8 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
               numberOfLines={4}
               style={$bioInput}
               maxLength={500}
+              editable={!isEditingDisabled}
+              status={isEditingDisabled ? "disabled" : undefined}
             />
 
             <View style={themed($row)}>
@@ -411,6 +431,8 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
                 onChangeText={(value) => setWeight(Number(value))}
                 containerStyle={[themed($textField), $halfWidth]}
                 keyboardType="decimal-pad"
+                editable={!isEditingDisabled}
+                status={isEditingDisabled ? "disabled" : undefined}
               />
 
               <TextField
@@ -419,6 +441,8 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
                 onChangeText={(value) => setHeight(Number(value))}
                 containerStyle={[themed($textField), $halfWidth]}
                 keyboardType="decimal-pad"
+                editable={!isEditingDisabled}
+                status={isEditingDisabled ? "disabled" : undefined}
               />
             </View>
 
@@ -438,6 +462,7 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
               onChange={(item) => {
                 setGender(item.value as Gender)
               }}
+              disable={isEditingDisabled}
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
               renderLeftIcon={() => (
@@ -466,6 +491,7 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
               valueField="value"
               placeholder={preferredWeightUnit}
               value={preferredWeightUnit}
+              disable={isEditingDisabled}
               onChange={(item) => {
                 setPreferredWeightUnit(item.value as PreferredWeight)
               }}
@@ -495,6 +521,7 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
               valueField="value"
               placeholder={preferredHeightUnit}
               value={preferredHeightUnit}
+              disable={isEditingDisabled}
               onChange={(item) => {
                 setPreferredHeightUnit(item.value as PreferredHeight)
               }}
@@ -524,6 +551,7 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
               valueField="value"
               placeholder={activityLevel}
               value={activityLevel}
+              disable={isEditingDisabled}
               onChange={(item) => {
                 setActivityLevel(item.value as ActivityLevel)
               }}
@@ -553,6 +581,7 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
               valueField="value"
               placeholder={fitnessGoal}
               value={fitnessGoal}
+              disable={isEditingDisabled}
               onChange={(item) => {
                 setFitnessGoal(item.value as FitnessGoal)
               }}
@@ -582,6 +611,7 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
               valueField="value"
               placeholder={diet}
               value={diet}
+              disable={isEditingDisabled}
               onChange={(item) => {
                 setDiet(item.value as Diet)
               }}
@@ -604,10 +634,10 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
             </View>
 
             <Button
-              text="Save Changes"
+              text={isEditingDisabled ? "Offline - Can't Save" : "Save Changes"}
               style={themed($saveButton)}
               preset="filled"
-              disabled={isSaving}
+              disabled={isSaving || isEditingDisabled}
               onPress={saveProfile}
             />
           </View>
@@ -672,7 +702,6 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
             />
           </View>
         </Modalize>
-
       </>
     )
   },
@@ -884,4 +913,22 @@ const $itemContainerStyle: ThemedStyle<ViewStyle> = ({ colors }) => ({
 const $itemTextStyle: ThemedStyle<TextStyle> = ({ colors }) => ({
   fontSize: 16,
   color: colors.background, // Ensure dropdown item text is visible
+})
+
+const $offlineMessage: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
+  backgroundColor: colors.palette.angry100,
+  padding: spacing.sm,
+  borderRadius: 8,
+  marginBottom: spacing.md,
+})
+
+const $offlineMessageText: ThemedStyle<TextStyle> = ({ colors }) => ({
+  color: colors.palette.angry500,
+  textAlign: "center",
+})
+
+const $disabledDropdown: ThemedStyle<ViewStyle> = ({ colors }) => ({
+  backgroundColor: colors.palette.neutral200,
+  borderColor: colors.palette.neutral300,
+  opacity: 0.7,
 })
