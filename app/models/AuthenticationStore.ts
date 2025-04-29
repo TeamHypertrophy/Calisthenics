@@ -29,6 +29,7 @@ export const AuthenticationStoreModel = types
   })
   .views((store) => ({
     get isAuthenticated() {
+      // TODO Check API Key Expiry (Require Re-Login)
       return !!store.authToken
     },
     get validationError() {
@@ -61,8 +62,12 @@ export const AuthenticationStoreModel = types
       store.mfa_code = data.mfa_code ?? ""
       store.mfa_verified = data.mfa_verified ?? false
       store.mfa_verification_token = data.mfa_verification_token
-      store.mfa_code_expires_at = data.mfa_code_expires_at ? new Date(data.mfa_code_expires_at) : null
-      store.password_updated_at = data.password_updated_at ? new Date(data.password_updated_at) : undefined
+      store.mfa_code_expires_at = data.mfa_code_expires_at
+        ? new Date(data.mfa_code_expires_at)
+        : null
+      store.password_updated_at = data.password_updated_at
+        ? new Date(data.password_updated_at)
+        : undefined
       store.created_at = data.created_at ? new Date(data.created_at) : undefined
       store.updated_at = data.updated_at ? new Date(data.updated_at) : undefined
       store.last_login = data.last_login ? new Date(data.last_login) : undefined

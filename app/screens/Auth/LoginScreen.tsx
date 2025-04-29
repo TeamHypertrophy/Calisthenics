@@ -10,7 +10,7 @@ import {
   TextField,
   TextFieldAccessoryProps,
 } from "../../components"
-import { setupRootStore, useStores } from "../../models"
+import { useStores } from "../../models"
 import { AppStackScreenProps } from "../../navigators"
 import type { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
@@ -180,6 +180,12 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         text="New To Hypertrophy?"
         style={themed($signUpText)}
         onPress={() => navigation.navigate("Signup")}
+      />
+
+      <Text
+        text="Forgot Password?"
+        style={themed($signUpText)}
+        onPress={() => navigation.navigate("ForgotPassword")}
       />
 
       {loginError ? (

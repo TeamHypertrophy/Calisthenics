@@ -79,3 +79,12 @@ export function clear(): void {
     storage.clearAll()
   } catch {}
 }
+
+export function logEverything(): void {
+  try {
+    console.log("Storage Contents: ", storage.getAllKeys())
+    storage.getAllKeys().forEach((key) => {
+      console.log(key, load(key))
+    })
+  } catch {}
+}

@@ -277,3 +277,10 @@ export interface SignupResponse {
   user: User
   api_key: string
 }
+
+export interface VersionResponse {
+  postgres: string
+  redis: string
+  version: string
+  status: number
+}

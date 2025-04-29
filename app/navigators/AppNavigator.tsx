@@ -41,46 +41,42 @@ export type AppStackParamList = {
   MFA: undefined
   Signup: undefined
   EditProfile: undefined
-	PersonalInfo: undefined
-	Preferences: undefined
-	Public: undefined
-	Goals: undefined
-	SearchExercises: undefined
-	ViewExercise: undefined
-	ViewSavedExercises: undefined
-	CreateCustomExercise: undefined
-	ViewExerciseLogs: undefined
-	CreateExerciseLog: undefined
-	ViewLog: undefined
-	CreateLog: undefined
-	EditLog: undefined
-	EditCustomExercise: undefined
-	EditExerciseLog: undefined
-	ForgotPassword: undefined
-	UpdatePassword: undefined
-	MfaSettings: undefined
-	ListTrainers: undefined
-	TrainerProfile: undefined
-	TrainerRequest: undefined
-	ViewWorkout: undefined
-	Workouts: undefined
-	EditWorkout: undefined
-	WorkoutPlans: undefined
-	ViewWorkoutPlan: undefined
-	EditWorkoutPlan: undefined
-	CreateWorkoutLog: undefined
-	ViewWorkoutLog: undefined
-	EditWorkoutLog: undefined
-	ViewWorkoutPlanLog: undefined
-	EditWorkoutPlanLog: undefined
-	ViewWorkoutPlanLogs: undefined
-	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+  PersonalInfo: undefined
+  Preferences: undefined
+  Public: undefined
+  Goals: undefined
+  SearchExercises: undefined
+  ViewExercise: undefined
+  ViewSavedExercises: undefined
+  CreateCustomExercise: undefined
+  ViewExerciseLogs: undefined
+  CreateExerciseLog: undefined
+  ViewLog: undefined
+  CreateLog: undefined
+  EditLog: undefined
+  EditCustomExercise: undefined
+  EditExerciseLog: undefined
+  ForgotPassword: undefined
+  UpdatePassword: undefined
+  MfaSettings: undefined
+  ListTrainers: undefined
+  TrainerProfile: undefined
+  TrainerRequest: undefined
+  ViewWorkout: undefined
+  Workouts: undefined
+  EditWorkout: undefined
+  WorkoutPlans: undefined
+  ViewWorkoutPlan: undefined
+  EditWorkoutPlan: undefined
+  CreateWorkoutLog: undefined
+  ViewWorkoutLog: undefined
+  EditWorkoutLog: undefined
+  ViewWorkoutPlanLog: undefined
+  EditWorkoutPlanLog: undefined
+  ViewWorkoutPlanLogs: undefined
+  // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
 
-/**
- * This is a list of all the route names that will exit the app if the back button
- * is pressed while in that screen. Only affects Android.
- */
 const exitRoutes = Config.exitRoutes
 
 export type AppStackScreenProps<T extends keyof AppStackParamList> = NativeStackScreenProps<
@@ -94,6 +90,7 @@ const Stack = createNativeStackNavigator<AppStackParamList>()
 const AppStack = observer(function AppStack() {
   const {
     authenticationStore: { isAuthenticated },
+    profileStore: { isOnboarded },
   } = useStores()
 
   const {
@@ -131,40 +128,40 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="MFA" component={Screens.MfaScreen} />
       <Stack.Screen name="Signup" component={Screens.SignupScreen} />
       <Stack.Screen name="EditProfile" component={Screens.EditProfileScreen} />
-			<Stack.Screen name="PersonalInfo" component={Screens.PersonalInfoScreen} />
-			<Stack.Screen name="Preferences" component={Screens.PreferencesScreen} />
-			<Stack.Screen name="Public" component={Screens.PublicScreen} />
-			<Stack.Screen name="Goals" component={Screens.GoalsScreen} />
-			<Stack.Screen name="SearchExercises" component={Screens.SearchExercisesScreen} />
-			<Stack.Screen name="ViewExercise" component={Screens.ViewExerciseScreen} />
-			<Stack.Screen name="ViewSavedExercises" component={Screens.ViewSavedExercisesScreen} />
-			<Stack.Screen name="CreateCustomExercise" component={Screens.CreateCustomExerciseScreen} />
-			<Stack.Screen name="ViewExerciseLogs" component={Screens.ViewExerciseLogsScreen} />
-			<Stack.Screen name="CreateExerciseLog" component={Screens.CreateExerciseLogScreen} />
-			<Stack.Screen name="ViewLog" component={Screens.ViewLogScreen} />
-			<Stack.Screen name="CreateLog" component={Screens.CreateLogScreen} />
-			<Stack.Screen name="EditLog" component={Screens.EditLogScreen} />
-			<Stack.Screen name="EditCustomExercise" component={Screens.EditCustomExerciseScreen} />
-			<Stack.Screen name="EditExerciseLog" component={Screens.EditExerciseLogScreen} />
-			<Stack.Screen name="ForgotPassword" component={Screens.ForgotPasswordScreen} />
-			<Stack.Screen name="UpdatePassword" component={Screens.UpdatePasswordScreen} />
-			<Stack.Screen name="MfaSettings" component={Screens.MfaSettingsScreen} />
-			<Stack.Screen name="ListTrainers" component={Screens.ListTrainersScreen} />
-			<Stack.Screen name="TrainerProfile" component={Screens.TrainerProfileScreen} />
-			<Stack.Screen name="TrainerRequest" component={Screens.TrainerRequestScreen} />
-			<Stack.Screen name="ViewWorkout" component={Screens.ViewWorkoutScreen} />
-			<Stack.Screen name="Workouts" component={Screens.WorkoutsScreen} />
-			<Stack.Screen name="EditWorkout" component={Screens.EditWorkoutScreen} />
-			<Stack.Screen name="WorkoutPlans" component={Screens.WorkoutPlansScreen} />
-			<Stack.Screen name="ViewWorkoutPlan" component={Screens.ViewWorkoutPlanScreen} />
-			<Stack.Screen name="EditWorkoutPlan" component={Screens.EditWorkoutPlanScreen} />
-			<Stack.Screen name="CreateWorkoutLog" component={Screens.CreateWorkoutLogScreen} />
-			<Stack.Screen name="ViewWorkoutLog" component={Screens.ViewWorkoutLogScreen} />
-			<Stack.Screen name="EditWorkoutLog" component={Screens.EditWorkoutLogScreen} />
-			<Stack.Screen name="ViewWorkoutPlanLog" component={Screens.ViewWorkoutPlanLogScreen} />
-			<Stack.Screen name="EditWorkoutPlanLog" component={Screens.EditWorkoutPlanLogScreen} />
-			<Stack.Screen name="ViewWorkoutPlanLogs" component={Screens.ViewWorkoutPlanLogsScreen} />
-			{/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
+      <Stack.Screen name="PersonalInfo" component={Screens.PersonalInfoScreen} />
+      <Stack.Screen name="Preferences" component={Screens.PreferencesScreen} />
+      <Stack.Screen name="Public" component={Screens.PublicScreen} />
+      <Stack.Screen name="Goals" component={Screens.GoalsScreen} />
+      <Stack.Screen name="SearchExercises" component={Screens.SearchExercisesScreen} />
+      <Stack.Screen name="ViewExercise" component={Screens.ViewExerciseScreen} />
+      <Stack.Screen name="ViewSavedExercises" component={Screens.ViewSavedExercisesScreen} />
+      <Stack.Screen name="CreateCustomExercise" component={Screens.CreateCustomExerciseScreen} />
+      <Stack.Screen name="ViewExerciseLogs" component={Screens.ViewExerciseLogsScreen} />
+      <Stack.Screen name="CreateExerciseLog" component={Screens.CreateExerciseLogScreen} />
+      <Stack.Screen name="ViewLog" component={Screens.ViewLogScreen} />
+      <Stack.Screen name="CreateLog" component={Screens.CreateLogScreen} />
+      <Stack.Screen name="EditLog" component={Screens.EditLogScreen} />
+      <Stack.Screen name="EditCustomExercise" component={Screens.EditCustomExerciseScreen} />
+      <Stack.Screen name="EditExerciseLog" component={Screens.EditExerciseLogScreen} />
+      <Stack.Screen name="ForgotPassword" component={Screens.ForgotPasswordScreen} />
+      <Stack.Screen name="UpdatePassword" component={Screens.UpdatePasswordScreen} />
+      <Stack.Screen name="MfaSettings" component={Screens.MfaSettingsScreen} />
+      <Stack.Screen name="ListTrainers" component={Screens.ListTrainersScreen} />
+      <Stack.Screen name="TrainerProfile" component={Screens.TrainerProfileScreen} />
+      <Stack.Screen name="TrainerRequest" component={Screens.TrainerRequestScreen} />
+      <Stack.Screen name="ViewWorkout" component={Screens.ViewWorkoutScreen} />
+      <Stack.Screen name="Workouts" component={Screens.WorkoutsScreen} />
+      <Stack.Screen name="EditWorkout" component={Screens.EditWorkoutScreen} />
+      <Stack.Screen name="WorkoutPlans" component={Screens.WorkoutPlansScreen} />
+      <Stack.Screen name="ViewWorkoutPlan" component={Screens.ViewWorkoutPlanScreen} />
+      <Stack.Screen name="EditWorkoutPlan" component={Screens.EditWorkoutPlanScreen} />
+      <Stack.Screen name="CreateWorkoutLog" component={Screens.CreateWorkoutLogScreen} />
+      <Stack.Screen name="ViewWorkoutLog" component={Screens.ViewWorkoutLogScreen} />
+      <Stack.Screen name="EditWorkoutLog" component={Screens.EditWorkoutLogScreen} />
+      <Stack.Screen name="ViewWorkoutPlanLog" component={Screens.ViewWorkoutPlanLogScreen} />
+      <Stack.Screen name="EditWorkoutPlanLog" component={Screens.EditWorkoutPlanLogScreen} />
+      <Stack.Screen name="ViewWorkoutPlanLogs" component={Screens.ViewWorkoutPlanLogsScreen} />
+      {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>
   )
 })

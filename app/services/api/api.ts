@@ -8,7 +8,15 @@
 import { ApiResponse, ApisauceInstance, create } from "apisauce"
 import Config from "../../config"
 import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
-import type { ApiConfig, LoginResponse, MFACheckResponse, SignupResponse, Profile, MFAResendResponse } from "./api.types"
+import type {
+  ApiConfig,
+  LoginResponse,
+  MFACheckResponse,
+  SignupResponse,
+  Profile,
+  MFAResendResponse,
+  VersionResponse,
+} from "./api.types"
 import { loadString } from "@/utils/storage"
 
 /**
@@ -52,13 +60,13 @@ export class Api {
       if (userId) {
         this.user_id = userId
       }
-      
+
       // Load API key from storage
       const apiKey = loadString("API_KEY")
       if (apiKey) {
         this.setApiKey(apiKey)
       }
-      
+
       console.log("API initialized with stored credentials")
     } catch (error) {
       console.error("Error loading API credentials from storage:", error)
@@ -89,7 +97,9 @@ export class Api {
   }
 
   async resendMFA(): Promise<ApiResponse<MFAResendResponse>> {
-    const response: ApiResponse<MFAResendResponse> = await this.apisauce.get(`/users/mfa/resend?user_id=${this.user_id}`)
+    const response: ApiResponse<MFAResendResponse> = await this.apisauce.get(
+      `/users/mfa/resend?user_id=${this.user_id}`,
+    )
     return response
   }
 
@@ -114,11 +124,12 @@ export class Api {
     return response
   }
 
-
   // PROFILE FUNCTIONS
   async getProfile(): Promise<ApiResponse<Profile>> {
     await this.ensureAuthLoaded()
-    const response: ApiResponse<Profile> = await this.apisauce.get(`/profile?user_id=${this.user_id}`)
+    const response: ApiResponse<Profile> = await this.apisauce.get(
+      `/profile?user_id=${this.user_id}`,
+    )
     return response
   }
 
@@ -128,11 +139,21 @@ export class Api {
     return response
   }
 
-  async updateProfile(
-    profile: Profile,
-  ): Promise<ApiResponse<Profile>> {
+  async createProfile(data: any): Promise<ApiResponse<Profile>> {
     await this.ensureAuthLoaded()
-    const response: ApiResponse<Profile> = await this.apisauce.post(`/profile/update?user_id=${this.user_id}`, profile)
+    const response: ApiResponse<Profile> = await this.apisauce.post(
+      `/profile/create?user_id=${this.user_id}`,
+      data,
+    )
+    return response
+  }
+
+  async updateProfile(profile: Profile): Promise<ApiResponse<Profile>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<Profile> = await this.apisauce.post(
+      `/profile/update?user_id=${this.user_id}`,
+      profile,
+    )
     return response
   }
 
@@ -147,7 +168,7 @@ export class Api {
       name: "avatar.jpg",
     }
 
-    formData.append('avatar', fileObject as any)
+    formData.append("avatar", fileObject as any)
 
     const response: ApiResponse<Profile> = await this.apisauce.post(
       `/profile/avatar/upload?user_id=${this.user_id}`,
@@ -155,34 +176,32 @@ export class Api {
       {
         // Special config for form data uploads
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'multipart/form-data',
+          "Accept": "application/json",
+          "Content-Type": "multipart/form-data",
         },
         // Add timeout extension for uploads
         timeout: 30000, // 30 seconds
-      }
+      },
     )
 
-    console.log('Upload response:', response)
+    console.log("Upload response:", response)
 
     if (response.ok && response.data) {
-      console.log('Upload successful')
+      console.log("Upload successful")
       return response
     } else {
-      console.error('Upload failed')
+      console.error("Upload failed")
       return response
     }
   }
 
-
   // SYSTEM FUNCTIONS
-  async getVersionInfo(): Promise<ApiResponse<any>> {
+  async getVersionInfo(): Promise<ApiResponse<VersionResponse>> {
     await this.ensureAuthLoaded()
-    const response: ApiResponse<any> = await this.apisauce.get('/health/version')
+    const response: ApiResponse<VersionResponse> = await this.apisauce.get("/health/version")
     return response
   }
 }
 
 // Singleton instance of the API for convenience
 export const api = new Api()
-

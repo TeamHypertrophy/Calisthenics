@@ -95,7 +95,11 @@ export function HomeNavigator() {
         options={{
           tabBarLabel: translate("homeNavigator:profileTab"),
           tabBarIcon: ({ focused }) => (
-            <MaterialIcons name="account-circle" color={focused ? colors.tint : colors.tintInactive} size={30} />
+            <MaterialIcons
+              name="account-circle"
+              color={focused ? colors.tint : colors.tintInactive}
+              size={30}
+            />
           ),
         }}
       />

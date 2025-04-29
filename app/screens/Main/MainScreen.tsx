@@ -1,28 +1,25 @@
-import { FC, useEffect } from "react"
+import { FC } from "react"
 import { observer } from "mobx-react-lite"
 import { ViewStyle } from "react-native"
-import { AppStackScreenProps } from "@/navigators"
 import { Button, Screen, Text } from "@/components"
 import { HomeTabScreenProps } from "@/navigators/HomeNavigator"
 import type { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
-import { load, loadString } from "@/utils/storage"
-import { api } from "@/services/api"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "@/models"
+import { logEverything, storage } from "@/utils/storage"
+import { useStores } from "@/models"
 
 export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function MainScreen(_props) {
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
   const { navigation } = _props
+
+  const {
+    profileStore: { updateSpecific },
+  } = useStores()
 
   const {
     themed,
     theme: { colors },
   } = useAppTheme()
 
-  // Pull in navigation via hook
-  // const navigation = useNavigation()
   return (
     <Screen
       style={$root}
@@ -33,6 +30,17 @@ export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function Main
       <Text text="Hypertrophy" preset="heading" />
 
       <Text text="Welcome!" />
+      <Button text="Go to Onboarding" onPress={() => navigation.navigate("PersonalInfo")} />
+      <Button text="Clear Local Stoage" onPress={() => storage.clearAll()} />
+      <Button
+        text="Set Avatar"
+        onPress={() =>
+          updateSpecific(
+            "https://live-pig-nearby.ngrok-free.app//assets/avatars/3ef01c23-7484-4c5a-bed5-aa205c177bf8/891843.png",
+          )
+        }
+      />
+      <Button text="Log Local Storage" onPress={() => logEverything()} />
     </Screen>
   )
 })

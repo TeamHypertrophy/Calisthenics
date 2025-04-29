@@ -2,16 +2,13 @@ import { FC, useEffect, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
 import {
   ActivityIndicator,
-  Alert,
-  Platform,
   TextStyle,
   View,
   ViewStyle,
   TouchableOpacity,
   ImageStyle,
 } from "react-native"
-import { Button, Screen, Switch, Text, TextField } from "@/components"
-import { HomeTabScreenProps } from "@/navigators/HomeNavigator"
+import { Button, Icon, Screen, Switch, Text, TextField } from "@/components"
 import { AppStackScreenProps } from "@/navigators"
 import { useStores } from "@/models"
 import type { ThemedStyle } from "@/theme"
@@ -25,15 +22,18 @@ import {
   PreferredHeight,
   PreferredWeight,
 } from "@/services/api"
-import { saveString } from "@/utils/storage"
 import { Dropdown } from "react-native-element-dropdown"
 import { AntDesign } from "@expo/vector-icons"
 import { renderToast } from "@/utils/toastNotification"
 import { AutoImage } from "@/components"
 import * as ImagePicker from "expo-image-picker"
-import { AppStackParamList } from "@/navigators"
 import { Modalize } from "react-native-modalize"
 import { useIsConnected } from "react-native-offline"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { Profile } from "@/services/api"
+import { ApiResponse } from "apisauce"
+import { Loading } from "@/components/Loader"
+import { ErrorScreen } from "@/components/ErrorScreen"
 
 interface EditProfileScreenProps extends AppStackScreenProps<"EditProfile"> {}
 
@@ -42,178 +42,92 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
     const { navigation } = _props
 
     const {
-      profileStore: { getProfile, updateProfile },
-      authenticationStore: { logout },
+      profileStore: { getProfile, updateProfile, updateAvatarUrl },
+      authenticationStore: { userID },
     } = useStores()
 
-    const [isLoading, setIsLoading] = useState(true)
-    const [isSaving, setIsSaving] = useState(false)
     const [isFocus, setIsFocus] = useState(false)
 
-    const [avatarUrl, setAvatarUrl] = useState("")
-    const [avatarFile, setAvatarFile] = useState<any>(null)
     const [isUploadingAvatar, setIsUploadingAvatar] = useState(false)
-
-    const [firstName, setFirstName] = useState("")
-    const [lastName, setLastName] = useState("")
-    const [age, setAge] = useState(0)
-    const [weight, setWeight] = useState(0)
-    const [height, setHeight] = useState(0)
-    const [gender, setGender] = useState<Gender>("male")
-    const [preferredWeightUnit, setPreferredWeightUnit] = useState<PreferredWeight>("kg")
-    const [preferredHeightUnit, setPreferredHeightUnit] = useState<PreferredHeight>("cm")
-    const [publicProfile, setPublicProfile] = useState(true)
-    const [bio, setBio] = useState("")
-    const [activityLevel, setActivityLevel] = useState<ActivityLevel>("moderate")
-    const [fitnessGoal, setFitnessGoal] = useState<FitnessGoal>("strength")
-    const [diet, setDiet] = useState<Diet>("anything")
 
     const modalizeRef = useRef<Modalize>(null)
 
     const isConnected = useIsConnected()
-    const isEditingDisabled = !isConnected
+    const isOffline = !isConnected
 
     const {
       themed,
       theme: { colors },
     } = useAppTheme()
 
-    useEffect(() => {
-      const loadProfileData = async () => {
-        setIsLoading(true)
-        try {
-          let store = await getProfile()
+    const queryClient = useQueryClient()
+    const {
+      data: profile,
+      isLoading,
+      isError,
+      error,
+    } = useQuery({
+      queryKey: ["profile", userID],
+      queryFn: () => getProfile(),
+    })
 
-          if (store) {
-            setFirstName(store.first_name)
-            setLastName(store.last_name)
-            setAge(store.age)
-            setWeight(store.weight)
-            setHeight(store.height)
-            setGender(store.gender)
-            setPreferredWeightUnit(store.preferred_weight_unit)
-            setPreferredHeightUnit(store.preferred_height_unit)
-            setPublicProfile(store.public)
-            setBio(store.bio)
-            setActivityLevel(store.activity_level)
-            setFitnessGoal(store.fitness_goal)
-            setDiet(store.diet)
-            setAvatarUrl(store.avatar_url || "")
-          } else {
-            await loadFromLocalStorage()
-          }
-        } catch (error) {
-          console.error("Failed to load profile:", error)
-          await loadFromLocalStorage()
-        } finally {
-          setIsLoading(false)
-        }
-      }
+    const saveMutation = useMutation({
+      mutationFn: (updates: Partial<Profile>) => updateProfile(updates),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["profile", userID] })
+        renderToast("Profile Updated", "Your profile has been saved", "success")
+        navigation.goBack()
+      },
+      onError: () => renderToast("Error", "Failed to save profile", "error"),
+    })
 
-      loadProfileData()
-      ;async () => {
-        const { status: cameraStatus } = await ImagePicker.requestCameraPermissionsAsync()
-        const { status: libraryStatus } = await ImagePicker.requestMediaLibraryPermissionsAsync()
+    const uploadAvatarMutation = useMutation<
+      ApiResponse<Profile>,
+      Error,
+      ImagePicker.ImagePickerAsset
+    >({
+      mutationFn: async (file) => await api.uploadAvatar(file),
+      onSuccess: (res) => {
+        if (res.ok && res.data) {
+          const data = res.data
 
-        if (cameraStatus != "granted" || libraryStatus != "granted") {
-          renderToast(
-            "Permissions Required",
-            "Please enable camera and media library permissions to upload an avatar",
-            "error",
+          onChange("avatar_url", data.avatar_url)
+          updateAvatarUrl(data.avatar_url)
+
+          queryClient.setQueryData<Profile>(["profile", userID], (old) =>
+            old ? { ...old, avatar_url: data.avatar_url } : old,
           )
+
+          renderToast("Avatar Uploaded", "Your avatar has been uploaded successfully", "success")
+          navigation.goBack()
+        } else {
+          renderToast("Error Uploading Avatar", "Failed to upload avatar", "error")
         }
-      }
-    }, [])
+      },
+      onError: () => renderToast("Error Uploading Avatar", "Failed to upload avatar", "error"),
+    })
 
-    const loadFromLocalStorage = async () => {
-      try {
-        const { loadString } = require("@/utils/storage")
+    const [form, setForm] = useState<Partial<Profile>>({})
 
-        setFirstName(loadString("firstName") || "")
-        setLastName(loadString("lastName") || "")
-        setAge(Number(loadString("age")) || 0)
-        setWeight(Number(loadString("weight")) || 0)
-        setHeight(Number(loadString("height")) || 0)
-        setGender(loadString("gender") || "male")
-        setPreferredWeightUnit((loadString("preferredWeightUnit") as PreferredWeight) || "lbs")
-        setPreferredHeightUnit((loadString("preferredHeightUnit") as PreferredHeight) || "in")
-        setPublicProfile(loadString("publicProfile") === "true")
-        setBio(loadString("bio") || "")
-        setActivityLevel((loadString("activityLevel") as ActivityLevel) || "moderate")
-        setFitnessGoal((loadString("fitnessGoal") as FitnessGoal) || "strength")
-        setDiet((loadString("diet") as Diet) || "anything")
-        setAvatarUrl((loadString("avatarUrl") as string) || "")
-      } catch (storageError) {
-        console.error("Failed to load from local storage:", storageError)
-        setDefaultValues()
-      }
-    }
-
-    const setDefaultValues = () => {
-      setFirstName("")
-      setLastName("")
-      setAge(0)
-      setWeight(0)
-      setHeight(0)
-      setGender("male")
-      setPreferredWeightUnit("lbs")
-      setPreferredHeightUnit("in")
-      setPublicProfile(true)
-      setBio("")
-      setActivityLevel("moderate")
-      setFitnessGoal("strength")
-      setDiet("anything")
-      setAvatarUrl("")
-    }
-
-    const saveProfile = async () => {
-      setIsSaving(true)
-
-      try {
-        const profile = {
-          first_name: firstName,
-          last_name: lastName,
-          age: age,
-          weight: weight,
-          height: height,
-          gender: gender,
-          preferred_weight_unit: preferredWeightUnit,
-          preferred_height_unit: preferredHeightUnit,
-          public: publicProfile,
-          bio: bio,
-          activity_level: activityLevel,
-          fitness_goal: fitnessGoal,
-          avatar_url: avatarUrl,
-          diet: diet,
-        }
-
-        await updateProfile({
-          ...profile,
+    useEffect(() => {
+      if (profile)
+        setForm({
+          first_name: profile.first_name,
+          last_name: profile.last_name,
+          age: profile.age,
+          weight: profile.weight,
+          height: profile.height,
+          gender: profile.gender,
+          bio: profile.bio,
+          public: profile.public,
+          activity_level: profile.activity_level,
+          fitness_goal: profile.fitness_goal,
+          diet: profile.diet,
+          preferred_weight_unit: profile.preferred_weight_unit,
+          preferred_height_unit: profile.preferred_height_unit,
+          avatar_url: profile.avatar_url,
         })
-
-        saveString("firstName", firstName)
-        saveString("lastName", lastName)
-        saveString("age", String(age))
-        saveString("weight", String(weight))
-        saveString("height", String(height))
-        saveString("gender", gender)
-        saveString("preferredWeightUnit", preferredWeightUnit)
-        saveString("preferredHeightUnit", preferredHeightUnit)
-        saveString("publicProfile", String(publicProfile))
-        saveString("bio", bio)
-        saveString("activityLevel", activityLevel)
-        saveString("fitnessGoal", fitnessGoal)
-        saveString("diet", diet)
-        saveString("avatarUrl", avatarUrl)
-
-        renderToast("Profile Updated", "Your profile has been updated successfully", "success")
-      } catch (error) {
-        console.error("Error saving profile:", error)
-        renderToast("Error Updating Profile", "Failed to save profile", "error")
-      } finally {
-        setIsSaving(false)
-      }
-    }
+    }, [profile])
 
     const handleAvatarSelection = async () => {
       if (isUploadingAvatar) return
@@ -222,6 +136,16 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
     }
 
     const pickImageFromCamera = async () => {
+      const { status: cameraStatus } = await ImagePicker.requestCameraPermissionsAsync()
+
+      if (cameraStatus !== "granted") {
+        renderToast(
+          "Permissions Required",
+          "Camera permissions are required to take a photo",
+          "error",
+        )
+      }
+
       try {
         const result = await ImagePicker.launchCameraAsync({
           mediaTypes: ["images"],
@@ -231,8 +155,8 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
         })
 
         if (!result.canceled) {
-          setAvatarFile(result.assets[0])
-          uploadAvatar(result.assets[0])
+          setIsUploadingAvatar(true)
+          uploadAvatarMutation.mutate(result.assets[0])
         }
       } catch (error) {
         console.error("Error picking image from camera:", error)
@@ -250,8 +174,8 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
         })
 
         if (!result.canceled) {
-          setAvatarFile(result.assets[0])
-          uploadAvatar(result.assets[0])
+          setIsUploadingAvatar(true)
+          uploadAvatarMutation.mutate(result.assets[0])
         }
       } catch (error) {
         console.error("Error picking image from gallery:", error)
@@ -259,25 +183,12 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
       }
     }
 
-    const uploadAvatar = async (imageFile: any) => {
-      setIsUploadingAvatar(true)
+    const onChange = <K extends keyof Profile>(key: K, value: Profile[K]) => {
+      setForm((curr) => ({ ...curr, [key]: value }))
+    }
 
-      try {
-        const response = await api.uploadAvatar(imageFile)
-
-        if (response.ok && response.data) {
-          setAvatarUrl(response.data.avatar_url)
-          saveString("avatarUrl", response.data.avatar_url)
-          renderToast("Avatar Uploaded", "Your avatar has been uploaded successfully", "success")
-        } else {
-          renderToast("Error Uploading Avatar", "Failed to upload avatar", "error")
-        }
-      } catch (error) {
-        console.error("Error uploading avatar:", error)
-        renderToast("Error Uploading Avatar", "Failed to upload avatar", "error")
-      } finally {
-        setIsUploadingAvatar(false)
-      }
+    const saveProfile = () => {
+      saveMutation.mutate(form)
     }
 
     const weightUnitOptions = [
@@ -317,16 +228,15 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
       { label: "Female", value: "Female" },
     ]
 
-    if (isLoading) {
+    if (isLoading) return <Loading />
+
+    if (isError || !profile) {
       return (
-        <Screen
-          style={$root}
-          preset="auto"
-          safeAreaEdges={["top"]}
-          contentContainerStyle={themed($screenContentContainer)}
-        >
-          <ActivityIndicator size="large" color={colors.palette.primary500} />
-        </Screen>
+        <ErrorScreen
+          title="Error Loading Profile"
+          message="There was an error loading your profile. Please try again later."
+          onBack={() => navigation.goBack()}
+        />
       )
     }
 
@@ -340,7 +250,7 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
         >
           <Text text="Profile" preset="heading" />
 
-          {!isConnected && (
+          {isOffline && (
             <View style={themed($offlineMessage)}>
               <Text
                 text="You're currently offline. Profile editing is disabled."
@@ -356,22 +266,22 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
               <TouchableOpacity
                 style={themed($avatarWrapper)}
                 onPress={handleAvatarSelection}
-                disabled={isUploadingAvatar || isEditingDisabled}
+                disabled={isUploadingAvatar || isOffline}
               >
                 {isUploadingAvatar ? (
                   <View style={themed($avatarLoading)}>
                     <ActivityIndicator size="small" color={colors.palette.primary500} />
                   </View>
-                ) : avatarUrl ? (
+                ) : form.avatar_url ? (
                   <AutoImage
-                    source={{ uri: avatarUrl }}
+                    source={{ uri: form.avatar_url }}
                     style={themed($avatar)}
                     resizeMode="cover"
                   />
                 ) : (
                   <View style={themed($avatarPlaceholder)}>
                     <Text
-                      text={`${firstName?.charAt(0) || ""}${lastName?.charAt(0) || ""}`}
+                      text={`${form.first_name?.charAt(0) || ""}${form.last_name?.charAt(0) || ""}`}
                       style={themed($avatarInitials)}
                     />
                   </View>
@@ -385,64 +295,64 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
 
             <TextField
               label="First Name"
-              value={String(firstName)}
-              onChangeText={setFirstName}
+              value={form.first_name}
+              onChangeText={(v) => onChange("first_name", v)}
               containerStyle={themed($textField)}
-              editable={!isEditingDisabled}
-              status={isEditingDisabled ? "disabled" : undefined}
+              editable={!isOffline}
+              status={isOffline ? "disabled" : undefined}
             />
 
             <TextField
               label="Last Name"
-              value={String(lastName)}
-              onChangeText={setLastName}
+              value={form.last_name}
+              onChangeText={(v) => onChange("last_name", v)}
               containerStyle={themed($textField)}
-              editable={!isEditingDisabled}
-              status={isEditingDisabled ? "disabled" : undefined}
+              editable={!isOffline}
+              status={isOffline ? "disabled" : undefined}
             />
 
             <TextField
               label="Age"
-              value={String(age)}
-              onChangeText={(value) => setAge(Number(value))}
+              value={form.age?.toString()}
+              onChangeText={(v) => onChange("age", Number(v))}
               containerStyle={themed($textField)}
               keyboardType="numeric"
-              editable={!isEditingDisabled}
-              status={isEditingDisabled ? "disabled" : undefined}
+              editable={!isOffline}
+              status={isOffline ? "disabled" : undefined}
             />
 
             <TextField
               label="Bio"
-              value={String(bio)}
-              onChangeText={setBio}
+              value={form.bio}
+              onChangeText={(v) => onChange("bio", v)}
               containerStyle={themed($bioTextField)}
               multiline={true}
               numberOfLines={4}
               style={$bioInput}
               maxLength={500}
-              editable={!isEditingDisabled}
-              status={isEditingDisabled ? "disabled" : undefined}
+              editable={!isOffline}
+              status={isOffline ? "disabled" : undefined}
             />
 
             <View style={themed($row)}>
               <TextField
-                label={`Weight (${preferredWeightUnit})`}
-                value={String(weight)}
-                onChangeText={(value) => setWeight(Number(value))}
+                label={`Weight (${form.preferred_weight_unit})`}
+                value={form.weight?.toString()}
+                onChangeText={(v) => onChange("weight", Number(v))}
                 containerStyle={[themed($textField), $halfWidth]}
                 keyboardType="decimal-pad"
-                editable={!isEditingDisabled}
-                status={isEditingDisabled ? "disabled" : undefined}
+                editable={!isOffline}
+                status={isOffline ? "disabled" : undefined}
               />
 
               <TextField
-                label={`Height (${preferredHeightUnit})`}
-                value={String(height)}
-                onChangeText={(value) => setHeight(Number(value))}
+                label={`Height (${form.preferred_height_unit})`}
+                value={form.height?.toString()}
+                onChangeText={(v) => onChange("height", Number(v))}
                 containerStyle={[themed($textField), $halfWidth]}
                 keyboardType="decimal-pad"
-                editable={!isEditingDisabled}
-                status={isEditingDisabled ? "disabled" : undefined}
+                editable={!isOffline}
+                status={isOffline ? "disabled" : undefined}
               />
             </View>
 
@@ -457,12 +367,12 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
               maxHeight={300}
               labelField="label"
               valueField="value"
-              placeholder={gender}
-              value={gender}
+              placeholder={form.gender}
+              value={form.gender}
               onChange={(item) => {
-                setGender(item.value as Gender)
+                onChange("gender", item.value as Gender)
               }}
-              disable={isEditingDisabled}
+              disable={isOffline}
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
               renderLeftIcon={() => (
@@ -489,11 +399,11 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
               maxHeight={300}
               labelField="label"
               valueField="value"
-              placeholder={preferredWeightUnit}
-              value={preferredWeightUnit}
-              disable={isEditingDisabled}
+              placeholder={form.preferred_weight_unit}
+              value={form.preferred_weight_unit}
+              disable={isOffline}
               onChange={(item) => {
-                setPreferredWeightUnit(item.value as PreferredWeight)
+                onChange("preferred_weight_unit", item.value as PreferredWeight)
               }}
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
@@ -519,11 +429,11 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
               maxHeight={300}
               labelField="label"
               valueField="value"
-              placeholder={preferredHeightUnit}
-              value={preferredHeightUnit}
-              disable={isEditingDisabled}
+              placeholder={form.preferred_height_unit}
+              value={form.preferred_height_unit}
+              disable={isOffline}
               onChange={(item) => {
-                setPreferredHeightUnit(item.value as PreferredHeight)
+                onChange("preferred_height_unit", item.value as PreferredHeight)
               }}
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
@@ -549,11 +459,11 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
               maxHeight={300}
               labelField="label"
               valueField="value"
-              placeholder={activityLevel}
-              value={activityLevel}
-              disable={isEditingDisabled}
+              placeholder={form.activity_level}
+              value={form.activity_level}
+              disable={isOffline}
               onChange={(item) => {
-                setActivityLevel(item.value as ActivityLevel)
+                onChange("activity_level", item.value as ActivityLevel)
               }}
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
@@ -579,11 +489,11 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
               maxHeight={300}
               labelField="label"
               valueField="value"
-              placeholder={fitnessGoal}
-              value={fitnessGoal}
-              disable={isEditingDisabled}
+              placeholder={form.fitness_goal}
+              value={form.fitness_goal}
+              disable={isOffline}
               onChange={(item) => {
-                setFitnessGoal(item.value as FitnessGoal)
+                onChange("fitness_goal", item.value as FitnessGoal)
               }}
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
@@ -609,11 +519,11 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
               maxHeight={300}
               labelField="label"
               valueField="value"
-              placeholder={diet}
-              value={diet}
-              disable={isEditingDisabled}
+              placeholder={form.diet}
+              value={form.diet}
+              disable={isOffline}
               onChange={(item) => {
-                setDiet(item.value as Diet)
+                onChange("diet", item.value as Diet)
               }}
               onFocus={() => setIsFocus(true)}
               onBlur={() => setIsFocus(false)}
@@ -630,14 +540,14 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
             <Text text="Privacy" preset="subheading" style={themed($sectionTitle)} />
             <View style={themed($toggleContainer)}>
               <Text text="Public Profile" style={themed($toggleLabel)} />
-              <Switch value={publicProfile} onValueChange={setPublicProfile} />
+              <Switch value={form.public} onValueChange={(v) => onChange("public", v)} />
             </View>
 
             <Button
-              text={isEditingDisabled ? "Offline - Can't Save" : "Save Changes"}
+              text={isOffline ? "Offline - Can't Save" : "Save Changes"}
               style={themed($saveButton)}
               preset="filled"
-              disabled={isSaving || isEditingDisabled}
+              disabled={isOffline}
               onPress={saveProfile}
             />
           </View>
@@ -674,7 +584,6 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
             <TouchableOpacity
               style={themed($modalOption)}
               onPress={() => {
-                console.log("?")
                 modalizeRef.current?.close()
                 pickImageFromGallery()
               }}
@@ -893,7 +802,6 @@ const $selectedTextStyle: ThemedStyle<TextStyle> = ({ colors }) => ({
   color: colors.text,
 })
 
-// Add these new styles for the bio field
 const $bioTextField: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   marginBottom: spacing.lg,
 })
@@ -901,10 +809,9 @@ const $bioTextField: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 const $bioInput: TextStyle = {
   minHeight: 100,
   textAlignVertical: "top",
-  paddingTop: 5, // Add some padding to ensure text doesn't touch the top
+  paddingTop: 5,
 }
 
-// Add this style for items in the dropdown list
 const $itemContainerStyle: ThemedStyle<ViewStyle> = ({ colors }) => ({
   padding: 5,
   backgroundColor: colors.palette.neutral500,
@@ -912,7 +819,7 @@ const $itemContainerStyle: ThemedStyle<ViewStyle> = ({ colors }) => ({
 
 const $itemTextStyle: ThemedStyle<TextStyle> = ({ colors }) => ({
   fontSize: 16,
-  color: colors.background, // Ensure dropdown item text is visible
+  color: colors.background,
 })
 
 const $offlineMessage: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
@@ -927,8 +834,20 @@ const $offlineMessageText: ThemedStyle<TextStyle> = ({ colors }) => ({
   textAlign: "center",
 })
 
-const $disabledDropdown: ThemedStyle<ViewStyle> = ({ colors }) => ({
-  backgroundColor: colors.palette.neutral200,
-  borderColor: colors.palette.neutral300,
-  opacity: 0.7,
+const $errorContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+  flex: 1,
+  justifyContent: "center",
+  alignItems: "center",
+  paddingHorizontal: spacing.lg,
+})
+
+const $errorText: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
+  color: colors.error,
+  textAlign: "center",
+  marginVertical: spacing.md,
+})
+
+const $button: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
+  paddingHorizontal: spacing.md,
+  marginTop: spacing.md,
 })

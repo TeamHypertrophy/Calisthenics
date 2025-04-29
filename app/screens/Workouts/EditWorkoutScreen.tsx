@@ -1,37 +1,34 @@
 import { FC } from "react"
-import { observer } from "mobx-react-lite" 
+import { observer } from "mobx-react-lite"
 import { ViewStyle } from "react-native"
 import { AppStackScreenProps } from "@/navigators"
 import { Screen, Text } from "@/components"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "@/models" 
 
 interface EditWorkoutScreenProps extends AppStackScreenProps<"EditWorkout"> {}
 
+export const EditWorkoutScreen: FC<EditWorkoutScreenProps> = observer(
+  function EditWorkoutScreen(_props) {
+    const { navigation } = _props
 
-export const EditWorkoutScreen: FC<EditWorkoutScreenProps> = observer(function EditWorkoutScreen(_props) {
-  
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
-  const  { navigation } = _props
-
-  const {
+    const {
       themed,
       theme: { colors },
-  } = useAppTheme()
-  
+    } = useAppTheme()
 
-  // Pull in navigation via hook
-  // const navigation = useNavigation()
-  return (
-    <Screen style={$root} preset="auto" safeAreaEdges={["top"]} contentContainerStyle={themed($screenContentContainer)}>
-      <Text text="editWorkout" />
-    </Screen>
-  )
-
-})
+    return (
+      <Screen
+        style={$root}
+        preset="auto"
+        safeAreaEdges={["top"]}
+        contentContainerStyle={themed($screenContentContainer)}
+      >
+        <Text text="editWorkout" />
+      </Screen>
+    )
+  },
+)
 
 const $root: ViewStyle = {
   flex: 1,

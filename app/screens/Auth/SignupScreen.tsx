@@ -16,8 +16,6 @@ import { useStores } from "@/models"
 import { api } from "@/services/api"
 import { loadString, saveString } from "@/utils/storage"
 import { useAppTheme } from "@/utils/useAppTheme"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "@/models"
 
 interface SignupScreenProps extends AppStackScreenProps<"Signup"> {}
 
@@ -58,7 +56,6 @@ export const SignupScreen: FC<SignupScreenProps> = observer(function SignupScree
     setAuthEmail(loadString("authEmail") || "")
     setAuthPassword(loadString("authPassword") || "")
 
-    // Return a "cleanup" function that React will run when the component unmounts
     return () => {
       setAuthPassword("")
       setAuthEmail("")
@@ -85,7 +82,6 @@ export const SignupScreen: FC<SignupScreenProps> = observer(function SignupScree
       return
     }
 
-    // Make a request to your server to get an authentication token.
     const response = await api.signup(authUsername, authEmail, authPassword)
 
     saveString("authUsername", authUsername)
@@ -123,7 +119,7 @@ export const SignupScreen: FC<SignupScreenProps> = observer(function SignupScree
     setAuthToken(response.data?.api_key)
     distributeAuthToken(response.data?.api_key)
 
-    return navigation.navigate("Home", { screen: "Main" })
+    return navigation.navigate("PersonalInfo")
   }
 
   const PasswordRightAccessory: ComponentType<TextFieldAccessoryProps> = useMemo(

@@ -9,7 +9,6 @@ import { useStores } from "@/models"
 import { useAppTheme } from "@/utils/useAppTheme"
 import type { ThemedStyle } from "@/theme"
 import { View } from "react-native"
-import { saveString } from "@/utils/storage"
 import { renderToast } from "@/utils/toastNotification"
 
 interface MfaScreenProps extends AppStackScreenProps<"MFA"> {}
@@ -26,7 +25,6 @@ export const MfaScreen: FC<MfaScreenProps> = observer(function MfaScreen(_props)
   } = useStores()
 
   useEffect(() => {
-    // Handle cooldown timer
     if (cooldown > 0) {
       const timer = setTimeout(() => {
         setCooldown(cooldown - 1)
@@ -37,7 +35,6 @@ export const MfaScreen: FC<MfaScreenProps> = observer(function MfaScreen(_props)
       setRetryDisabled(false)
     }
 
-    // Return a no-op cleanup function for all other cases
     return () => {}
   }, [cooldown, retryDisabled])
 
@@ -59,9 +56,8 @@ export const MfaScreen: FC<MfaScreenProps> = observer(function MfaScreen(_props)
   const handleRetry = async () => {
     try {
       setRetryDisabled(true)
-      setCooldown(60) // Set cooldown to 60 seconds
+      setCooldown(60)
 
-      // Call API to request a new MFA code
       const response = await api.resendMFA()
 
       if (response.ok && response.status == 200) {

@@ -1,36 +1,39 @@
 import { FC } from "react"
-import { observer } from "mobx-react-lite" 
+import { observer } from "mobx-react-lite"
 import { ViewStyle } from "react-native"
 import { AppStackScreenProps } from "@/navigators"
-import { Screen, Text } from "@/components"
+import { Button, Screen, Text } from "@/components"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
-// import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "@/models" 
 
 interface PublicScreenProps extends AppStackScreenProps<"Public"> {}
 
-
 export const PublicScreen: FC<PublicScreenProps> = observer(function PublicScreen(_props) {
-  
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
-  const  { navigation } = _props
+  const { navigation } = _props
 
   const {
-      themed,
-      theme: { colors },
+    themed,
+    theme: { colors },
   } = useAppTheme()
-  
 
-  // Pull in navigation via hook
-  // const navigation = useNavigation()
+  /*
+  - set a bio
+  - upload avatar
+  - set activity level
+  */
+
   return (
-    <Screen style={$root} preset="auto" safeAreaEdges={["top"]} contentContainerStyle={themed($screenContentContainer)}>
-      <Text text="public" />
+    <Screen
+      style={$root}
+      preset="auto"
+      safeAreaEdges={["top"]}
+      contentContainerStyle={themed($screenContentContainer)}
+    >
+      <Text text="Public Information" preset="heading" />
+
+      <Button text="Back To Main" onPress={() => navigation.navigate("Home", { screen: "Main" })} />
     </Screen>
   )
-
 })
 
 const $root: ViewStyle = {

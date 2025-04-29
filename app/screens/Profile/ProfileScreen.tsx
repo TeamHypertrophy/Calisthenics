@@ -1,29 +1,19 @@
-import { FC, useState, useEffect, useCallback } from "react"
+import { FC } from "react"
 import { observer } from "mobx-react-lite"
-import {
-  ActivityIndicator,
-  ScrollView,
-  TextStyle,
-  View,
-  ViewStyle,
-  ImageStyle,
-  Platform,
-} from "react-native"
-import { AppStackScreenProps } from "@/navigators"
+import { ScrollView, TextStyle, View, ViewStyle, ImageStyle } from "react-native"
 import { AutoImage, Button, Card, Screen, Text, Icon } from "@/components"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { HomeTabScreenProps } from "@/navigators/HomeNavigator"
 import { useStores } from "@/models"
-import { api, Profile } from "@/services/api"
+import { api } from "@/services/api"
 import { AntDesign, MaterialIcons } from "@expo/vector-icons"
-import { useFocusEffect } from "@react-navigation/native"
-import { useIsConnected } from "react-native-offline"
+import { useQuery } from "@tanstack/react-query"
+import { Loading } from "@/components/Loader"
+import { ErrorScreen } from "@/components/ErrorScreen"
 
 export const ProfileScreen: FC<HomeTabScreenProps<"Profile">> = observer(
   function ViewProfileScreen(props) {
-    // Pull in one of our MST stores
-    // const { someStore, anotherStore } = useStores()
     const { navigation } = props
 
     const {
@@ -38,60 +28,34 @@ export const ProfileScreen: FC<HomeTabScreenProps<"Profile">> = observer(
       theme: { colors },
     } = useAppTheme()
 
-    const [isLoading, setIsLoading] = useState(true)
-    const [profile, setProfile] = useState<Profile | null>(null)
-    const [isOwnProfile, setIsOwnProfile] = useState(false)
-    const [error, setError] = useState<string | null>(null)
-
-    useFocusEffect(
-      useCallback(() => {
-        loadProfile()
-      }, [profileID]),
-    )
-
-    const loadProfile = async () => {
-      setIsLoading(true)
-      setError(null)
-
-      try {
-        let profileData: Profile | null = null
-
-        // If no profileId provided or it matches logged in user, use current user's profile
-        if (!profileID || profileID === userID) {
-          profileData = await profileStore.getProfile()
-          setIsOwnProfile(true)
-        } else {
-          // Otherwise load the requested profile
-          const response = await api.getProfileByID(profileID)
-          if (response.ok && response.data) {
-            profileData = response.data
-          } else {
-            throw new Error("Failed to load profile")
-          }
+    const {
+      isFetching,
+      isError,
+      data: profile,
+    } = useQuery({
+      queryKey: ["profile", profileID],
+      queryFn: async () => {
+        if (profileID === userID) {
+          return await profileStore.getProfile()
         }
 
-        if (profileData) {
-          setProfile(profileData)
+        const res = await api.getProfileByID(profileID)
+
+        if (res.ok && res.data) {
+          return res.data
         } else {
-          setError("Profile not found")
+          throw new Error("Failed to load profile")
         }
-      } catch (error) {
-        console.error("Error loading profile:", error)
-        setError("Failed to load profile")
-      } finally {
-        setIsLoading(false)
-      }
-    }
+      },
+      staleTime: 1000 * 60 * 5,
+      initialData: () => (profileID === userID ? profileStore.getProfile() : null),
+    })
+
+    const isOwnProfile = profileID === userID
+    const canViewProfile = isOwnProfile || (profile?.public ?? false)
 
     const navigateToEditProfile = () => {
       navigation.navigate("EditProfile")
-    }
-
-    function canViewProfile(profile: Profile | null, isOwnProfile: boolean): boolean {
-      // Can view if:
-      // 1. It's the user's own profile
-      // 2. The profile is public
-     return isOwnProfile || (profile?.public ?? false)
     }
 
     // Helper functions to format data for display
@@ -126,40 +90,19 @@ export const ProfileScreen: FC<HomeTabScreenProps<"Profile">> = observer(
       return mapping[diet] || diet
     }
 
-    // Pull in navigation via hook
-    // const navigation = useNavigation()
-    if (isLoading) {
+    if (isFetching) return <Loading />
+
+    if (isError || !profile) {
       return (
-        <Screen
-          style={$root}
-          preset="auto"
-          safeAreaEdges={["top"]}
-          contentContainerStyle={themed($screenContentContainer)}
-        >
-          <ActivityIndicator size="large" color={colors.palette.primary500} />
-        </Screen>
+        <ErrorScreen
+          title="Profile"
+          message="There was an error loading this profile."
+          onBack={() => navigation.goBack()}
+        />
       )
     }
 
-    if (error || !profile) {
-      return (
-        <Screen
-          style={$root}
-          preset="auto"
-          safeAreaEdges={["top"]}
-          contentContainerStyle={themed($screenContentContainer)}
-        >
-          <Text text="Profile" preset="heading" />
-          <View style={themed($errorContainer)}>
-            <Icon icon="view" size={50} color={colors.error} />
-            <Text text={error || "Profile not available"} style={themed($errorText)} />
-            <Button text="Go Back" onPress={() => navigation.goBack()} style={themed($button)} />
-          </View>
-        </Screen>
-      )
-    }
-
-    if (!canViewProfile(profile, isOwnProfile)) {
+    if (!canViewProfile) {
       return (
         <Screen
           style={$root}
@@ -215,7 +158,6 @@ export const ProfileScreen: FC<HomeTabScreenProps<"Profile">> = observer(
           contentContainerStyle={themed($contentContainer)}
           showsVerticalScrollIndicator={false}
         >
-          {/* Profile Header with Avatar */}
           <View style={themed($profileHeader)}>
             <View style={themed($avatarContainer)}>
               {profile.avatar_url ? (
@@ -262,7 +204,6 @@ export const ProfileScreen: FC<HomeTabScreenProps<"Profile">> = observer(
             </View>
           </View>
 
-          {/* Bio Section */}
           {profile.bio && (
             <Card
               style={themed($sectionCard)}
@@ -275,7 +216,6 @@ export const ProfileScreen: FC<HomeTabScreenProps<"Profile">> = observer(
             />
           )}
 
-          {/* Personal Information */}
           <Card
             style={themed($sectionCard)}
             ContentComponent={
@@ -366,7 +306,6 @@ export const ProfileScreen: FC<HomeTabScreenProps<"Profile">> = observer(
             }
           />
 
-          {/* Fitness Information */}
           <Card
             style={themed($sectionCard)}
             ContentComponent={
@@ -437,7 +376,6 @@ export const ProfileScreen: FC<HomeTabScreenProps<"Profile">> = observer(
   },
 )
 
-// Styles
 const $root: ViewStyle = {
   flex: 1,
 }
@@ -617,12 +555,6 @@ const $errorContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   justifyContent: "center",
   alignItems: "center",
   paddingHorizontal: spacing.lg,
-})
-
-const $errorText: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
-  color: colors.error,
-  textAlign: "center",
-  marginVertical: spacing.md,
 })
 
 const $button: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({

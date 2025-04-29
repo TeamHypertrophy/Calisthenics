@@ -1,6 +1,7 @@
 import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "./helpers/withSetPropAction"
 import { api, Profile } from "@/services/api"
+
 /**
  * Model description here for TypeScript hints.
  */
@@ -28,7 +29,10 @@ export const ProfileStoreModel = types
   .views((store) => ({
     get fullName() {
       return `${store.first_name} ${store.last_name}`
-    }
+    },
+    get isOnboarded() {
+      return !!store.profile_id
+    },
   }))
   .actions((store) => ({
     updateStoreFromProfileData(data: any) {
@@ -49,36 +53,47 @@ export const ProfileStoreModel = types
       store.setProp("fitness_goal", data.fitness_goal)
       store.setProp("diet", data.diet)
     },
-    async getProfile() {
-        let prof = await api.getProfile()
-
-        if (prof.ok && prof.data) {
-          let data = prof.data
-    
-          this.updateStoreFromProfileData(data)
-          return data
-        }
-      else {
-        console.error("Error Fetching Profile")
-        return null
-      }
+    getProfile() {
+      return {
+        profile_id: store.profile_id,
+        first_name: store.first_name,
+        last_name: store.last_name,
+        age: store.age,
+        weight: store.weight,
+        height: store.height,
+        gender: store.gender,
+        preferred_weight_unit: store.preferred_weight_unit,
+        preferred_height_unit: store.preferred_height_unit,
+        public: store.public,
+        bio: store.bio,
+        streak: store.streak,
+        avatar_url: store.avatar_url,
+        activity_level: store.activity_level,
+        fitness_goal: store.fitness_goal,
+        diet: store.diet,
+      } as Profile
     },
     async updateProfile(formData: any) {
-      let response = await api.updateProfile(formData as Profile)
-      
+      const response = await api.updateProfile(formData as Profile)
+
       if (response.ok && response.data) {
-        let data = response.data
-        
+        const data = response.data
+
         this.updateStoreFromProfileData(data)
         return data
       } else {
         console.error("Error Updating Profile")
         return null
       }
-    }
+    },
+    updateAvatarUrl(avatar_url: string) {
+      store.setProp("avatar_url", avatar_url)
+    },
+    updateSpecific(value: string) {
+      store.setProp("avatar_url", value)
+    },
   }))
 
 export interface ProfileStore extends Instance<typeof ProfileStoreModel> {}
 export interface ProfileStoreSnapshotOut extends SnapshotOut<typeof ProfileStoreModel> {}
 export interface ProfileStoreSnapshotIn extends SnapshotIn<typeof ProfileStoreModel> {}
-

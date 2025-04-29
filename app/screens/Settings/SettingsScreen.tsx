@@ -1,12 +1,6 @@
-import { FC, useRef, useState, useEffect } from "react"
+import { FC, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { 
-  ViewStyle, 
-  View, 
-  TouchableOpacity, 
-  TextStyle, 
-  Platform
-} from "react-native"
+import { ViewStyle, View, TouchableOpacity, TextStyle, Platform } from "react-native"
 import Clipboard from "@react-native-clipboard/clipboard"
 import { Screen, Text, Button, Icon, Card } from "@/components"
 import { ThemedStyle } from "@/theme"
@@ -17,6 +11,10 @@ import { AntDesign, MaterialIcons, Ionicons } from "@expo/vector-icons"
 import { Modalize } from "react-native-modalize"
 import { api } from "@/services/api"
 import Constants from "expo-constants"
+import { useQuery } from "@tanstack/react-query"
+import { Loading } from "@/components/Loader"
+import { ErrorScreen } from "@/components/ErrorScreen"
+import { useIsConnected } from "react-native-offline"
 
 export const SettingsScreen: FC<HomeTabScreenProps<"Settings">> = observer(
   function SettingsScreen(_props) {
@@ -26,12 +24,10 @@ export const SettingsScreen: FC<HomeTabScreenProps<"Settings">> = observer(
     } = useStores()
 
     const logoutModalRef = useRef<Modalize>(null)
-    const [backendVersion, setBackendVersion] = useState<string>("Loading...")
-    const [dbVersion, setDbVersion] = useState<string>("Loading...")
-    const [redisVersion, setRedisVersion] = useState<string>("Loading...")
     const [isDebugExpanded, setIsDebugExpanded] = useState(false)
 
     const appVersion = Constants.expoConfig?.version || "1.0.0"
+    const isConnected = useIsConnected()
 
     const handleLogoutPress = () => {
       logoutModalRef.current?.open()
@@ -42,46 +38,42 @@ export const SettingsScreen: FC<HomeTabScreenProps<"Settings">> = observer(
       theme: { colors },
     } = useAppTheme()
 
-    useEffect(() => {
-      // Fetch version information from backend
-      fetchVersionInfo()
-    }, [])
-
-    const fetchVersionInfo = async () => {
-      try {
+    const { isFetching, isError, data } = useQuery({
+      queryKey: ["version"],
+      queryFn: async () => {
         const response = await api.getVersionInfo()
-
-        if (response.ok && response.data) {
-          setBackendVersion(response.data.version || "Unknown")
-          setDbVersion(response.data.postgres || "Unknown")
-          setRedisVersion(response.data.redis || "Unknown")
-        } else {
-          setBackendVersion("Error Fetching")
-          setDbVersion("Error Fetching")
-          setRedisVersion("Error Fetching")
-        }
-      } catch (error) {
-        console.error("Failed to fetch version info:", error)
-        setBackendVersion("Error Fetching")
-        setDbVersion("Error Fetching")
-        setRedisVersion("Error Fetching")
-      }
-    }
+        return response.data
+      },
+    })
 
     const copyDebugInfo = () => {
       const debugInfo = `Hypertrophy Debug Info:
 App Version: ${appVersion}
-Backend Version: ${backendVersion}
-Database Version: ${dbVersion}
-Redis Version: ${redisVersion}
+Backend Version: ${data?.version}
+Database Version: ${data?.postgres}
+Redis Version: ${data?.redis}
 Device: ${Constants.deviceName}
 OS: ${Constants.platform?.os} ${Constants.systemVersion}
+Current Time: ${new Date().toLocaleString()}
+Network Status: ${isConnected ? "Online" : "Offline"}
 `
       Clipboard.setString(debugInfo)
     }
 
     const toggleDebugSection = () => {
       setIsDebugExpanded(!isDebugExpanded)
+    }
+
+    if (isFetching) return <Loading />
+
+    if (isError) {
+      return (
+        <ErrorScreen
+          title="Error Loading Settings"
+          message="Unable to load settings. Please try again later."
+          onBack={() => navigation.goBack()}
+        />
+      )
     }
 
     return (
@@ -102,7 +94,6 @@ OS: ${Constants.platform?.os} ${Constants.systemVersion}
           </View>
 
           <View style={themed($settingsContainer)}>
-
             <View style={themed($settingsSection)}>
               <TouchableOpacity style={themed($debugSectionHeader)} onPress={toggleDebugSection}>
                 <Text text="Debug Information" preset="subheading" style={themed($sectionTitle)} />
@@ -125,12 +116,17 @@ OS: ${Constants.platform?.os} ${Constants.systemVersion}
 
                       <View style={themed($versionItem)}>
                         <Text text="Backend Version" style={themed($versionLabel)} />
-                        <Text text={backendVersion} style={themed($versionValue)} />
+                        <Text text={data?.version} style={themed($versionValue)} />
                       </View>
 
                       <View style={themed($versionItem)}>
                         <Text text="Database Version" style={themed($versionLabel)} />
-                        <Text text={dbVersion} style={themed($versionValue)} />
+                        <Text text={data?.postgres} style={themed($versionValue)} />
+                      </View>
+
+                      <View style={themed($versionItem)}>
+                        <Text text="Redis Version" style={themed($versionLabel)} />
+                        <Text text={data?.redis} style={themed($versionValue)} />
                       </View>
 
                       <TouchableOpacity style={themed($copyButton)} onPress={copyDebugInfo}>
