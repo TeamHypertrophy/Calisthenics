@@ -40,7 +40,7 @@ export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function Main
           )
         }
       />
-      <Button text="Log Local Storage" onPress={() => logEverything()} />
+      <Button text="Log Local Storage" onPress={() => logEverything()}/>
     </Screen>
   )
 })

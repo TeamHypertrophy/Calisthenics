@@ -106,16 +106,14 @@ const AppStack = observer(function AppStack() {
           backgroundColor: colors.background,
         },
       }}
-      initialRouteName={isAuthenticated ? "Home" : "Login"}
+      initialRouteName={!isAuthenticated ? "Login" : !isOnboarded ? "PersonalInfo" : "Home"}
     >
-      {isAuthenticated ? (
-        <>
-          <Stack.Screen name="Home" component={HomeNavigator} />
-        </>
+      {!isAuthenticated ? (
+        <Stack.Screen name="Login" component={Screens.LoginScreen} />
+      ) : !isOnboarded ? (
+        <Stack.Screen name="PersonalInfo" component={Screens.PersonalInfoScreen} />
       ) : (
-        <>
-          <Stack.Screen name="Login" component={Screens.LoginScreen} />
-        </>
+        <Stack.Screen name="Home" component={HomeNavigator} />
       )}
 
       {/** 🔥 Your screens go here */}
@@ -128,7 +126,6 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="MFA" component={Screens.MfaScreen} />
       <Stack.Screen name="Signup" component={Screens.SignupScreen} />
       <Stack.Screen name="EditProfile" component={Screens.EditProfileScreen} />
-      <Stack.Screen name="PersonalInfo" component={Screens.PersonalInfoScreen} />
       <Stack.Screen name="Preferences" component={Screens.PreferencesScreen} />
       <Stack.Screen name="Public" component={Screens.PublicScreen} />
       <Stack.Screen name="Goals" component={Screens.GoalsScreen} />

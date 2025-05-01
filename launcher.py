@@ -239,44 +239,6 @@ else:
 
 print_line(console=console)
 
-console.print(ADB_LOGO, justify="full")
-
-console.print("[blue3] Checking If ADB Server Has Started")
-
-adb_running = "adb.exe" in (p.name() for p in psutil.process_iter())
-
-if adb_running:
-    console.print("[green] ADB Sucessfully Started[/green]")
-else:
-    console.print("[red] ADB Not Running, Starting..[/red]")
-
-    result = subprocess.run(
-        ["adb", "start-server"], check=True, capture_output=True
-    )
-
-    time.sleep(5)
-
-    check_again = "adb.exe" in (p.name() for p in psutil.process_iter())
-
-    if check_again:
-        console.print("[green] ADB Started Successfully [/green]")
-    else:
-        console.print("[red] ADB Failed To Start [/red]")
-        raise SystemExit
-    
-ip_input = console.input("[blue3] Enter ADB IP: [/blue3]")
-port_input = console.input("[blue3] Enter ADB Port: [/blue3]")
-
-console.print(f"[blue3] Connecting To Device Using [red]{ip_input}:{port_input}[/red] [/blue3]")
-
-result = subprocess.run(["adb", "connect", f"{ip_input}:{port_input}"], check=True, capture_output=True).stdout.decode("utf-8")
-
-time.sleep(4)
-
-console.print("[blue3] Connected To Device Successfully [/blue3]")
-
-print_line(console=console)
-
 console.print(BUN_LOGO, justify="full")
 
 console.print("[blue3] Starting Bun, Running [red]bun run android[/red]")

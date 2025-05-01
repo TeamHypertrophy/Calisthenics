@@ -1,7 +1,8 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { api, User } from "@/services/api"
 import { withSetPropAction } from "./helpers/withSetPropAction"
-import { remove, saveString } from "@/utils/storage"
+import { clear, remove, saveString } from "@/utils/storage"
+import { ProfileStoreModel } from "./ProfileStore"
 
 export const AuthenticationStoreModel = types
   .model("AuthenticationStore")
@@ -88,8 +89,7 @@ export const AuthenticationStoreModel = types
       store.authEmail = ""
       store.userID = ""
 
-      remove("API_KEY")
-      remove("userID")
+      clear()
     },
   }))
 

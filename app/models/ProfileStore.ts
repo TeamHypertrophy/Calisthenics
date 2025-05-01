@@ -1,6 +1,6 @@
 import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
 import { withSetPropAction } from "./helpers/withSetPropAction"
-import { api, Profile } from "@/services/api"
+import { api, Gender, Profile } from "@/services/api"
 
 /**
  * Model description here for TypeScript hints.
@@ -86,12 +86,28 @@ export const ProfileStoreModel = types
         return null
       }
     },
+    async createProfile(data: any) {
+      const response = await api.createProfile(data as Profile)
+
+      if (response.ok && response.data) {
+        const data = response.data
+
+        this.updateStoreFromProfileData(data)
+        return data
+      } else {
+        console.error("Error Creating Profile")
+        return new Error("Error Creating Profile")
+      }
+    },
     updateAvatarUrl(avatar_url: string) {
       store.setProp("avatar_url", avatar_url)
     },
     updateSpecific(value: string) {
       store.setProp("avatar_url", value)
     },
+    clear() {
+      store.profile_id = undefined
+    }
   }))
 
 export interface ProfileStore extends Instance<typeof ProfileStoreModel> {}

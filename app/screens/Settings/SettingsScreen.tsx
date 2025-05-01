@@ -21,6 +21,7 @@ export const SettingsScreen: FC<HomeTabScreenProps<"Settings">> = observer(
     const { navigation } = _props
     const {
       authenticationStore: { logout },
+      profileStore: { clear },
     } = useStores()
 
     const logoutModalRef = useRef<Modalize>(null)
@@ -174,6 +175,7 @@ Network Status: ${isConnected ? "Online" : "Offline"}
                 preset="default"
                 onPress={() => {
                   logoutModalRef.current?.close()
+                  clear()
                   logout()
                 }}
               />

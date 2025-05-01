@@ -3,15 +3,17 @@ import { observer } from "mobx-react-lite"
 import { TextStyle, View, ViewStyle } from "react-native"
 import { AppStackScreenProps } from "@/navigators"
 import { Button, Screen, Text, TextField } from "@/components"
-import { ThemedStyle } from "@/theme"
+import { spacing, ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
-import { Gender } from "@/services/api"
+import { Gender, Profile } from "@/services/api"
 import { useIsConnected } from "react-native-offline"
 import { MaterialIcons } from "@expo/vector-icons"
 import { renderToast } from "@/utils/toastNotification"
 import { api } from "@/services/api"
 import { saveString } from "@/utils/storage"
 import { Dropdown } from "react-native-element-dropdown"
+import { useStores } from "@/models"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 interface PersonalInfoScreenProps extends AppStackScreenProps<"PersonalInfo"> {}
 
@@ -19,55 +21,41 @@ export const PersonalInfoScreen: FC<PersonalInfoScreenProps> = observer(
   function PersonalInfoScreen(_props) {
     const { navigation } = _props
 
-    const [firstName, setFirstName] = useState("")
-    const [lastName, setLastName] = useState("")
-    const [age, setAge] = useState(0)
-    const [gender, setGender] = useState<Gender>("male")
-
-    const [isSaving, setIsSaving] = useState(false)
-
     const {
       themed,
       theme: { colors },
     } = useAppTheme()
 
+    const { profileStore: { createProfile }, authenticationStore: { userID }} = useStores()
+
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
+    const [age, setAge] = useState(0)
+    const [gender, setGender] = useState<Gender>("male")
+
+    const queryClient = useQueryClient()
     const isConnected = useIsConnected()
 
-    /*
-  - what is your first name
-  - what is your last name
-  - what is your age
-  - what is your gender
-  */
-
-    const saveAndgoNext = async () => {
-      setIsSaving(true)
-
-      try {
-        const data = {
-          first_name: firstName,
-          last_name: lastName,
-          age: age,
-          gender: gender,
-        }
-
-        await api.createProfile({
-          ...data,
-        })
-
-        saveString("firstName", firstName)
-        saveString("lastName", lastName)
-        saveString("age", age.toString())
-        saveString("gender", gender)
-
+    const saveData = useMutation({
+      mutationFn: (updates: Partial<Profile>) => createProfile(updates),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["profile", userID] })
+        renderToast("Success", "Profile Created", "success")
         navigation.navigate("Preferences")
-      } catch (error) {
-        console.error("Error Saving Personal Information:", error)
-        renderToast("Error", "Failed Saving Personal Information", "error")
-      } finally {
-        setIsSaving(false)
-      }
+      },
+      onError: () => {
+        renderToast("Error", "Failed to Create Profile", "error")
+      },
+    })
+
+  const onNext = () => {
+    if (!firstName || !lastName || !age || !gender) {
+      renderToast("Missing Fields", "Please fill all fields", "error")
+      return
     }
+
+    saveData.mutate({user_id: userID, first_name: firstName, last_name: lastName, age: age, gender: gender})
+  }
 
     if (!isConnected) {
       return (
@@ -102,19 +90,61 @@ export const PersonalInfoScreen: FC<PersonalInfoScreenProps> = observer(
         safeAreaEdges={["top"]}
         contentContainerStyle={themed($screenContentContainer)}
       >
-        <Text text="Let's Get You Started" preset="heading" />
+        <Text text="Let’s Get You Started" preset="heading" style={{ marginBottom: spacing.lg }} />
 
-        <TextField />
-        <TextField />
+        <TextField
+          label="First Name"
+          placeholder="John"
+          value={firstName}
+          onChangeText={setFirstName}
+          containerStyle={{ marginBottom: spacing.md }}
+        />
+        <TextField
+          label="Last Name"
+          placeholder="Doe"
+          value={lastName}
+          onChangeText={setLastName}
+          containerStyle={{ marginBottom: spacing.md }}
+        />
 
-        <TextField />
+        <TextField
+          label="Age"
+          placeholder="e.g. 30"
+          keyboardType="number-pad"
+          value={age != null ? String(age) : ""}
+          onChangeText={(text) => setAge(Number(text))}
+          containerStyle={{ marginBottom: spacing.md }}
+        />
 
-        {/* Dropdown */}
+        <Text style={themed($fieldLabel)}>Gender</Text>
+        <Dropdown
+          data={[
+            { label: "Male", value: "Male" },
+            { label: "Female", value: "Female" },
+          ]}
+          labelField="label"
+          valueField="value"
+          placeholder="Select Gender"
+          value={gender}
+          onChange={(item) => setGender(item.value as Gender)}
+          containerStyle={{ marginBottom: spacing.lg }}
+          style={{
+            backgroundColor: colors.background,
+            borderColor: colors.border,
+            borderWidth: 1,
+            borderRadius: 4,
+            paddingHorizontal: spacing.md,
+            height: 48,
+            marginBottom: spacing.md,
+          }}
+          placeholderStyle={{ color: colors.textDim }}
+          selectedTextStyle={{ color: colors.text }}
+        />
 
-        <Button text="Next" onPress={saveAndgoNext} disabled={isSaving} />
         <Button
-          text="Back To Main"
-          onPress={() => navigation.navigate("Home", { screen: "Main" })}
+          text="Next"
+          onPress={onNext}
+          style={{ marginBottom: spacing.lg, borderRadius: 120 }}
         />
       </Screen>
     )
@@ -152,4 +182,9 @@ const $privacyTitle: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
   color: colors.text,
   textAlign: "center",
   marginTop: spacing.md,
+})
+
+const $fieldLabel: ThemedStyle<TextStyle> = ({ spacing, colors }) => ({
+  marginBottom: spacing.xs,
+  color: colors.textDim,
 })
