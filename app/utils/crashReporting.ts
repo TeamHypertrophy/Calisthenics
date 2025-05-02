@@ -1,6 +1,5 @@
 import * as Sentry from "@sentry/react-native"
 
-
 export const initCrashReporting = () => {
   Sentry.init({
     dsn: process.env.SENTRY_DSN,
