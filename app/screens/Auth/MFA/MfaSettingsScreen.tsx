@@ -89,7 +89,7 @@ export const MfaSettingsScreen: FC<MfaSettingsScreenProps> = observer(
           renderToast("Error", "Failed to disable MFA.", "error")
         }
       },
-      onError: (err) => {
+      onError: () => {
         renderToast("Error", "Network error disabling MFA.", "error")
       },
     })
@@ -113,20 +113,22 @@ export const MfaSettingsScreen: FC<MfaSettingsScreenProps> = observer(
     const openEmailClient = async () => {
       openInbox({
         title: "Open Verification Email",
-        cancelLabel: "Go Back to MFA Settings"
+        cancelLabel: "Go Back to MFA Settings",
       })
     }
 
     if (isLoadingUser) {
-      return <Loading/>
+      return <Loading />
     }
 
     if (isErrorUser) {
-      return <ErrorScreen
-        title="Error"
-        message="Failed to load user data. Please try again."
-        onBack={() => navigation.goBack()}
-      />
+      return (
+        <ErrorScreen
+          title="Error"
+          message="Failed to load user data. Please try again."
+          onBack={() => navigation.goBack()}
+        />
+      )
     }
 
     return (
@@ -166,7 +168,7 @@ export const MfaSettingsScreen: FC<MfaSettingsScreenProps> = observer(
                 <>
                   <View style={themed($statusRow)}>
                     <MaterialIcons icon="check" color={colors.palette.primary500} size={20} />
-                    <Text style={themed($verifiedText)} text="MFA Verified"/>
+                    <Text style={themed($verifiedText)} text="MFA Verified" />
                   </View>
                 </>
               ) : (
@@ -218,7 +220,7 @@ export const MfaSettingsScreen: FC<MfaSettingsScreenProps> = observer(
               </View>
               <Text text="Enable MFA" preset="heading" style={themed($modalTitle)} />
               <Text
-                text="Are you sure you want to enable Multi-Factor Authentication? A verification link will be sent to your email." // Updated modal text
+                text="Are you sure you want to enable Multi-Factor Authentication? A verification link will be sent to your email."
                 style={themed($modalMessage)}
               />
               <View style={$modalButtonsContainer}>
@@ -311,7 +313,7 @@ const $settingRow: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 
 const $settingLabel: ThemedStyle<TextStyle> = ({ colors }) => ({
   color: colors.text,
-  flexShrink: 1, // Allow text to wrap if needed
+  flexShrink: 1,
   marginRight: spacing.md,
 })
 
@@ -334,14 +336,14 @@ const $verifiedText: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
 })
 
 const $notVerifiedText: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
-  color: colors.palette.angry500, // Changed color to warning
+  color: colors.palette.angry500,
   marginLeft: spacing.xs,
   fontWeight: "bold",
 })
 
 const $verifyButton: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   marginTop: spacing.lg,
-  alignSelf: "flex-start", // Align button to the left
+  alignSelf: "flex-start",
 })
 
 const $backButton: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
@@ -367,7 +369,7 @@ const $modalIconContainer =
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: iconColor + "20", // 20% opacity version of icon color
+    backgroundColor: iconColor + "20",
     justifyContent: "center",
     alignItems: "center",
     marginBottom: spacing.lg,

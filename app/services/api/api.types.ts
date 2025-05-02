@@ -286,12 +286,12 @@ export interface VersionResponse {
 }
 
 export interface HealthResponse {
-  is_healthy: boolean,
-  status: number,
+  is_healthy: boolean
+  status: number
 }
 
 export interface DeleteResponse {
-  status: number,
-  message: string,
+  status: number
+  message: string
   user: User
 }

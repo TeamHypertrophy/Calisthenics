@@ -27,7 +27,10 @@ export const PersonalInfoScreen: FC<PersonalInfoScreenProps> = observer(
       theme: { colors },
     } = useAppTheme()
 
-    const { profileStore: { createProfile, setProfileId }, authenticationStore: { userID }} = useStores()
+    const {
+      profileStore: { createProfile, setProfileId },
+      authenticationStore: { userID },
+    } = useStores()
 
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
@@ -49,14 +52,20 @@ export const PersonalInfoScreen: FC<PersonalInfoScreenProps> = observer(
       },
     })
 
-  const onNext = () => {
-    if (!firstName || !lastName || !age || !gender) {
-      renderToast("Missing Fields", "Please fill all fields", "error")
-      return
-    }
+    const onNext = () => {
+      if (!firstName || !lastName || !age || !gender) {
+        renderToast("Missing Fields", "Please fill all fields", "error")
+        return
+      }
 
-    saveData.mutate({user_id: userID, first_name: firstName, last_name: lastName, age: age, gender: gender})
-  }
+      saveData.mutate({
+        user_id: userID,
+        first_name: firstName,
+        last_name: lastName,
+        age: age,
+        gender: gender,
+      })
+    }
 
     if (!isConnected) {
       return (

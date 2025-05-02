@@ -93,3 +93,6 @@ web-build/
 
 # Python
 __pycache__
+
+# Environment Variables
+.env

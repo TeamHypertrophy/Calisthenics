@@ -25,21 +25,6 @@ if (__DEV__) {
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
-// Web linking configuration
-const prefix = Linking.createURL("/")
-const config = {
-  screens: {
-    Login: {
-      path: "",
-    },
-    Home: {
-      screens: {
-        Profile: "profile",
-      },
-    },
-  },
-}
-
 export function App() {
   const {
     initialNavigationState,
@@ -69,13 +54,6 @@ export function App() {
     return null
   }
 
-  const linking = {
-    prefixes: [prefix],
-    config,
-  }
-
-  const toastConfig = {} // TODO: Add custom toast configuration here
-
   const queryClient = new QueryClient()
 
   return (
@@ -86,7 +64,6 @@ export function App() {
             <ErrorBoundary catchErrors={Config.catchErrors}>
               <KeyboardProvider>
                 <AppNavigator
-                  linking={linking}
                   initialState={initialNavigationState}
                   onStateChange={onNavigationStateChange}
                 />

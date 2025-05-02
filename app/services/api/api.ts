@@ -104,15 +104,19 @@ export class Api {
     return response
   }
 
-  async enableMFA(): Promise<ApiResponse<User>>{
+  async enableMFA(): Promise<ApiResponse<User>> {
     await this.ensureAuthLoaded()
-    const response: ApiResponse<User> = await this.apisauce.get(`/users/mfa/enable?user_id=${this.user_id}`)
+    const response: ApiResponse<User> = await this.apisauce.get(
+      `/users/mfa/enable?user_id=${this.user_id}`,
+    )
     return response
   }
 
   async disableMFA(): Promise<ApiResponse<User>> {
     await this.ensureAuthLoaded()
-    const response: ApiResponse<User> = await this.apisauce.get(`/users/mfa/disable?user_id=${this.user_id}`)
+    const response: ApiResponse<User> = await this.apisauce.get(
+      `/users/mfa/disable?user_id=${this.user_id}`,
+    )
     return response
   }
 
@@ -133,7 +137,9 @@ export class Api {
 
   async delete(): Promise<ApiResponse<DeleteResponse>> {
     await this.ensureAuthLoaded()
-    const response: ApiResponse<DeleteResponse> = await this.apisauce.get(`/users/delete?user_id=${this.user_id}`)
+    const response: ApiResponse<DeleteResponse> = await this.apisauce.get(
+      `/users/delete?user_id=${this.user_id}`,
+    )
     return response
   }
 

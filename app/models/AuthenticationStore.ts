@@ -103,7 +103,7 @@ export const AuthenticationStoreModel = types
       if (response.ok && response.data) {
         console.log("Deleted User Account Successfully")
       }
-    }
+    },
   }))
 
 export interface AuthenticationStore extends Instance<typeof AuthenticationStoreModel> {}

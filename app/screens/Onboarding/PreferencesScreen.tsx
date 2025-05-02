@@ -17,7 +17,10 @@ export const PreferencesScreen: FC<PreferencesScreenProps> = observer(
   function PreferencesScreen(_props) {
     const { navigation } = _props
 
-    const { profileStore: { updateProfile } , authenticationStore: { userID }} = useStores()
+    const {
+      profileStore: { updateProfile },
+      authenticationStore: { userID },
+    } = useStores()
 
     const {
       themed,
@@ -39,14 +42,18 @@ export const PreferencesScreen: FC<PreferencesScreenProps> = observer(
       },
       onError: () => renderToast("Error", "Failed to Update Preferences", "error"),
     })
-    
+
     const onNext = () => {
       if (!weightUnit || !heightUnit || isPublic === undefined) {
         renderToast("Missing Fields", "Please fill all fields", "error")
         return
       }
 
-      savePrefrences.mutate({ preferred_weight_unit: weightUnit, preferred_height_unit: heightUnit, public: isPublic })
+      savePrefrences.mutate({
+        preferred_weight_unit: weightUnit,
+        preferred_height_unit: heightUnit,
+        public: isPublic,
+      })
     }
 
     return (

@@ -53,12 +53,12 @@ export const SettingsScreen: FC<HomeTabScreenProps<"Settings">> = observer(
       },
     })
 
-    const { data: redisData} = useQuery({
+    const { data: redisData } = useQuery({
       queryKey: ["health", "redis"],
       queryFn: async () => {
         const response = await api.checkRedis()
         return response.data
-      }
+      },
     })
 
     const { data: postgresData } = useQuery({
@@ -66,7 +66,7 @@ export const SettingsScreen: FC<HomeTabScreenProps<"Settings">> = observer(
       queryFn: async () => {
         const response = await api.checkPostgres()
         return response.data
-      }
+      },
     })
 
     const copyDebugInfo = () => {
@@ -131,7 +131,7 @@ Network Status: ${isConnected ? "Online" : "Offline"}
 
           <View style={themed($settingsContainer)}>
             <View style={themed($settingsSection)}>
-              <Text text="Password" preset="subheading" style={themed($sectionTitle)}/>
+              <Text text="Password" preset="subheading" style={themed($sectionTitle)} />
               <Button
                 text="Change Password"
                 onPress={() => navigation.navigate("UpdatePassword")}
@@ -143,7 +143,11 @@ Network Status: ${isConnected ? "Online" : "Offline"}
                 style={themed($button)}
               />
 
-              <Text text="Multi-Factor Authentication" preset="subheading" style={themed($sectionTitle)} />
+              <Text
+                text="Multi-Factor Authentication"
+                preset="subheading"
+                style={themed($sectionTitle)}
+              />
               <Button
                 text="MFA Settings"
                 onPress={() => navigation.navigate("MfaSettings")}
@@ -151,7 +155,11 @@ Network Status: ${isConnected ? "Online" : "Offline"}
               />
 
               <Text text="Account" preset="subheading" style={themed($sectionTitle)} />
-              <Button text="Delete Account" style={themed($button)} onPress={handleDeleteAccountPress}/>
+              <Button
+                text="Delete Account"
+                style={themed($button)}
+                onPress={handleDeleteAccountPress}
+              />
 
               <TouchableOpacity style={themed($debugSectionHeader)} onPress={toggleDebugSection}>
                 <Text text="Debug Information" preset="subheading" style={themed($sectionTitle)} />
@@ -301,7 +309,6 @@ Network Status: ${isConnected ? "Online" : "Offline"}
   },
 )
 
-// Styles
 const $root: ViewStyle = {
   flex: 1,
 }
@@ -404,7 +411,6 @@ const $copyButtonText: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
   fontSize: 14,
 })
 
-// Modal styles
 const $modalStyle: ThemedStyle<ViewStyle> = ({ colors }) => ({
   backgroundColor: colors.background,
   borderTopLeftRadius: 12,
@@ -420,7 +426,7 @@ const $modalIconContainer: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
   width: 80,
   height: 80,
   borderRadius: 40,
-  backgroundColor: colors.error + "20", // 20% opacity version of error color
+  backgroundColor: colors.error + "20",
   justifyContent: "center",
   alignItems: "center",
   marginBottom: spacing.lg,
@@ -466,4 +472,3 @@ const $button: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
   marginBottom: spacing.md,
   borderRadius: 120,
 })
-

@@ -83,7 +83,7 @@ export const MfaScreen: FC<MfaScreenProps> = observer(function MfaScreen(_props)
   } = useAppTheme()
 
   if (isVerifying) {
-    return <Loading/>
+    return <Loading />
   }
 
   return (
@@ -157,7 +157,7 @@ const $errorText: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
 
 const $retryContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   alignItems: "center",
-  marginTop: -60, // Position it below the OTP input
+  marginTop: -60,
   paddingBottom: spacing.lg,
 })
 

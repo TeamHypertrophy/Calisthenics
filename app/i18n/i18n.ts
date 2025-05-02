@@ -4,7 +4,6 @@ import i18n from "i18next"
 import { initReactI18next } from "react-i18next"
 import "intl-pluralrules"
 
-// if English isn't your default language, move Translations to the appropriate language file.
 import en, { Translations } from "./en"
 import es from "./es"
 import fr from "./fr"

@@ -10,7 +10,6 @@ export function loadString(key: string): string | null {
   try {
     return storage.getString(key) ?? null
   } catch {
-    // not sure why this would fail... even reading the RN docs I'm unclear
     return null
   }
 }

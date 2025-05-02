@@ -38,10 +38,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       setUserData,
       validationError,
     },
-    profileStore: {
-      updateStoreFromProfileData,
-      clear: clearProfileStore,
-    }
+    profileStore: { updateStoreFromProfileData, clear: clearProfileStore },
   } = useStores()
 
   const {
@@ -110,9 +107,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
 
     distributeAuthToken(response.data?.api_key)
 
-    // --- Fetch Profile Data After Successful Login & User Data Set ---
     try {
-      // Assuming api.getProfile() fetches the profile for the currently authenticated user (via token/userID set in api instance)
       const profileResponse = await api.getProfile()
       if (profileResponse.ok && profileResponse.data) {
         updateStoreFromProfileData(profileResponse.data)

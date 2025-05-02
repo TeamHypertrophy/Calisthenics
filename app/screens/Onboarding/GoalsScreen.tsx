@@ -16,7 +16,10 @@ interface GoalsScreenProps extends AppStackScreenProps<"Goals"> {}
 export const GoalsScreen: FC<GoalsScreenProps> = observer(function GoalsScreen(_props) {
   const { navigation } = _props
 
-  const { profileStore: { updateProfile }, authenticationStore: { userID }} = useStores()
+  const {
+    profileStore: { updateProfile },
+    authenticationStore: { userID },
+  } = useStores()
   const queryClient = useQueryClient()
 
   const {
@@ -62,7 +65,6 @@ export const GoalsScreen: FC<GoalsScreenProps> = observer(function GoalsScreen(_
 
     saveInformation.mutate({ weight, height, fitness_goal: fitnessGoal, diet })
   }
-  
 
   return (
     <Screen

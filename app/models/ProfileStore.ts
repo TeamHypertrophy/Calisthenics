@@ -110,7 +110,7 @@ export const ProfileStoreModel = types
     },
     clear() {
       store.profile_id = undefined
-    }
+    },
   }))
 
 export interface ProfileStore extends Instance<typeof ProfileStoreModel> {}

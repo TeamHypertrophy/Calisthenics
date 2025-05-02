@@ -58,7 +58,6 @@ export const ProfileScreen: FC<HomeTabScreenProps<"Profile">> = observer(
       navigation.navigate("EditProfile")
     }
 
-    // Helper functions to format data for display
     function formatActivityLevel(level: string): string {
       const mapping: Record<string, string> = {
         light: "Light",
