@@ -36,11 +36,11 @@ export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function Main
         text="Set Avatar"
         onPress={() =>
           updateSpecific(
-            "https://live-pig-nearby.ngrok-free.app//assets/avatars/3ef01c23-7484-4c5a-bed5-aa205c177bf8/891843.png",
+            "https://live-pig-nearby.ngrok-free.app//assets/avatars/47c1f63e-adb6-4fe8-be69-6b079f2d9baf/872826.png",
           )
         }
       />
-      <Button text="Log Local Storage" onPress={() => logEverything()}/>
+      <Button text="Log Local Storage" onPress={() => logEverything()} />
     </Screen>
   )
 })

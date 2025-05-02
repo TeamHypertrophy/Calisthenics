@@ -1,3 +1,3 @@
 @echo off
 
-python launcher.py
+uv run launcher.py

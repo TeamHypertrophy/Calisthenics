@@ -10,10 +10,11 @@ import { useIsConnected } from "react-native-offline"
 import { MaterialIcons } from "@expo/vector-icons"
 import { renderToast } from "@/utils/toastNotification"
 import { api } from "@/services/api"
-import { saveString } from "@/utils/storage"
+import { logEverything, saveString } from "@/utils/storage"
 import { Dropdown } from "react-native-element-dropdown"
 import { useStores } from "@/models"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { setOptions } from "expo-splash-screen"
 
 interface PersonalInfoScreenProps extends AppStackScreenProps<"PersonalInfo"> {}
 
@@ -26,7 +27,7 @@ export const PersonalInfoScreen: FC<PersonalInfoScreenProps> = observer(
       theme: { colors },
     } = useAppTheme()
 
-    const { profileStore: { createProfile }, authenticationStore: { userID }} = useStores()
+    const { profileStore: { createProfile, setProfileId }, authenticationStore: { userID }} = useStores()
 
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")

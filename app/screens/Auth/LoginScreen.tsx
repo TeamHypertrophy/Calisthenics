@@ -38,6 +38,10 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       setUserData,
       validationError,
     },
+    profileStore: {
+      updateStoreFromProfileData,
+      clear: clearProfileStore,
+    }
   } = useStores()
 
   const {
@@ -62,6 +66,8 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
     setAttemptsCount(attemptsCount + 1)
 
     if (validationError) return
+
+    clearProfileStore()
 
     const response = await api.login(authUsername, authPassword)
 
@@ -102,12 +108,33 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       return
     }
 
+    distributeAuthToken(response.data?.api_key)
+
+    // --- Fetch Profile Data After Successful Login & User Data Set ---
+    try {
+      // Assuming api.getProfile() fetches the profile for the currently authenticated user (via token/userID set in api instance)
+      const profileResponse = await api.getProfile()
+      if (profileResponse.ok && profileResponse.data) {
+        updateStoreFromProfileData(profileResponse.data)
+        console.log("Profile data fetched and store updated.")
+      } else if (profileResponse.status === 500) {
+        console.log("No profile found for user, proceeding to onboarding.")
+      } else {
+        console.error("Error fetching profile:", profileResponse.problem)
+        setLoginError("Failed to fetch profile data.")
+        return
+      }
+    } catch (error) {
+      console.error("Exception fetching profile:", error)
+      setLoginError("An error occurred while fetching profile.")
+      return
+    }
+
     setIsSubmitted(false)
     setAuthPassword("")
     setAuthUsername("")
 
     setAuthToken(response.data?.api_key)
-    distributeAuthToken(response.data?.api_key)
   }
 
   const PasswordRightAccessory: ComponentType<TextFieldAccessoryProps> = useMemo(
@@ -225,6 +252,7 @@ const $signUpText: ThemedStyle<TextStyle> = ({ spacing, colors }) => ({
   fontSize: 15,
   color: colors.textDim,
   textDecorationLine: "underline",
+  marginBottom: spacing.sm,
 })
 
 const $enterDetails: ThemedStyle<TextStyle> = ({ spacing }) => ({
@@ -243,6 +271,7 @@ const $textField: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 
 const $tapButton: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   marginTop: spacing.xs,
+  borderRadius: 120,
 })
 
 const $errorText: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({

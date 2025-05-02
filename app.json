@@ -54,7 +54,8 @@
           "resizeMode": "contain",
           "backgroundColor": "#FFFFFF"
         }
-      ]
+      ],
+      "react-native-email-link"
     ],
     "experiments": {
       "tsconfigPaths": true

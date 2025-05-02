@@ -105,6 +105,9 @@ export const ProfileStoreModel = types
     updateSpecific(value: string) {
       store.setProp("avatar_url", value)
     },
+    setProfileId(value: number) {
+      store.setProp("profile_id", value)
+    },
     clear() {
       store.profile_id = undefined
     }

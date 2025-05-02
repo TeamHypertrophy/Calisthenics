@@ -55,6 +55,12 @@ export const AuthenticationStoreModel = types
       store.userID = value
       saveString("userID", value)
     },
+    setMFAEnabled(value: boolean) {
+      store.mfa_enabled = value
+    },
+    setMFAVerified(value: boolean) {
+      store.mfa_verified = value
+    },
     setUserData(data: User) {
       store.email_verified = data.email_verified
       store.email_verified_at = data.email_verified_at ? new Date(data.email_verified_at) : null
@@ -91,6 +97,13 @@ export const AuthenticationStoreModel = types
 
       clear()
     },
+    async deleteAccount() {
+      const response = await api.delete()
+
+      if (response.ok && response.data) {
+        console.log("Deleted User Account Successfully")
+      }
+    }
   }))
 
 export interface AuthenticationStore extends Instance<typeof AuthenticationStoreModel> {}

@@ -10,6 +10,7 @@ import { useAppTheme } from "@/utils/useAppTheme"
 import type { ThemedStyle } from "@/theme"
 import { View } from "react-native"
 import { renderToast } from "@/utils/toastNotification"
+import { Loading } from "@/components/Loader"
 
 interface MfaScreenProps extends AppStackScreenProps<"MFA"> {}
 
@@ -19,6 +20,7 @@ export const MfaScreen: FC<MfaScreenProps> = observer(function MfaScreen(_props)
   const [mfaError, setMfaError] = useState("")
   const [cooldown, setCooldown] = useState(0)
   const [retryDisabled, setRetryDisabled] = useState(false)
+  const [isVerifying, setIsVerifying] = useState(false)
 
   const {
     authenticationStore: { setAuthToken, distributeAuthToken, setUserData },
@@ -39,17 +41,21 @@ export const MfaScreen: FC<MfaScreenProps> = observer(function MfaScreen(_props)
   }, [cooldown, retryDisabled])
 
   async function validateMFA(text: string) {
+    setIsVerifying(true)
     const response = await api.validateMFA(text)
 
-    if (response.data?.status == 200) {
+    if (!response.ok) {
+      setIsVerifying(false)
+      setMfaError("Invalid MFA code. Please Try Again.")
+      return
+    }
+
+    if (response.data) {
       setUserData(response.data.user)
       setAuthToken(response.data?.api_key)
       distributeAuthToken(response.data?.api_key)
 
-      return navigation.navigate("Home", { screen: "Main" })
-    } else {
-      setMfaError("Invalid MFA code. Please Try Again.")
-      return
+      setIsVerifying(false)
     }
   }
 
@@ -75,6 +81,10 @@ export const MfaScreen: FC<MfaScreenProps> = observer(function MfaScreen(_props)
     themed,
     theme: { colors },
   } = useAppTheme()
+
+  if (isVerifying) {
+    return <Loading/>
+  }
 
   return (
     <Screen style={$root} preset="auto" contentContainerStyle={themed($screenContentContainer)}>

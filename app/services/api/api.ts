@@ -16,6 +16,9 @@ import type {
   Profile,
   MFAResendResponse,
   VersionResponse,
+  HealthResponse,
+  DeleteResponse,
+  User,
 } from "./api.types"
 import { loadString } from "@/utils/storage"
 
@@ -89,10 +92,27 @@ export class Api {
 
   // AUTH FUNCTIONS
 
+  async getUser(): Promise<ApiResponse<User>> {
+    const response: ApiResponse<User> = await this.apisauce.get(`/users/?user_id=${this.user_id}`)
+    return response
+  }
+
   async validateMFA(code: string): Promise<ApiResponse<MFACheckResponse>> {
     const response: ApiResponse<MFACheckResponse> = await this.apisauce.get(
       `/users/mfa/check/${code}?user_id=${this.user_id}`,
     )
+    return response
+  }
+
+  async enableMFA(): Promise<ApiResponse<User>>{
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<User> = await this.apisauce.get(`/users/mfa/enable?user_id=${this.user_id}`)
+    return response
+  }
+
+  async disableMFA(): Promise<ApiResponse<User>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<User> = await this.apisauce.get(`/users/mfa/disable?user_id=${this.user_id}`)
     return response
   }
 
@@ -108,6 +128,12 @@ export class Api {
       username,
       password,
     })
+    return response
+  }
+
+  async delete(): Promise<ApiResponse<DeleteResponse>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<DeleteResponse> = await this.apisauce.get(`/users/delete?user_id=${this.user_id}`)
     return response
   }
 
@@ -199,6 +225,18 @@ export class Api {
   async getVersionInfo(): Promise<ApiResponse<VersionResponse>> {
     await this.ensureAuthLoaded()
     const response: ApiResponse<VersionResponse> = await this.apisauce.get("/health/version")
+    return response
+  }
+
+  async checkRedis(): Promise<ApiResponse<HealthResponse>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<HealthResponse> = await this.apisauce.get("/health/redis")
+    return response
+  }
+
+  async checkPostgres(): Promise<ApiResponse<HealthResponse>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<HealthResponse> = await this.apisauce.get("/health/postgres")
     return response
   }
 }
