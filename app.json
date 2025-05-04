@@ -55,7 +55,17 @@
           "backgroundColor": "#FFFFFF"
         }
       ],
-      "react-native-email-link"
+      "react-native-email-link",
+      "expo-background-task",
+      ["expo-build-properties",
+        {
+            "android": {
+              "compileSdkVersion": 35,
+              "targetSdkVersion": 34,
+              "extraMavenRepos": ["../../node_modules/@notifee/react-native/android/libs"]
+            }
+        }
+      ]
     ],
     "experiments": {
       "tsconfigPaths": true

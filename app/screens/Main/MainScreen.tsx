@@ -7,6 +7,7 @@ import type { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { logEverything, storage } from "@/utils/storage"
 import { useStores } from "@/models"
+import notifee from "@notifee/react-native"
 
 export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function MainScreen(_props) {
   const { navigation } = _props
@@ -19,6 +20,28 @@ export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function Main
     themed,
     theme: { colors },
   } = useAppTheme()
+
+  async function onDisplayNotification() {
+    await notifee.requestPermission()
+
+    const channelId = await notifee.createChannel({
+      id: "default",
+      name: "Default Channel"
+    })
+
+    await notifee.displayNotification({
+      title: "Notification Title",
+      body: "Main body content of the notification",
+      android: {
+        channelId,
+        pressAction: {
+          id: "default",
+        },
+      },
+    })
+
+
+  }
 
   return (
     <Screen
@@ -41,6 +64,7 @@ export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function Main
         }
       />
       <Button text="Log Local Storage" onPress={() => logEverything()} />
+      <Button text="Display Notification" onPress={() => onDisplayNotification()}/>
     </Screen>
   )
 })

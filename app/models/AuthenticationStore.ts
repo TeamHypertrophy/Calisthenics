@@ -1,8 +1,6 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { api, User } from "@/services/api"
-import { withSetPropAction } from "./helpers/withSetPropAction"
 import { clear, remove, saveString } from "@/utils/storage"
-import { ProfileStoreModel } from "./ProfileStore"
 
 export const AuthenticationStoreModel = types
   .model("AuthenticationStore")
@@ -30,7 +28,6 @@ export const AuthenticationStoreModel = types
   })
   .views((store) => ({
     get isAuthenticated() {
-      // TODO Check API Key Expiry (Require Re-Login)
       return !!store.authToken
     },
     get validationError() {
