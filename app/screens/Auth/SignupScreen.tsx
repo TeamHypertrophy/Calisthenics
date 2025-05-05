@@ -1,21 +1,21 @@
-import { ComponentType, FC, useEffect, useMemo, useRef, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { ImageStyle, TextInput, TextStyle, ViewStyle } from "react-native"
-import { AppStackScreenProps } from "@/navigators"
 import {
   AutoImage,
+  Button,
   Icon,
   Screen,
   Text,
   TextField,
   TextFieldAccessoryProps,
-  Button,
 } from "@/components"
-import { ThemedStyle } from "@/theme"
 import { useStores } from "@/models"
+import { AppStackScreenProps } from "@/navigators"
 import { api } from "@/services/api"
+import { ThemedStyle } from "@/theme"
 import { loadString, saveString } from "@/utils/storage"
 import { useAppTheme } from "@/utils/useAppTheme"
+import { observer } from "mobx-react-lite"
+import { ComponentType, FC, useEffect, useMemo, useRef, useState } from "react"
+import { ImageStyle, TextInput, TextStyle, ViewStyle } from "react-native"
 
 interface SignupScreenProps extends AppStackScreenProps<"Signup"> {}
 

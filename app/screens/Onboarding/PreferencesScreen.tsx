@@ -1,15 +1,15 @@
-import { FC, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { TextStyle, ViewStyle } from "react-native"
-import { AppStackScreenProps } from "@/navigators"
 import { Button, Screen, Text } from "@/components"
+import { useStores } from "@/models"
+import { AppStackScreenProps } from "@/navigators"
+import { PreferredHeight, PreferredWeight, Profile } from "@/services/api"
 import { spacing, ThemedStyle } from "@/theme"
+import { renderToast } from "@/utils/toastNotification"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { PreferredHeight, PreferredWeight, Profile } from "@/services/api"
-import { renderToast } from "@/utils/toastNotification"
+import { observer } from "mobx-react-lite"
+import { FC, useState } from "react"
+import { TextStyle, ViewStyle } from "react-native"
 import { Dropdown } from "react-native-element-dropdown"
-import { useStores } from "@/models"
 
 interface PreferencesScreenProps extends AppStackScreenProps<"Preferences"> {}
 

@@ -1,10 +1,10 @@
-import { Image, ImageProps, ImageStyle, StyleProp, TextStyle, View, ViewStyle } from "react-native"
+import type { ThemedStyle } from "@/theme"
 
+import { translate } from "@/i18n/translate"
+import { useAppTheme } from "@/utils/useAppTheme"
+import { Image, ImageProps, ImageStyle, StyleProp, TextStyle, View, ViewStyle } from "react-native"
 import { Button, ButtonProps } from "./Button"
 import { Text, TextProps } from "./Text"
-import { useAppTheme } from "@/utils/useAppTheme"
-import type { ThemedStyle } from "@/theme"
-import { translate } from "@/i18n/translate"
 
 const sadFace = require("../../assets/images/sad-face.png")
 
@@ -165,7 +165,9 @@ export function EmptyState(props: EmptyStateProps) {
   const $containerStyles = [$containerStyleOverride]
   const $imageStyles = [
     $image,
-    (isHeadingPresent || isContentPresent || isButtonPresent) && { marginBottom: spacing.xxxs },
+    (isHeadingPresent || isContentPresent || isButtonPresent) && {
+      marginBottom: spacing.xxxs,
+    },
     $imageStyleOverride,
     ImageProps?.style,
   ]
@@ -184,7 +186,9 @@ export function EmptyState(props: EmptyStateProps) {
     ContentTextProps?.style,
   ]
   const $buttonStyles = [
-    (isImagePresent || isHeadingPresent || isContentPresent) && { marginTop: spacing.xl },
+    (isImagePresent || isHeadingPresent || isContentPresent) && {
+      marginTop: spacing.xl,
+    },
     $buttonStyleOverride,
     ButtonProps?.style,
   ]

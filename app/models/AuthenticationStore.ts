@@ -1,6 +1,6 @@
-import { Instance, SnapshotOut, types } from "mobx-state-tree"
-import { api, User } from "@/services/api"
+import { User, api } from "@/services/api"
 import { clear, remove, saveString } from "@/utils/storage"
+import { Instance, SnapshotOut, types } from "mobx-state-tree"
 
 export const AuthenticationStoreModel = types
   .model("AuthenticationStore")
@@ -87,12 +87,15 @@ export const AuthenticationStoreModel = types
       api.user_id = store.userID
     },
     logout() {
+      console.log("[AUTH] Removing Credentials From Store")
       store.authToken = undefined
       store.authUsername = ""
       store.authEmail = ""
       store.userID = ""
 
+      console.log("[AUTH] Removing Credentials From Storage")
       clear()
+      console.log("[AUTH] Logout Complete")
     },
     async deleteAccount() {
       const response = await api.delete()

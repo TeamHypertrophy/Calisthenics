@@ -1,14 +1,16 @@
+import type { ThemedStyle } from "@/theme"
+
+import { translate } from "@/i18n"
+import { useAppTheme } from "@/utils/useAppTheme"
+import { MaterialIcons } from "@expo/vector-icons"
 import { BottomTabScreenProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { CompositeScreenProps } from "@react-navigation/native"
 import { TextStyle, ViewStyle } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+
 import { Icon } from "../components"
-import { translate } from "@/i18n"
 import { LogsScreen, MainScreen, ProfileScreen, SettingsScreen, TrainerScreen } from "../screens"
-import type { ThemedStyle } from "@/theme"
 import { AppStackParamList, AppStackScreenProps } from "./AppNavigator"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { MaterialIcons } from "@expo/vector-icons"
 
 export type HomeTabParamList = {
   Main: undefined

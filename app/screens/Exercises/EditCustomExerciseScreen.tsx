@@ -1,10 +1,10 @@
-import { FC } from "react"
-import { observer } from "mobx-react-lite"
-import { ViewStyle } from "react-native"
-import { AppStackScreenProps } from "@/navigators"
 import { Screen, Text } from "@/components"
+import { AppStackScreenProps } from "@/navigators"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
+import { observer } from "mobx-react-lite"
+import { FC } from "react"
+import { ViewStyle } from "react-native"
 
 interface EditCustomExerciseScreenProps extends AppStackScreenProps<"EditCustomExercise"> {}
 

@@ -1,13 +1,14 @@
-import { FC } from "react"
-import { observer } from "mobx-react-lite"
-import { ViewStyle } from "react-native"
-import { Button, Screen, Text } from "@/components"
-import { HomeTabScreenProps } from "@/navigators/HomeNavigator"
 import type { ThemedStyle } from "@/theme"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { logEverything, storage } from "@/utils/storage"
+
+import { Button, Screen, Text } from "@/components"
 import { useStores } from "@/models"
+import { HomeTabScreenProps } from "@/navigators/HomeNavigator"
+import { logEverything, storage } from "@/utils/storage"
+import { useAppTheme } from "@/utils/useAppTheme"
 import notifee from "@notifee/react-native"
+import { observer } from "mobx-react-lite"
+import { FC } from "react"
+import { ViewStyle } from "react-native"
 
 export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function MainScreen(_props) {
   const { navigation } = _props
@@ -26,7 +27,7 @@ export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function Main
 
     const channelId = await notifee.createChannel({
       id: "default",
-      name: "Default Channel"
+      name: "Default Channel",
     })
 
     await notifee.displayNotification({
@@ -39,8 +40,6 @@ export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function Main
         },
       },
     })
-
-
   }
 
   return (
@@ -64,7 +63,7 @@ export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function Main
         }
       />
       <Button text="Log Local Storage" onPress={() => logEverything()} />
-      <Button text="Display Notification" onPress={() => onDisplayNotification()}/>
+      <Button text="Display Notification" onPress={() => onDisplayNotification()} />
     </Screen>
   )
 })

@@ -1,8 +1,8 @@
+import { Button, Icon, Screen, Text } from "@/components"
+import { ThemedStyle } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
 import React, { FC, useEffect } from "react"
 import { TextStyle, View, ViewStyle } from "react-native"
-import { Screen, Text, Button, Icon } from "@/components"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { ThemedStyle } from "@/theme"
 
 interface ErrorScreenProps {
   title?: string

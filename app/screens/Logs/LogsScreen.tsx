@@ -1,8 +1,8 @@
-import { FC } from "react"
-import { observer } from "mobx-react-lite"
-import { ViewStyle } from "react-native"
 import { Screen, Text } from "@/components"
 import { HomeTabScreenProps } from "@/navigators/HomeNavigator"
+import { observer } from "mobx-react-lite"
+import { FC } from "react"
+import { ViewStyle } from "react-native"
 
 export const LogsScreen: FC<HomeTabScreenProps<"Logs">> = observer(function LogsScreen() {
   return (

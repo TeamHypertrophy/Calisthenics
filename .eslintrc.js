@@ -10,7 +10,7 @@ module.exports = {
     "plugin:react/jsx-runtime",
     "prettier",
   ],
-  plugins: ["reactotron", "prettier"],
+  plugins: ["reactotron", "prettier", "perfectionist"],
   rules: {
     "prettier/prettier": "error",
     // typescript-eslint
@@ -53,5 +53,6 @@ module.exports = {
     "no-global-assign": 0,
     "quotes": 0,
     "space-before-function-paren": 0,
+    "perfectionist/sort-imports": "error",
   },
 }

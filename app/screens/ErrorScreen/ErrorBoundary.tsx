@@ -1,6 +1,7 @@
-import { Component, ErrorInfo, ReactNode } from "react"
-import { ErrorDetails } from "./ErrorDetails"
 import { reportCrash } from "@/utils/crashReporting"
+import { Component, ErrorInfo, ReactNode } from "react"
+
+import { ErrorDetails } from "./ErrorDetails"
 
 interface Props {
   children: ReactNode

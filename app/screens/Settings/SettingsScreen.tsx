@@ -1,21 +1,21 @@
-import { FC, useRef, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { ViewStyle, View, TouchableOpacity, TextStyle, Platform } from "react-native"
-import Clipboard from "@react-native-clipboard/clipboard"
-import { Screen, Text, Button, Icon, Card } from "@/components"
-import { ThemedStyle } from "@/theme"
-import { useAppTheme } from "@/utils/useAppTheme"
+import { Button, Card, Screen, Text } from "@/components"
+import { ErrorScreen } from "@/components/ErrorScreen"
+import { Loading } from "@/components/Loader"
 import { useStores } from "@/models"
 import { HomeTabScreenProps } from "@/navigators/HomeNavigator"
-import { AntDesign, MaterialIcons, Ionicons } from "@expo/vector-icons"
-import { Modalize } from "react-native-modalize"
 import { api } from "@/services/api"
-import Constants from "expo-constants"
-import { useQuery } from "@tanstack/react-query"
-import { Loading } from "@/components/Loader"
-import { ErrorScreen } from "@/components/ErrorScreen"
-import { useIsConnected } from "react-native-offline"
+import { ThemedStyle } from "@/theme"
 import { clear } from "@/utils/storage"
+import { useAppTheme } from "@/utils/useAppTheme"
+import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons"
+import Clipboard from "@react-native-clipboard/clipboard"
+import { useQuery } from "@tanstack/react-query"
+import Constants from "expo-constants"
+import { observer } from "mobx-react-lite"
+import { FC, useRef, useState } from "react"
+import { Platform, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
+import { Modalize } from "react-native-modalize"
+import { useIsConnected } from "react-native-offline"
 
 export const SettingsScreen: FC<HomeTabScreenProps<"Settings">> = observer(
   function SettingsScreen(_props) {
@@ -23,6 +23,7 @@ export const SettingsScreen: FC<HomeTabScreenProps<"Settings">> = observer(
 
     const {
       authenticationStore: { logout, deleteAccount },
+      profileStore: { clear: clearProfileStore },
     } = useStores()
 
     const logoutModalRef = useRef<Modalize>(null)
@@ -38,6 +39,19 @@ export const SettingsScreen: FC<HomeTabScreenProps<"Settings">> = observer(
 
     const handleDeleteAccountPress = () => {
       deleteAccountRef.current?.open()
+    }
+
+    const handleLogout = () => {
+      clearProfileStore()
+      logout()
+    }
+
+    const handleDeleteAccount = async () => {
+      deleteAccountRef.current?.close()
+      await deleteAccount()
+      clear()
+      clearProfileStore()
+      logout()
     }
 
     const {
@@ -135,11 +149,6 @@ Network Status: ${isConnected ? "Online" : "Offline"}
               <Button
                 text="Change Password"
                 onPress={() => navigation.navigate("UpdatePassword")}
-                style={themed($button)}
-              />
-              <Button
-                text="Reset Password"
-                onPress={() => navigation.navigate("ForgotPassword")}
                 style={themed($button)}
               />
 
@@ -254,10 +263,7 @@ Network Status: ${isConnected ? "Online" : "Offline"}
                 style={themed($confirmButton)}
                 textStyle={$confirmButtonText}
                 preset="default"
-                onPress={() => {
-                  logoutModalRef.current?.close()
-                  logout()
-                }}
+                onPress={handleLogout}
               />
             </View>
           </View>
@@ -294,12 +300,7 @@ Network Status: ${isConnected ? "Online" : "Offline"}
                 style={themed($confirmButton)}
                 textStyle={$confirmButtonText}
                 preset="default"
-                onPress={async () => {
-                  deleteAccountRef.current?.close()
-                  await deleteAccount()
-                  clear()
-                  logout()
-                }}
+                onPress={handleDeleteAccount}
               />
             </View>
           </View>

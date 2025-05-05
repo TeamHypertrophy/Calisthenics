@@ -1,7 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
 
-
 /**
  * AUTO-GENERATED FILE - DO NOT EDIT!
  *
@@ -10,704 +9,982 @@
  *
  */
 
-
-export type Json = unknown;
-export type activitylevel = 'extremely' | 'light' | 'moderate' | 'very';
-export type diet = 'anything' | 'keto' | 'vegan' | 'vegetarian';
-export type difficulty = 'advanced' | 'beginner' | 'intermediate';
-export type equipment = 'barbell' | 'bodyweight' | 'cable' | 'dumbbell' | 'kettlebell' | 'machine' | 'other' | 'resistance_band';
-export type exercisetype = 'bodyweight' | 'cardio' | 'flexibility' | 'plyometric' | 'strength';
-export type fitnessgoal = 'endurance' | 'maintenance' | 'muscle_gain' | 'strength' | 'weight_loss';
-export type gender = 'female' | 'male';
-export type musclegroup = 'abs' | 'biceps' | 'calves' | 'chest' | 'forearms' | 'glutes' | 'hamstrings' | 'lats' | 'lower_back' | 'obliques' | 'quads' | 'shoulders' | 'triceps' | 'upper_back';
-export type preferredheight = 'cm' | 'in';
-export type preferredweight = 'kg' | 'lbs';
-export type role = 'admin' | 'developer' | 'trainer' | 'user';
-export type specialization = 'endurance' | 'maintenance' | 'muscle_gain' | 'strength' | 'weight_loss';
-export type status = 'active' | 'expired' | 'revoked';
-export type userstatus = 'active' | 'pending' | 'pending_deletion';
-export type workoutinterval = 'daily' | 'monthly' | 'weekly';
+export type Json = unknown
+export type activitylevel = "extremely" | "light" | "moderate" | "very"
+export type diet = "anything" | "keto" | "vegan" | "vegetarian"
+export type difficulty = "advanced" | "beginner" | "intermediate"
+export type equipment =
+  | "barbell"
+  | "bodyweight"
+  | "cable"
+  | "dumbbell"
+  | "kettlebell"
+  | "machine"
+  | "other"
+  | "resistance_band"
+export type exercisetype = "bodyweight" | "cardio" | "flexibility" | "plyometric" | "strength"
+export type fitnessgoal = "endurance" | "maintenance" | "muscle_gain" | "strength" | "weight_loss"
+export type gender = "female" | "male"
+export type musclegroup =
+  | "abs"
+  | "biceps"
+  | "calves"
+  | "chest"
+  | "forearms"
+  | "glutes"
+  | "hamstrings"
+  | "lats"
+  | "lower_back"
+  | "obliques"
+  | "quads"
+  | "shoulders"
+  | "triceps"
+  | "upper_back"
+export type preferredheight = "cm" | "in"
+export type preferredweight = "kg" | "lbs"
+export type role = "admin" | "developer" | "trainer" | "user"
+export type specialization =
+  | "endurance"
+  | "maintenance"
+  | "muscle_gain"
+  | "strength"
+  | "weight_loss"
+export type status = "active" | "expired" | "revoked"
+export type userstatus = "active" | "pending" | "pending_deletion"
+export type workoutinterval = "daily" | "monthly" | "weekly"
 
 // Table __diesel_schema_migrations
 export interface DieselSchemaMigrations {
-  version: string;
-  run_on: Date;
+  version: string
+  run_on: Date
 }
 export interface DieselSchemaMigrationsInput {
-  version: string;
-  run_on?: Date;
+  version: string
+  run_on?: Date
 }
 const __diesel_schema_migrations = {
-  tableName: '__diesel_schema_migrations',
-  columns: ['version', 'run_on'],
-  requiredForInsert: ['version'],
-  primaryKey: 'version',
+  tableName: "__diesel_schema_migrations",
+  columns: ["version", "run_on"],
+  requiredForInsert: ["version"],
+  primaryKey: "version",
   foreignKeys: {},
   $type: null as unknown as DieselSchemaMigrations,
-  $input: null as unknown as DieselSchemaMigrationsInput
-} as const;
+  $input: null as unknown as DieselSchemaMigrationsInput,
+} as const
 
 // Table api_key_logs
 export interface ApiKeyLogs {
-  log_id: number;
-  user_id: string;
-  api_key: string;
-  method: string;
-  route: string;
-  status_code: number;
-  ip_address: string;
-  user_agent: string;
-  created_at: Date;
+  log_id: number
+  user_id: string
+  api_key: string
+  method: string
+  route: string
+  status_code: number
+  ip_address: string
+  user_agent: string
+  created_at: Date
 }
 export interface ApiKeyLogsInput {
-  log_id?: number;
-  user_id: string;
-  api_key: string;
-  method?: string;
-  route?: string;
-  status_code?: number;
-  ip_address: string;
-  user_agent?: string;
-  created_at?: Date;
+  log_id?: number
+  user_id: string
+  api_key: string
+  method?: string
+  route?: string
+  status_code?: number
+  ip_address: string
+  user_agent?: string
+  created_at?: Date
 }
 const api_key_logs = {
-  tableName: 'api_key_logs',
-  columns: ['log_id', 'user_id', 'api_key', 'method', 'route', 'status_code', 'ip_address', 'user_agent', 'created_at'],
-  requiredForInsert: ['user_id', 'api_key', 'ip_address'],
-  primaryKey: 'log_id',
+  tableName: "api_key_logs",
+  columns: [
+    "log_id",
+    "user_id",
+    "api_key",
+    "method",
+    "route",
+    "status_code",
+    "ip_address",
+    "user_agent",
+    "created_at",
+  ],
+  requiredForInsert: ["user_id", "api_key", "ip_address"],
+  primaryKey: "log_id",
   foreignKeys: {
-    user_id: { table: 'users', column: 'user_id', $type: null as unknown as Users },
-    api_key: { table: 'api_keys', column: 'api_key', $type: null as unknown as ApiKeys },
+    user_id: {
+      table: "users",
+      column: "user_id",
+      $type: null as unknown as Users,
+    },
+    api_key: {
+      table: "api_keys",
+      column: "api_key",
+      $type: null as unknown as ApiKeys,
+    },
   },
   $type: null as unknown as ApiKeyLogs,
-  $input: null as unknown as ApiKeyLogsInput
-} as const;
+  $input: null as unknown as ApiKeyLogsInput,
+} as const
 
 // Table api_keys
 export interface ApiKeys {
-  key_id: number;
-  user_id: string;
-  api_key: string;
-  created_at: Date;
-  updated_at: Date;
-  expires_at: Date;
-  role: role;
-  revoked_reason: string;
-  status: status;
-  quota: number;
+  key_id: number
+  user_id: string
+  api_key: string
+  created_at: Date
+  updated_at: Date
+  expires_at: Date
+  role: role
+  revoked_reason: string
+  status: status
+  quota: number
 }
 export interface ApiKeysInput {
-  key_id?: number;
-  user_id: string;
-  api_key?: string;
-  created_at?: Date;
-  updated_at?: Date;
-  expires_at?: Date;
-  role?: role;
-  revoked_reason?: string;
-  status?: status;
-  quota?: number;
+  key_id?: number
+  user_id: string
+  api_key?: string
+  created_at?: Date
+  updated_at?: Date
+  expires_at?: Date
+  role?: role
+  revoked_reason?: string
+  status?: status
+  quota?: number
 }
 const api_keys = {
-  tableName: 'api_keys',
-  columns: ['key_id', 'user_id', 'api_key', 'created_at', 'updated_at', 'expires_at', 'role', 'revoked_reason', 'status', 'quota'],
-  requiredForInsert: ['user_id'],
-  primaryKey: 'key_id',
-  foreignKeys: { user_id: { table: 'users', column: 'user_id', $type: null as unknown as Users }, },
+  tableName: "api_keys",
+  columns: [
+    "key_id",
+    "user_id",
+    "api_key",
+    "created_at",
+    "updated_at",
+    "expires_at",
+    "role",
+    "revoked_reason",
+    "status",
+    "quota",
+  ],
+  requiredForInsert: ["user_id"],
+  primaryKey: "key_id",
+  foreignKeys: {
+    user_id: {
+      table: "users",
+      column: "user_id",
+      $type: null as unknown as Users,
+    },
+  },
   $type: null as unknown as ApiKeys,
-  $input: null as unknown as ApiKeysInput
-} as const;
+  $input: null as unknown as ApiKeysInput,
+} as const
 
 // Table calorie_logs
 export interface CalorieLogs {
-  log_id: number;
-  user_id: string;
-  date: Date;
-  amount: number;
-  updated_at: Date;
+  log_id: number
+  user_id: string
+  date: Date
+  amount: number
+  updated_at: Date
 }
 export interface CalorieLogsInput {
-  log_id?: number;
-  user_id: string;
-  date?: Date;
-  amount: number;
-  updated_at?: Date;
+  log_id?: number
+  user_id: string
+  date?: Date
+  amount: number
+  updated_at?: Date
 }
 const calorie_logs = {
-  tableName: 'calorie_logs',
-  columns: ['log_id', 'user_id', 'date', 'amount', 'updated_at'],
-  requiredForInsert: ['user_id', 'amount'],
-  primaryKey: 'log_id',
-  foreignKeys: { user_id: { table: 'users', column: 'user_id', $type: null as unknown as Users }, },
+  tableName: "calorie_logs",
+  columns: ["log_id", "user_id", "date", "amount", "updated_at"],
+  requiredForInsert: ["user_id", "amount"],
+  primaryKey: "log_id",
+  foreignKeys: {
+    user_id: {
+      table: "users",
+      column: "user_id",
+      $type: null as unknown as Users,
+    },
+  },
   $type: null as unknown as CalorieLogs,
-  $input: null as unknown as CalorieLogsInput
-} as const;
+  $input: null as unknown as CalorieLogsInput,
+} as const
 
 // Table custom_exercises
 export interface CustomExercises {
-  exercise_id: number;
-  user_id: string;
-  name: string;
-  equipment: equipment;
-  difficulty: difficulty;
-  muscle_group: musclegroup;
-  sets: number;
-  reps: number;
-  rest_time: number;
-  exercise_type: exercisetype;
-  created_at: Date;
-  updated_at: Date;
+  exercise_id: number
+  user_id: string
+  name: string
+  equipment: equipment
+  difficulty: difficulty
+  muscle_group: musclegroup
+  sets: number
+  reps: number
+  rest_time: number
+  exercise_type: exercisetype
+  created_at: Date
+  updated_at: Date
 }
 export interface CustomExercisesInput {
-  exercise_id: number;
-  user_id: string;
-  name: string;
-  equipment: equipment;
-  difficulty: difficulty;
-  muscle_group: musclegroup;
-  sets?: number;
-  reps?: number;
-  rest_time?: number;
-  exercise_type: exercisetype;
-  created_at?: Date;
-  updated_at?: Date;
+  exercise_id: number
+  user_id: string
+  name: string
+  equipment: equipment
+  difficulty: difficulty
+  muscle_group: musclegroup
+  sets?: number
+  reps?: number
+  rest_time?: number
+  exercise_type: exercisetype
+  created_at?: Date
+  updated_at?: Date
 }
 const custom_exercises = {
-  tableName: 'custom_exercises',
-  columns: ['exercise_id', 'user_id', 'name', 'equipment', 'difficulty', 'muscle_group', 'sets', 'reps', 'rest_time', 'exercise_type', 'created_at', 'updated_at'],
-  requiredForInsert: ['exercise_id', 'user_id', 'name', 'equipment', 'difficulty', 'muscle_group', 'exercise_type'],
-  primaryKey: 'exercise_id',
-  foreignKeys: { user_id: { table: 'users', column: 'user_id', $type: null as unknown as Users }, },
+  tableName: "custom_exercises",
+  columns: [
+    "exercise_id",
+    "user_id",
+    "name",
+    "equipment",
+    "difficulty",
+    "muscle_group",
+    "sets",
+    "reps",
+    "rest_time",
+    "exercise_type",
+    "created_at",
+    "updated_at",
+  ],
+  requiredForInsert: [
+    "exercise_id",
+    "user_id",
+    "name",
+    "equipment",
+    "difficulty",
+    "muscle_group",
+    "exercise_type",
+  ],
+  primaryKey: "exercise_id",
+  foreignKeys: {
+    user_id: {
+      table: "users",
+      column: "user_id",
+      $type: null as unknown as Users,
+    },
+  },
   $type: null as unknown as CustomExercises,
-  $input: null as unknown as CustomExercisesInput
-} as const;
+  $input: null as unknown as CustomExercisesInput,
+} as const
 
 // Table exercise_logs
 export interface ExerciseLogs {
-  log_id: number;
-  user_id: string;
-  exercise_id: number;
-  sets_completed: number;
-  reps_completed: number;
-  date: Date;
-  updated_at: Date;
+  log_id: number
+  user_id: string
+  exercise_id: number
+  sets_completed: number
+  reps_completed: number
+  date: Date
+  updated_at: Date
 }
 export interface ExerciseLogsInput {
-  log_id?: number;
-  user_id: string;
-  exercise_id: number;
-  sets_completed: number;
-  reps_completed: number;
-  date?: Date;
-  updated_at?: Date;
+  log_id?: number
+  user_id: string
+  exercise_id: number
+  sets_completed: number
+  reps_completed: number
+  date?: Date
+  updated_at?: Date
 }
 const exercise_logs = {
-  tableName: 'exercise_logs',
-  columns: ['log_id', 'user_id', 'exercise_id', 'sets_completed', 'reps_completed', 'date', 'updated_at'],
-  requiredForInsert: ['user_id', 'exercise_id', 'sets_completed', 'reps_completed'],
-  primaryKey: 'log_id',
+  tableName: "exercise_logs",
+  columns: [
+    "log_id",
+    "user_id",
+    "exercise_id",
+    "sets_completed",
+    "reps_completed",
+    "date",
+    "updated_at",
+  ],
+  requiredForInsert: ["user_id", "exercise_id", "sets_completed", "reps_completed"],
+  primaryKey: "log_id",
   foreignKeys: {
-    user_id: { table: 'users', column: 'user_id', $type: null as unknown as Users },
-    exercise_id: { table: 'exercises', column: 'exercise_id', $type: null as unknown as Exercises },
+    user_id: {
+      table: "users",
+      column: "user_id",
+      $type: null as unknown as Users,
+    },
+    exercise_id: {
+      table: "exercises",
+      column: "exercise_id",
+      $type: null as unknown as Exercises,
+    },
   },
   $type: null as unknown as ExerciseLogs,
-  $input: null as unknown as ExerciseLogsInput
-} as const;
+  $input: null as unknown as ExerciseLogsInput,
+} as const
 
 // Table exercises
 export interface Exercises {
-  exercise_id: number;
-  name: string;
-  description: string;
-  instructions: string;
-  equipment: equipment;
-  difficulty: difficulty;
-  muscle_group: musclegroup;
-  sets: number;
-  reps: number;
-  rest_time: number;
-  exercise_type: exercisetype;
-  image_url: string;
-  video_url: string;
-  created_at: Date;
-  updated_at: Date;
+  exercise_id: number
+  name: string
+  description: string
+  instructions: string
+  equipment: equipment
+  difficulty: difficulty
+  muscle_group: musclegroup
+  sets: number
+  reps: number
+  rest_time: number
+  exercise_type: exercisetype
+  image_url: string
+  video_url: string
+  created_at: Date
+  updated_at: Date
 }
 export interface ExercisesInput {
-  exercise_id: number;
-  name: string;
-  description?: string;
-  instructions?: string;
-  equipment: equipment;
-  difficulty: difficulty;
-  muscle_group: musclegroup;
-  sets?: number;
-  reps?: number;
-  rest_time?: number;
-  exercise_type: exercisetype;
-  image_url?: string;
-  video_url?: string;
-  created_at?: Date;
-  updated_at?: Date;
+  exercise_id: number
+  name: string
+  description?: string
+  instructions?: string
+  equipment: equipment
+  difficulty: difficulty
+  muscle_group: musclegroup
+  sets?: number
+  reps?: number
+  rest_time?: number
+  exercise_type: exercisetype
+  image_url?: string
+  video_url?: string
+  created_at?: Date
+  updated_at?: Date
 }
 const exercises = {
-  tableName: 'exercises',
-  columns: ['exercise_id', 'name', 'description', 'instructions', 'equipment', 'difficulty', 'muscle_group', 'sets', 'reps', 'rest_time', 'exercise_type', 'image_url', 'video_url', 'created_at', 'updated_at'],
-  requiredForInsert: ['exercise_id', 'name', 'equipment', 'difficulty', 'muscle_group', 'exercise_type'],
-  primaryKey: 'exercise_id',
+  tableName: "exercises",
+  columns: [
+    "exercise_id",
+    "name",
+    "description",
+    "instructions",
+    "equipment",
+    "difficulty",
+    "muscle_group",
+    "sets",
+    "reps",
+    "rest_time",
+    "exercise_type",
+    "image_url",
+    "video_url",
+    "created_at",
+    "updated_at",
+  ],
+  requiredForInsert: [
+    "exercise_id",
+    "name",
+    "equipment",
+    "difficulty",
+    "muscle_group",
+    "exercise_type",
+  ],
+  primaryKey: "exercise_id",
   foreignKeys: {},
   $type: null as unknown as Exercises,
-  $input: null as unknown as ExercisesInput
-} as const;
+  $input: null as unknown as ExercisesInput,
+} as const
 
 // Table profiles
 export interface Profiles {
-  profile_id: number;
-  user_id: string;
-  first_name: string;
-  last_name: string;
-  age: number;
-  weight: number;
-  height: number;
-  gender: gender;
-  preferred_weight_unit: preferredweight;
-  preferred_height_unit: preferredheight;
-  public: boolean;
-  bio: string;
-  streak: number;
-  avatar_url: string;
-  activity_level: activitylevel;
-  fitness_goal: fitnessgoal;
-  diet: diet;
-  created_at: Date;
-  updated_at: Date;
+  profile_id: number
+  user_id: string
+  first_name: string
+  last_name: string
+  age: number
+  weight: number
+  height: number
+  gender: gender
+  preferred_weight_unit: preferredweight
+  preferred_height_unit: preferredheight
+  public: boolean
+  bio: string
+  streak: number
+  avatar_url: string
+  activity_level: activitylevel
+  fitness_goal: fitnessgoal
+  diet: diet
+  created_at: Date
+  updated_at: Date
 }
 export interface ProfilesInput {
-  profile_id?: number;
-  user_id: string;
-  first_name: string;
-  last_name: string;
-  age: number;
-  weight?: number;
-  height?: number;
-  gender: gender;
-  preferred_weight_unit?: preferredweight;
-  preferred_height_unit?: preferredheight;
-  public?: boolean;
-  bio?: string;
-  streak?: number;
-  avatar_url?: string;
-  activity_level?: activitylevel;
-  fitness_goal?: fitnessgoal;
-  diet?: diet;
-  created_at?: Date;
-  updated_at?: Date;
+  profile_id?: number
+  user_id: string
+  first_name: string
+  last_name: string
+  age: number
+  weight?: number
+  height?: number
+  gender: gender
+  preferred_weight_unit?: preferredweight
+  preferred_height_unit?: preferredheight
+  public?: boolean
+  bio?: string
+  streak?: number
+  avatar_url?: string
+  activity_level?: activitylevel
+  fitness_goal?: fitnessgoal
+  diet?: diet
+  created_at?: Date
+  updated_at?: Date
 }
 const profiles = {
-  tableName: 'profiles',
-  columns: ['profile_id', 'user_id', 'first_name', 'last_name', 'age', 'weight', 'height', 'gender', 'preferred_weight_unit', 'preferred_height_unit', 'public', 'bio', 'streak', 'avatar_url', 'activity_level', 'fitness_goal', 'diet', 'created_at', 'updated_at'],
-  requiredForInsert: ['user_id', 'first_name', 'last_name', 'age', 'gender'],
-  primaryKey: 'profile_id',
-  foreignKeys: { user_id: { table: 'users', column: 'user_id', $type: null as unknown as Users }, },
+  tableName: "profiles",
+  columns: [
+    "profile_id",
+    "user_id",
+    "first_name",
+    "last_name",
+    "age",
+    "weight",
+    "height",
+    "gender",
+    "preferred_weight_unit",
+    "preferred_height_unit",
+    "public",
+    "bio",
+    "streak",
+    "avatar_url",
+    "activity_level",
+    "fitness_goal",
+    "diet",
+    "created_at",
+    "updated_at",
+  ],
+  requiredForInsert: ["user_id", "first_name", "last_name", "age", "gender"],
+  primaryKey: "profile_id",
+  foreignKeys: {
+    user_id: {
+      table: "users",
+      column: "user_id",
+      $type: null as unknown as Users,
+    },
+  },
   $type: null as unknown as Profiles,
-  $input: null as unknown as ProfilesInput
-} as const;
+  $input: null as unknown as ProfilesInput,
+} as const
 
 // Table protein_logs
 export interface ProteinLogs {
-  log_id: number;
-  user_id: string;
-  date: Date;
-  amount: number;
-  updated_at: Date;
+  log_id: number
+  user_id: string
+  date: Date
+  amount: number
+  updated_at: Date
 }
 export interface ProteinLogsInput {
-  log_id?: number;
-  user_id: string;
-  date?: Date;
-  amount: number;
-  updated_at?: Date;
+  log_id?: number
+  user_id: string
+  date?: Date
+  amount: number
+  updated_at?: Date
 }
 const protein_logs = {
-  tableName: 'protein_logs',
-  columns: ['log_id', 'user_id', 'date', 'amount', 'updated_at'],
-  requiredForInsert: ['user_id', 'amount'],
-  primaryKey: 'log_id',
-  foreignKeys: { user_id: { table: 'users', column: 'user_id', $type: null as unknown as Users }, },
+  tableName: "protein_logs",
+  columns: ["log_id", "user_id", "date", "amount", "updated_at"],
+  requiredForInsert: ["user_id", "amount"],
+  primaryKey: "log_id",
+  foreignKeys: {
+    user_id: {
+      table: "users",
+      column: "user_id",
+      $type: null as unknown as Users,
+    },
+  },
   $type: null as unknown as ProteinLogs,
-  $input: null as unknown as ProteinLogsInput
-} as const;
+  $input: null as unknown as ProteinLogsInput,
+} as const
 
 // Table sleep_logs
 export interface SleepLogs {
-  log_id: number;
-  user_id: string;
-  beginning: Date;
-  end: Date;
-  amount: number;
-  updated_at: Date;
+  log_id: number
+  user_id: string
+  beginning: Date
+  end: Date
+  amount: number
+  updated_at: Date
 }
 export interface SleepLogsInput {
-  log_id?: number;
-  user_id: string;
-  beginning: Date;
-  end: Date;
-  amount?: number;
-  updated_at?: Date;
+  log_id?: number
+  user_id: string
+  beginning: Date
+  end: Date
+  amount?: number
+  updated_at?: Date
 }
 const sleep_logs = {
-  tableName: 'sleep_logs',
-  columns: ['log_id', 'user_id', 'beginning', 'end', 'amount', 'updated_at'],
-  requiredForInsert: ['user_id', 'beginning', 'end'],
-  primaryKey: 'log_id',
-  foreignKeys: { user_id: { table: 'users', column: 'user_id', $type: null as unknown as Users }, },
+  tableName: "sleep_logs",
+  columns: ["log_id", "user_id", "beginning", "end", "amount", "updated_at"],
+  requiredForInsert: ["user_id", "beginning", "end"],
+  primaryKey: "log_id",
+  foreignKeys: {
+    user_id: {
+      table: "users",
+      column: "user_id",
+      $type: null as unknown as Users,
+    },
+  },
   $type: null as unknown as SleepLogs,
-  $input: null as unknown as SleepLogsInput
-} as const;
+  $input: null as unknown as SleepLogsInput,
+} as const
 
 // Table trainer_announcements
 export interface TrainerAnnouncements {
-  announcement_id: number;
-  trainer_id: string;
-  title: string;
-  visibility: boolean;
-  content: string;
-  pinned: boolean;
-  created_at: Date;
-  updated_at: Date;
+  announcement_id: number
+  trainer_id: string
+  title: string
+  visibility: boolean
+  content: string
+  pinned: boolean
+  created_at: Date
+  updated_at: Date
 }
 export interface TrainerAnnouncementsInput {
-  announcement_id?: number;
-  trainer_id: string;
-  title: string;
-  visibility?: boolean;
-  content?: string;
-  pinned?: boolean;
-  created_at?: Date;
-  updated_at?: Date;
+  announcement_id?: number
+  trainer_id: string
+  title: string
+  visibility?: boolean
+  content?: string
+  pinned?: boolean
+  created_at?: Date
+  updated_at?: Date
 }
 const trainer_announcements = {
-  tableName: 'trainer_announcements',
-  columns: ['announcement_id', 'trainer_id', 'title', 'visibility', 'content', 'pinned', 'created_at', 'updated_at'],
-  requiredForInsert: ['trainer_id', 'title'],
-  primaryKey: 'announcement_id',
-  foreignKeys: { trainer_id: { table: 'users', column: 'user_id', $type: null as unknown as Users }, },
+  tableName: "trainer_announcements",
+  columns: [
+    "announcement_id",
+    "trainer_id",
+    "title",
+    "visibility",
+    "content",
+    "pinned",
+    "created_at",
+    "updated_at",
+  ],
+  requiredForInsert: ["trainer_id", "title"],
+  primaryKey: "announcement_id",
+  foreignKeys: {
+    trainer_id: {
+      table: "users",
+      column: "user_id",
+      $type: null as unknown as Users,
+    },
+  },
   $type: null as unknown as TrainerAnnouncements,
-  $input: null as unknown as TrainerAnnouncementsInput
-} as const;
+  $input: null as unknown as TrainerAnnouncementsInput,
+} as const
 
 // Table trainers
 export interface Trainers {
-  trainer_id: number;
-  user_id: string;
-  clients: string[];
-  specialization: specialization;
-  verified: boolean;
-  verified_at: Date | null;
-  created_at: Date;
-  updated_at: Date;
+  trainer_id: number
+  user_id: string
+  clients: string[]
+  specialization: specialization
+  verified: boolean
+  verified_at: Date | null
+  created_at: Date
+  updated_at: Date
 }
 export interface TrainersInput {
-  trainer_id?: number;
-  user_id: string;
-  clients?: string[];
-  specialization?: specialization;
-  verified?: boolean;
-  verified_at?: Date | null;
-  created_at?: Date;
-  updated_at?: Date;
+  trainer_id?: number
+  user_id: string
+  clients?: string[]
+  specialization?: specialization
+  verified?: boolean
+  verified_at?: Date | null
+  created_at?: Date
+  updated_at?: Date
 }
 const trainers = {
-  tableName: 'trainers',
-  columns: ['trainer_id', 'user_id', 'clients', 'specialization', 'verified', 'verified_at', 'created_at', 'updated_at'],
-  requiredForInsert: ['user_id'],
-  primaryKey: 'trainer_id',
-  foreignKeys: { user_id: { table: 'users', column: 'user_id', $type: null as unknown as Users }, },
+  tableName: "trainers",
+  columns: [
+    "trainer_id",
+    "user_id",
+    "clients",
+    "specialization",
+    "verified",
+    "verified_at",
+    "created_at",
+    "updated_at",
+  ],
+  requiredForInsert: ["user_id"],
+  primaryKey: "trainer_id",
+  foreignKeys: {
+    user_id: {
+      table: "users",
+      column: "user_id",
+      $type: null as unknown as Users,
+    },
+  },
   $type: null as unknown as Trainers,
-  $input: null as unknown as TrainersInput
-} as const;
+  $input: null as unknown as TrainersInput,
+} as const
 
 // Table users
 export interface Users {
-  user_id: string;
-  username: string;
-  password: string;
-  email: string;
-  email_verified: boolean;
-  email_verified_at: Date | null;
-  email_verification_token: string;
-  mfa_enabled: boolean;
-  mfa_code: string | null;
-  mfa_verified: boolean;
-  mfa_verification_token: string;
-  mfa_code_expires_at: Date | null;
-  password_updated_at: Date;
-  created_at: Date;
-  updated_at: Date;
-  last_login: Date;
-  last_login_ip: string;
-  ip_address: string;
-  role: role;
-  status: userstatus;
+  user_id: string
+  username: string
+  password: string
+  email: string
+  email_verified: boolean
+  email_verified_at: Date | null
+  email_verification_token: string
+  mfa_enabled: boolean
+  mfa_code: string | null
+  mfa_verified: boolean
+  mfa_verification_token: string
+  mfa_code_expires_at: Date | null
+  password_updated_at: Date
+  created_at: Date
+  updated_at: Date
+  last_login: Date
+  last_login_ip: string
+  ip_address: string
+  role: role
+  status: userstatus
 }
 export interface UsersInput {
-  user_id?: string;
-  username: string;
-  password: string;
-  email: string;
-  email_verified?: boolean;
-  email_verified_at?: Date | null;
-  email_verification_token?: string;
-  mfa_enabled?: boolean;
-  mfa_code?: string | null;
-  mfa_verified?: boolean;
-  mfa_verification_token?: string;
-  mfa_code_expires_at?: Date | null;
-  password_updated_at?: Date;
-  created_at?: Date;
-  updated_at?: Date;
-  last_login?: Date;
-  last_login_ip: string;
-  ip_address: string;
-  role?: role;
-  status?: userstatus;
+  user_id?: string
+  username: string
+  password: string
+  email: string
+  email_verified?: boolean
+  email_verified_at?: Date | null
+  email_verification_token?: string
+  mfa_enabled?: boolean
+  mfa_code?: string | null
+  mfa_verified?: boolean
+  mfa_verification_token?: string
+  mfa_code_expires_at?: Date | null
+  password_updated_at?: Date
+  created_at?: Date
+  updated_at?: Date
+  last_login?: Date
+  last_login_ip: string
+  ip_address: string
+  role?: role
+  status?: userstatus
 }
 const users = {
-  tableName: 'users',
-  columns: ['user_id', 'username', 'password', 'email', 'email_verified', 'email_verified_at', 'email_verification_token', 'mfa_enabled', 'mfa_code', 'mfa_verified', 'mfa_verification_token', 'mfa_code_expires_at', 'password_updated_at', 'created_at', 'updated_at', 'last_login', 'last_login_ip', 'ip_address', 'role', 'status'],
-  requiredForInsert: ['username', 'password', 'email', 'last_login_ip', 'ip_address'],
-  primaryKey: 'user_id',
+  tableName: "users",
+  columns: [
+    "user_id",
+    "username",
+    "password",
+    "email",
+    "email_verified",
+    "email_verified_at",
+    "email_verification_token",
+    "mfa_enabled",
+    "mfa_code",
+    "mfa_verified",
+    "mfa_verification_token",
+    "mfa_code_expires_at",
+    "password_updated_at",
+    "created_at",
+    "updated_at",
+    "last_login",
+    "last_login_ip",
+    "ip_address",
+    "role",
+    "status",
+  ],
+  requiredForInsert: ["username", "password", "email", "last_login_ip", "ip_address"],
+  primaryKey: "user_id",
   foreignKeys: {},
   $type: null as unknown as Users,
-  $input: null as unknown as UsersInput
-} as const;
+  $input: null as unknown as UsersInput,
+} as const
 
 // Table water_logs
 export interface WaterLogs {
-  log_id: number;
-  user_id: string;
-  date: Date;
-  amount: number;
-  updated_at: Date;
+  log_id: number
+  user_id: string
+  date: Date
+  amount: number
+  updated_at: Date
 }
 export interface WaterLogsInput {
-  log_id?: number;
-  user_id: string;
-  date?: Date;
-  amount: number;
-  updated_at?: Date;
+  log_id?: number
+  user_id: string
+  date?: Date
+  amount: number
+  updated_at?: Date
 }
 const water_logs = {
-  tableName: 'water_logs',
-  columns: ['log_id', 'user_id', 'date', 'amount', 'updated_at'],
-  requiredForInsert: ['user_id', 'amount'],
-  primaryKey: 'log_id',
-  foreignKeys: { user_id: { table: 'users', column: 'user_id', $type: null as unknown as Users }, },
+  tableName: "water_logs",
+  columns: ["log_id", "user_id", "date", "amount", "updated_at"],
+  requiredForInsert: ["user_id", "amount"],
+  primaryKey: "log_id",
+  foreignKeys: {
+    user_id: {
+      table: "users",
+      column: "user_id",
+      $type: null as unknown as Users,
+    },
+  },
   $type: null as unknown as WaterLogs,
-  $input: null as unknown as WaterLogsInput
-} as const;
+  $input: null as unknown as WaterLogsInput,
+} as const
 
 // Table workout_logs
 export interface WorkoutLogs {
-  log_id: number;
-  user_id: string;
-  workout_id: string;
-  date: Date;
-  updated_at: Date;
+  log_id: number
+  user_id: string
+  workout_id: string
+  date: Date
+  updated_at: Date
 }
 export interface WorkoutLogsInput {
-  log_id?: number;
-  user_id: string;
-  workout_id: string;
-  date?: Date;
-  updated_at?: Date;
+  log_id?: number
+  user_id: string
+  workout_id: string
+  date?: Date
+  updated_at?: Date
 }
 const workout_logs = {
-  tableName: 'workout_logs',
-  columns: ['log_id', 'user_id', 'workout_id', 'date', 'updated_at'],
-  requiredForInsert: ['user_id', 'workout_id'],
-  primaryKey: 'log_id',
+  tableName: "workout_logs",
+  columns: ["log_id", "user_id", "workout_id", "date", "updated_at"],
+  requiredForInsert: ["user_id", "workout_id"],
+  primaryKey: "log_id",
   foreignKeys: {
-    user_id: { table: 'users', column: 'user_id', $type: null as unknown as Users },
-    workout_id: { table: 'workouts', column: 'workout_id', $type: null as unknown as Workouts },
+    user_id: {
+      table: "users",
+      column: "user_id",
+      $type: null as unknown as Users,
+    },
+    workout_id: {
+      table: "workouts",
+      column: "workout_id",
+      $type: null as unknown as Workouts,
+    },
   },
   $type: null as unknown as WorkoutLogs,
-  $input: null as unknown as WorkoutLogsInput
-} as const;
+  $input: null as unknown as WorkoutLogsInput,
+} as const
 
 // Table workout_plan_logs
 export interface WorkoutPlanLogs {
-  log_id: number;
-  user_id: string;
-  plan_id: string;
-  date: Date;
-  updated_at: Date;
+  log_id: number
+  user_id: string
+  plan_id: string
+  date: Date
+  updated_at: Date
 }
 export interface WorkoutPlanLogsInput {
-  log_id?: number;
-  user_id: string;
-  plan_id: string;
-  date?: Date;
-  updated_at?: Date;
+  log_id?: number
+  user_id: string
+  plan_id: string
+  date?: Date
+  updated_at?: Date
 }
 const workout_plan_logs = {
-  tableName: 'workout_plan_logs',
-  columns: ['log_id', 'user_id', 'plan_id', 'date', 'updated_at'],
-  requiredForInsert: ['user_id', 'plan_id'],
-  primaryKey: 'log_id',
+  tableName: "workout_plan_logs",
+  columns: ["log_id", "user_id", "plan_id", "date", "updated_at"],
+  requiredForInsert: ["user_id", "plan_id"],
+  primaryKey: "log_id",
   foreignKeys: {
-    user_id: { table: 'users', column: 'user_id', $type: null as unknown as Users },
-    plan_id: { table: 'workout_plans', column: 'plan_id', $type: null as unknown as WorkoutPlans },
+    user_id: {
+      table: "users",
+      column: "user_id",
+      $type: null as unknown as Users,
+    },
+    plan_id: {
+      table: "workout_plans",
+      column: "plan_id",
+      $type: null as unknown as WorkoutPlans,
+    },
   },
   $type: null as unknown as WorkoutPlanLogs,
-  $input: null as unknown as WorkoutPlanLogsInput
-} as const;
+  $input: null as unknown as WorkoutPlanLogsInput,
+} as const
 
 // Table workout_plans
 export interface WorkoutPlans {
-  plan_id: string;
-  user_id: string;
-  name: string;
-  description: string;
-  workouts: string[];
-  created_at: Date;
-  updated_at: Date;
-  start_time: Date;
-  repeats: workoutinterval;
-  goal: fitnessgoal;
-  difficulty: difficulty;
-  is_public: boolean;
+  plan_id: string
+  user_id: string
+  name: string
+  description: string
+  workouts: string[]
+  created_at: Date
+  updated_at: Date
+  start_time: Date
+  repeats: workoutinterval
+  goal: fitnessgoal
+  difficulty: difficulty
+  is_public: boolean
 }
 export interface WorkoutPlansInput {
-  plan_id?: string;
-  user_id: string;
-  name: string;
-  description?: string;
-  workouts?: string[];
-  created_at?: Date;
-  updated_at?: Date;
-  start_time?: Date;
-  repeats?: workoutinterval;
-  goal?: fitnessgoal;
-  difficulty: difficulty;
-  is_public?: boolean;
+  plan_id?: string
+  user_id: string
+  name: string
+  description?: string
+  workouts?: string[]
+  created_at?: Date
+  updated_at?: Date
+  start_time?: Date
+  repeats?: workoutinterval
+  goal?: fitnessgoal
+  difficulty: difficulty
+  is_public?: boolean
 }
 const workout_plans = {
-  tableName: 'workout_plans',
-  columns: ['plan_id', 'user_id', 'name', 'description', 'workouts', 'created_at', 'updated_at', 'start_time', 'repeats', 'goal', 'difficulty', 'is_public'],
-  requiredForInsert: ['user_id', 'name', 'difficulty'],
-  primaryKey: 'plan_id',
-  foreignKeys: { user_id: { table: 'users', column: 'user_id', $type: null as unknown as Users }, },
+  tableName: "workout_plans",
+  columns: [
+    "plan_id",
+    "user_id",
+    "name",
+    "description",
+    "workouts",
+    "created_at",
+    "updated_at",
+    "start_time",
+    "repeats",
+    "goal",
+    "difficulty",
+    "is_public",
+  ],
+  requiredForInsert: ["user_id", "name", "difficulty"],
+  primaryKey: "plan_id",
+  foreignKeys: {
+    user_id: {
+      table: "users",
+      column: "user_id",
+      $type: null as unknown as Users,
+    },
+  },
   $type: null as unknown as WorkoutPlans,
-  $input: null as unknown as WorkoutPlansInput
-} as const;
+  $input: null as unknown as WorkoutPlansInput,
+} as const
 
 // Table workouts
 export interface Workouts {
-  workout_id: string;
-  user_id: string;
-  name: string;
-  description: string;
-  duration: number;
-  difficulty: difficulty;
-  created_at: Date;
-  updated_at: Date;
-  exercises: number[];
+  workout_id: string
+  user_id: string
+  name: string
+  description: string
+  duration: number
+  difficulty: difficulty
+  created_at: Date
+  updated_at: Date
+  exercises: number[]
 }
 export interface WorkoutsInput {
-  workout_id?: string;
-  user_id: string;
-  name: string;
-  description?: string;
-  duration?: number;
-  difficulty: difficulty;
-  created_at?: Date;
-  updated_at?: Date;
-  exercises?: number[];
+  workout_id?: string
+  user_id: string
+  name: string
+  description?: string
+  duration?: number
+  difficulty: difficulty
+  created_at?: Date
+  updated_at?: Date
+  exercises?: number[]
 }
 const workouts = {
-  tableName: 'workouts',
-  columns: ['workout_id', 'user_id', 'name', 'description', 'duration', 'difficulty', 'created_at', 'updated_at', 'exercises'],
-  requiredForInsert: ['user_id', 'name', 'difficulty'],
-  primaryKey: 'workout_id',
-  foreignKeys: { user_id: { table: 'users', column: 'user_id', $type: null as unknown as Users }, },
+  tableName: "workouts",
+  columns: [
+    "workout_id",
+    "user_id",
+    "name",
+    "description",
+    "duration",
+    "difficulty",
+    "created_at",
+    "updated_at",
+    "exercises",
+  ],
+  requiredForInsert: ["user_id", "name", "difficulty"],
+  primaryKey: "workout_id",
+  foreignKeys: {
+    user_id: {
+      table: "users",
+      column: "user_id",
+      $type: null as unknown as Users,
+    },
+  },
   $type: null as unknown as Workouts,
-  $input: null as unknown as WorkoutsInput
-} as const;
-
+  $input: null as unknown as WorkoutsInput,
+} as const
 
 export interface TableTypes {
   __diesel_schema_migrations: {
-    select: DieselSchemaMigrations;
-    input: DieselSchemaMigrationsInput;
-  };
+    select: DieselSchemaMigrations
+    input: DieselSchemaMigrationsInput
+  }
   api_key_logs: {
-    select: ApiKeyLogs;
-    input: ApiKeyLogsInput;
-  };
+    select: ApiKeyLogs
+    input: ApiKeyLogsInput
+  }
   api_keys: {
-    select: ApiKeys;
-    input: ApiKeysInput;
-  };
+    select: ApiKeys
+    input: ApiKeysInput
+  }
   calorie_logs: {
-    select: CalorieLogs;
-    input: CalorieLogsInput;
-  };
+    select: CalorieLogs
+    input: CalorieLogsInput
+  }
   custom_exercises: {
-    select: CustomExercises;
-    input: CustomExercisesInput;
-  };
+    select: CustomExercises
+    input: CustomExercisesInput
+  }
   exercise_logs: {
-    select: ExerciseLogs;
-    input: ExerciseLogsInput;
-  };
+    select: ExerciseLogs
+    input: ExerciseLogsInput
+  }
   exercises: {
-    select: Exercises;
-    input: ExercisesInput;
-  };
+    select: Exercises
+    input: ExercisesInput
+  }
   profiles: {
-    select: Profiles;
-    input: ProfilesInput;
-  };
+    select: Profiles
+    input: ProfilesInput
+  }
   protein_logs: {
-    select: ProteinLogs;
-    input: ProteinLogsInput;
-  };
+    select: ProteinLogs
+    input: ProteinLogsInput
+  }
   sleep_logs: {
-    select: SleepLogs;
-    input: SleepLogsInput;
-  };
+    select: SleepLogs
+    input: SleepLogsInput
+  }
   trainer_announcements: {
-    select: TrainerAnnouncements;
-    input: TrainerAnnouncementsInput;
-  };
+    select: TrainerAnnouncements
+    input: TrainerAnnouncementsInput
+  }
   trainers: {
-    select: Trainers;
-    input: TrainersInput;
-  };
+    select: Trainers
+    input: TrainersInput
+  }
   users: {
-    select: Users;
-    input: UsersInput;
-  };
+    select: Users
+    input: UsersInput
+  }
   water_logs: {
-    select: WaterLogs;
-    input: WaterLogsInput;
-  };
+    select: WaterLogs
+    input: WaterLogsInput
+  }
   workout_logs: {
-    select: WorkoutLogs;
-    input: WorkoutLogsInput;
-  };
+    select: WorkoutLogs
+    input: WorkoutLogsInput
+  }
   workout_plan_logs: {
-    select: WorkoutPlanLogs;
-    input: WorkoutPlanLogsInput;
-  };
+    select: WorkoutPlanLogs
+    input: WorkoutPlanLogsInput
+  }
   workout_plans: {
-    select: WorkoutPlans;
-    input: WorkoutPlansInput;
-  };
+    select: WorkoutPlans
+    input: WorkoutPlansInput
+  }
   workouts: {
-    select: Workouts;
-    input: WorkoutsInput;
-  };
+    select: Workouts
+    input: WorkoutsInput
+  }
 }
 
 export const tables = {

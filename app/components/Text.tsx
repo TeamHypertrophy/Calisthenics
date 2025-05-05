@@ -1,10 +1,11 @@
-import { TOptions } from "i18next"
-import { StyleProp, Text as RNText, TextProps as RNTextProps, TextStyle } from "react-native"
-import { isRTL, translate, TxKeyPath } from "@/i18n"
 import type { ThemedStyle, ThemedStyleArray } from "@/theme"
-import { useAppTheme } from "@/utils/useAppTheme"
+
+import { isRTL, translate, TxKeyPath } from "@/i18n"
 import { typography } from "@/theme/typography"
+import { useAppTheme } from "@/utils/useAppTheme"
+import { TOptions } from "i18next"
 import { ReactNode } from "react"
+import { Text as RNText, TextProps as RNTextProps, StyleProp, TextStyle } from "react-native"
 
 type Sizes = keyof typeof $sizeStyles
 type Weights = keyof typeof typography.primary

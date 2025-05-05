@@ -1,3 +1,5 @@
+import * as Screens from "@/screens"
+import { useAppTheme, useThemeProvider } from "@/utils/useAppTheme"
 /**
  * The app navigator (formerly "AppNavigator" and "MainNavigator") is used for the primary
  * navigation flows of your app.
@@ -5,15 +7,14 @@
  * and a "main" flow which the user will use once logged in.
  */
 import { NavigationContainer, NavigatorScreenParams } from "@react-navigation/native"
-import { createNativeStackNavigator, NativeStackScreenProps } from "@react-navigation/native-stack"
+import { NativeStackScreenProps, createNativeStackNavigator } from "@react-navigation/native-stack"
 import { observer } from "mobx-react-lite"
-import * as Screens from "@/screens"
+import { ComponentProps } from "react"
+
 import Config from "../config"
 import { useStores } from "../models"
 import { HomeNavigator, HomeTabParamList } from "./HomeNavigator"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
-import { useAppTheme, useThemeProvider } from "@/utils/useAppTheme"
-import { ComponentProps } from "react"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -109,7 +110,12 @@ const AppStack = observer(function AppStack() {
       initialRouteName={!isAuthenticated ? "Login" : !isOnboarded ? "PersonalInfo" : "Home"}
     >
       {!isAuthenticated ? (
-        <Stack.Screen name="Login" component={Screens.LoginScreen} />
+        <>
+          <Stack.Screen name="Login" component={Screens.LoginScreen} />
+          <Stack.Screen name="MFA" component={Screens.MfaScreen} />
+          <Stack.Screen name="Signup" component={Screens.SignupScreen} />
+          <Stack.Screen name="ForgotPassword" component={Screens.ForgotPasswordScreen} />
+        </>
       ) : !isOnboarded ? (
         <Stack.Screen name="PersonalInfo" component={Screens.PersonalInfoScreen} />
       ) : (
@@ -123,8 +129,6 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="Trainer" component={Screens.TrainerScreen} />
       <Stack.Screen name="TrainerAnnouncement" component={Screens.TrainerAnnouncementScreen} />
       <Stack.Screen name="Settings" component={Screens.SettingsScreen} />
-      <Stack.Screen name="MFA" component={Screens.MfaScreen} />
-      <Stack.Screen name="Signup" component={Screens.SignupScreen} />
       <Stack.Screen name="EditProfile" component={Screens.EditProfileScreen} />
       <Stack.Screen name="Preferences" component={Screens.PreferencesScreen} />
       <Stack.Screen name="Public" component={Screens.PublicScreen} />
@@ -140,7 +144,6 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="EditLog" component={Screens.EditLogScreen} />
       <Stack.Screen name="EditCustomExercise" component={Screens.EditCustomExerciseScreen} />
       <Stack.Screen name="EditExerciseLog" component={Screens.EditExerciseLogScreen} />
-      <Stack.Screen name="ForgotPassword" component={Screens.ForgotPasswordScreen} />
       <Stack.Screen name="UpdatePassword" component={Screens.UpdatePasswordScreen} />
       <Stack.Screen name="MfaSettings" component={Screens.MfaSettingsScreen} />
       <Stack.Screen name="ListTrainers" component={Screens.ListTrainersScreen} />

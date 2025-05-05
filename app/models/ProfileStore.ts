@@ -1,6 +1,7 @@
-import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
-import { withSetPropAction } from "./helpers/withSetPropAction"
 import { api, Profile } from "@/services/api"
+import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
+
+import { withSetPropAction } from "./helpers/withSetPropAction"
 
 export const ProfileStoreModel = types
   .model("ProfileStore")

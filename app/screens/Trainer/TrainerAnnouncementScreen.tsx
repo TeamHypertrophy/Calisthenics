@@ -1,8 +1,8 @@
-import { FC } from "react"
-import { observer } from "mobx-react-lite"
-import { ViewStyle } from "react-native"
-import { AppStackScreenProps } from "@/navigators"
 import { Screen, Text } from "@/components"
+import { AppStackScreenProps } from "@/navigators"
+import { observer } from "mobx-react-lite"
+import { FC } from "react"
+import { ViewStyle } from "react-native"
 
 interface TrainerAnnouncementScreenProps extends AppStackScreenProps<"TrainerAnnouncement"> {}
 

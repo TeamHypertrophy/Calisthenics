@@ -1,3 +1,4 @@
+import { loadString } from "@/utils/storage"
 /**
  * This Api class lets you define an API endpoint and methods to request
  * data and process it.
@@ -6,21 +7,22 @@
  * documentation for more details.
  */
 import { ApiResponse, ApisauceInstance, create } from "apisauce"
-import Config from "../../config"
-import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
+
 import type {
   ApiConfig,
+  DeleteResponse,
+  HealthResponse,
   LoginResponse,
   MFACheckResponse,
-  SignupResponse,
-  Profile,
   MFAResendResponse,
-  VersionResponse,
-  HealthResponse,
-  DeleteResponse,
+  Profile,
+  SignupResponse,
   User,
+  VersionResponse,
 } from "./api.types"
-import { loadString } from "@/utils/storage"
+
+import Config from "../../config"
+import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
 
 /**
  * Configuring the apisauce instance.
@@ -94,6 +96,18 @@ export class Api {
 
   async getUser(): Promise<ApiResponse<User>> {
     const response: ApiResponse<User> = await this.apisauce.get(`/users/?user_id=${this.user_id}`)
+    return response
+  }
+
+  async updatePassword(oldPassword: string, newPassword: string): Promise<ApiResponse<User>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<User> = await this.apisauce.post(
+      `/users/update/password?user_id=${this.user_id}`,
+      {
+        old_password: oldPassword,
+        new_password: newPassword,
+      },
+    )
     return response
   }
 

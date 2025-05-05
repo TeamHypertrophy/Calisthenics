@@ -1,3 +1,6 @@
+import type { ThemedStyle } from "@/theme"
+
+import { useAppTheme } from "@/utils/useAppTheme"
 import { ComponentType, FC, useMemo } from "react"
 import {
   GestureResponderEvent,
@@ -12,10 +15,9 @@ import {
   ViewProps,
   ViewStyle,
 } from "react-native"
+
 import { $styles } from "../../theme"
 import { Text, TextProps } from "../Text"
-import { useAppTheme } from "@/utils/useAppTheme"
-import type { ThemedStyle } from "@/theme"
 
 export interface ToggleProps<T> extends Omit<TouchableOpacityProps, "style"> {
   /**

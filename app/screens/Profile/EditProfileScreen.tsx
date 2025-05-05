@@ -1,39 +1,40 @@
-import { FC, useEffect, useRef, useState } from "react"
-import { observer } from "mobx-react-lite"
-import {
-  ActivityIndicator,
-  TextStyle,
-  View,
-  ViewStyle,
-  TouchableOpacity,
-  ImageStyle,
-} from "react-native"
-import { Button, Icon, Screen, Switch, Text, TextField } from "@/components"
-import { AppStackScreenProps } from "@/navigators"
-import { useStores } from "@/models"
 import type { ThemedStyle } from "@/theme"
-import { useAppTheme } from "@/utils/useAppTheme"
+
+import { Button, Screen, Switch, Text, TextField } from "@/components"
+import { AutoImage } from "@/components"
+import { ErrorScreen } from "@/components/ErrorScreen"
+import { Loading } from "@/components/Loader"
+import { useStores } from "@/models"
+import { AppStackScreenProps } from "@/navigators"
 import {
-  api,
   ActivityLevel,
   Diet,
   FitnessGoal,
   Gender,
   PreferredHeight,
   PreferredWeight,
+  api,
 } from "@/services/api"
-import { Dropdown } from "react-native-element-dropdown"
-import { AntDesign } from "@expo/vector-icons"
+import { Profile } from "@/services/api"
 import { renderToast } from "@/utils/toastNotification"
-import { AutoImage } from "@/components"
+import { useAppTheme } from "@/utils/useAppTheme"
+import { AntDesign } from "@expo/vector-icons"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { ApiResponse } from "apisauce"
 import * as ImagePicker from "expo-image-picker"
+import { observer } from "mobx-react-lite"
+import { FC, useEffect, useRef, useState } from "react"
+import {
+  ActivityIndicator,
+  ImageStyle,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from "react-native"
+import { Dropdown } from "react-native-element-dropdown"
 import { Modalize } from "react-native-modalize"
 import { useIsConnected } from "react-native-offline"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { Profile } from "@/services/api"
-import { ApiResponse } from "apisauce"
-import { Loading } from "@/components/Loader"
-import { ErrorScreen } from "@/components/ErrorScreen"
 
 interface EditProfileScreenProps extends AppStackScreenProps<"EditProfile"> {}
 
@@ -229,6 +230,8 @@ export const EditProfileScreen: FC<EditProfileScreenProps> = observer(
     ]
 
     if (isLoading) return <Loading />
+
+    if (saveMutation.isPending) return <Loading />
 
     if (isError || !profile) {
       return (

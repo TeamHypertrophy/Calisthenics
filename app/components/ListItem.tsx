@@ -1,3 +1,6 @@
+import type { ThemedStyle } from "@/theme"
+
+import { useAppTheme } from "@/utils/useAppTheme"
 import { forwardRef, ReactElement } from "react"
 import {
   StyleProp,
@@ -7,11 +10,10 @@ import {
   View,
   ViewStyle,
 } from "react-native"
+
 import { $styles } from "../theme"
 import { Icon, IconTypes } from "./Icon"
 import { Text, TextProps } from "./Text"
-import type { ThemedStyle } from "@/theme"
-import { useAppTheme } from "@/utils/useAppTheme"
 
 export interface ListItemProps extends TouchableOpacityProps {
   /**

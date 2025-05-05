@@ -1,23 +1,26 @@
 import "./utils/gestureHandler"
-import { initI18n } from "./i18n"
+
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+
 import "./utils/ignoreWarnings"
+
 import { useFonts } from "expo-font"
-import { useEffect, useState } from "react"
-import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
-import * as Linking from "expo-linking"
 import * as SplashScreen from "expo-splash-screen"
+import { useEffect, useState } from "react"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
+import { KeyboardProvider } from "react-native-keyboard-controller"
+import { NetworkProvider } from "react-native-offline"
+import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context"
+import Toast from "react-native-toast-message"
+
+import Config from "./config"
+import { initI18n } from "./i18n"
 import { useInitialRootStore } from "./models"
 import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary"
-import * as storage from "./utils/storage"
 import { customFontsToLoad } from "./theme"
-import Config from "./config"
-import { KeyboardProvider } from "react-native-keyboard-controller"
 import { loadDateFnsLocale } from "./utils/formatDate"
-import Toast from "react-native-toast-message"
-import { GestureHandlerRootView } from "react-native-gesture-handler"
-import { NetworkProvider } from "react-native-offline"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import * as storage from "./utils/storage"
 
 if (__DEV__) {
   require("./devtools/ReactotronConfig.ts")

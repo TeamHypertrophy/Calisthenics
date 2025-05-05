@@ -1,7 +1,7 @@
-import React, { FC } from "react"
-import { ActivityIndicator } from "react-native"
 import { Screen } from "@/components"
 import { useAppTheme } from "@/utils/useAppTheme"
+import React, { FC } from "react"
+import { ActivityIndicator } from "react-native"
 
 export const Loading: FC = () => {
   const {

@@ -1,6 +1,13 @@
+import type { ThemedStyle } from "@/theme"
+
+import { Loading } from "@/components/Loader"
+import { api } from "@/services/api"
+import { loadString, saveString } from "@/utils/storage"
+import { useAppTheme } from "@/utils/useAppTheme"
 import { observer } from "mobx-react-lite"
 import { ComponentType, FC, useEffect, useMemo, useRef, useState } from "react"
-import { TextInput, TextStyle, ViewStyle, ImageStyle } from "react-native"
+import { ImageStyle, TextInput, TextStyle, ViewStyle } from "react-native"
+
 import {
   AutoImage,
   Button,
@@ -12,10 +19,6 @@ import {
 } from "../../components"
 import { useStores } from "../../models"
 import { AppStackScreenProps } from "../../navigators"
-import type { ThemedStyle } from "@/theme"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { api } from "@/services/api"
-import { loadString, saveString } from "@/utils/storage"
 
 interface LoginScreenProps extends AppStackScreenProps<"Login"> {}
 
@@ -28,6 +31,8 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
   const [isAuthPasswordHidden, setIsAuthPasswordHidden] = useState(true)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [attemptsCount, setAttemptsCount] = useState(0)
+  const [isLoading, setIsLoading] = useState(false)
+
   const {
     authenticationStore: {
       authUsername,
@@ -64,6 +69,8 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
 
     if (validationError) return
 
+    setIsLoading(true)
+
     clearProfileStore()
 
     const response = await api.login(authUsername, authPassword)
@@ -72,23 +79,27 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
     saveString("authPassword", authPassword)
 
     if (!response.ok) {
+      if (response.status == 401) {
+        setLoginError("Invalid Email or Password")
+        setIsLoading(false)
+        return
+      }
       setLoginError("Internal Error, Try Again")
-      return
-    }
-
-    if (response.status == 401) {
-      setLoginError("Invalid Email or Password")
+      setIsLoading(false)
       return
     }
 
     if (!response.data?.user_id) {
+      console.error("User ID not found in response:", response.data)
       setLoginError("Could Not Find User ID")
+      setIsLoading(false)
       return
     } else {
       setUserID(response.data?.user_id)
     }
 
     if (response.data?.message == "MFA Code Required & Sent") {
+      setIsLoading(false)
       navigation.navigate("MFA")
     }
 
@@ -97,10 +108,12 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         setUserData(response.data?.user)
       } catch (error) {
         console.error("Failed to set user data:", error)
+        setIsLoading(false)
         setLoginError("Failed Setting User Data")
         return
       }
     } else {
+      setIsLoading(false)
       setLoginError("Could Not Find User Data")
       return
     }
@@ -116,11 +129,13 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         console.log("No profile found for user, proceeding to onboarding.")
       } else {
         console.error("Error fetching profile:", profileResponse.problem)
+        setIsLoading(false)
         setLoginError("Failed to fetch profile data.")
         return
       }
     } catch (error) {
       console.error("Exception fetching profile:", error)
+      setIsLoading(false)
       setLoginError("An error occurred while fetching profile.")
       return
     }
@@ -129,6 +144,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
     setAuthPassword("")
     setAuthUsername("")
 
+    setIsLoading(false)
     setAuthToken(response.data?.api_key)
   }
 
@@ -147,6 +163,8 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       },
     [isAuthPasswordHidden, colors.palette.neutral800],
   )
+
+  if (isLoading) return <Loading />
 
   return (
     <Screen

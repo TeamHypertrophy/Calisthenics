@@ -1,14 +1,14 @@
-import { FC, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { TextStyle, ViewStyle } from "react-native"
-import { AppStackScreenProps } from "@/navigators"
 import { Button, Screen, Text, TextField } from "@/components"
-import { spacing, ThemedStyle } from "@/theme"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { Diet, FitnessGoal, Profile } from "@/services/api"
 import { useStores } from "@/models"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { AppStackScreenProps } from "@/navigators"
+import { Diet, FitnessGoal, Profile } from "@/services/api"
+import { spacing, ThemedStyle } from "@/theme"
 import { renderToast } from "@/utils/toastNotification"
+import { useAppTheme } from "@/utils/useAppTheme"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { observer } from "mobx-react-lite"
+import { FC, useState } from "react"
+import { TextStyle, ViewStyle } from "react-native"
 import { Dropdown } from "react-native-element-dropdown"
 
 interface GoalsScreenProps extends AppStackScreenProps<"Goals"> {}
@@ -63,7 +63,12 @@ export const GoalsScreen: FC<GoalsScreenProps> = observer(function GoalsScreen(_
       return
     }
 
-    saveInformation.mutate({ weight, height, fitness_goal: fitnessGoal, diet })
+    saveInformation.mutate({
+      weight,
+      height,
+      fitness_goal: fitnessGoal,
+      diet,
+    })
   }
 
   return (

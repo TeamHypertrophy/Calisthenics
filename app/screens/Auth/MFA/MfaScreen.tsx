@@ -1,16 +1,17 @@
-import { FC, useEffect, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { TextStyle, ViewStyle } from "react-native"
-import { AppStackScreenProps } from "@/navigators"
-import { Button, Screen, Text, TextField } from "@/components"
-import { api } from "@/services/api"
-import { OtpInput } from "react-native-otp-entry"
-import { useStores } from "@/models"
-import { useAppTheme } from "@/utils/useAppTheme"
 import type { ThemedStyle } from "@/theme"
-import { View } from "react-native"
-import { renderToast } from "@/utils/toastNotification"
+
+import { Button, Screen, Text } from "@/components"
 import { Loading } from "@/components/Loader"
+import { useStores } from "@/models"
+import { AppStackScreenProps } from "@/navigators"
+import { api } from "@/services/api"
+import { renderToast } from "@/utils/toastNotification"
+import { useAppTheme } from "@/utils/useAppTheme"
+import { observer } from "mobx-react-lite"
+import { FC, useEffect, useState } from "react"
+import { TextStyle, ViewStyle } from "react-native"
+import { View } from "react-native"
+import { OtpInput } from "react-native-otp-entry"
 
 interface MfaScreenProps extends AppStackScreenProps<"MFA"> {}
 
@@ -24,6 +25,7 @@ export const MfaScreen: FC<MfaScreenProps> = observer(function MfaScreen(_props)
 
   const {
     authenticationStore: { setAuthToken, distributeAuthToken, setUserData },
+    profileStore: { updateStoreFromProfileData },
   } = useStores()
 
   useEffect(() => {
@@ -42,6 +44,7 @@ export const MfaScreen: FC<MfaScreenProps> = observer(function MfaScreen(_props)
 
   async function validateMFA(text: string) {
     setIsVerifying(true)
+    api.user_id = "47c1f63e-adb6-4fe8-be69-6b079f2d9baf"
     const response = await api.validateMFA(text)
 
     if (!response.ok) {
@@ -51,11 +54,31 @@ export const MfaScreen: FC<MfaScreenProps> = observer(function MfaScreen(_props)
     }
 
     if (response.data) {
-      setUserData(response.data.user)
-      setAuthToken(response.data?.api_key)
+      setIsVerifying(false)
       distributeAuthToken(response.data?.api_key)
 
-      setIsVerifying(false)
+      try {
+        const profileResponse = await api.getProfile()
+        if (profileResponse.ok && profileResponse.data) {
+          updateStoreFromProfileData(profileResponse.data)
+          console.log("Profile data fetched and store updated.")
+        } else if (profileResponse.status === 500) {
+          console.log("No profile found for user, proceeding to onboarding.")
+        } else {
+          console.error("Error fetching profile:", profileResponse.problem)
+          setIsVerifying(false)
+          setMfaError("Failed to fetch profile data.")
+          return
+        }
+      } catch (error) {
+        console.error("Exception fetching profile:", error)
+        setIsVerifying(false)
+        setMfaError("An error occurred while fetching profile.")
+        return
+      }
+
+      setUserData(response.data.user)
+      setAuthToken(response.data?.api_key)
     }
   }
 

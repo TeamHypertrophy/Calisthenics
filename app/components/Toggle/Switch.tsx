@@ -1,4 +1,10 @@
-import { useEffect, useMemo, useRef, useCallback } from "react"
+import type { ThemedStyle } from "@/theme"
+
+import { iconRegistry } from "@/components/Icon"
+import { isRTL } from "@/i18n"
+import { $styles } from "@/theme"
+import { useAppTheme } from "@/utils/useAppTheme"
+import { useCallback, useEffect, useMemo, useRef } from "react"
 import {
   Animated,
   Image,
@@ -10,12 +16,7 @@ import {
   ViewStyle,
 } from "react-native"
 
-import { $styles } from "@/theme"
-import { iconRegistry } from "@/components/Icon"
-import { isRTL } from "@/i18n"
 import { $inputOuterBase, BaseToggleInputProps, Toggle, ToggleProps } from "./Toggle"
-import { useAppTheme } from "@/utils/useAppTheme"
-import type { ThemedStyle } from "@/theme"
 
 export interface SwitchToggleProps extends Omit<ToggleProps<SwitchInputProps>, "ToggleInput"> {
   /**
@@ -26,7 +27,10 @@ export interface SwitchToggleProps extends Omit<ToggleProps<SwitchInputProps>, "
    * Optional style prop that affects the knob View.
    * Note: `width` and `height` rules should be points (numbers), not percentages.
    */
-  inputDetailStyle?: Omit<ViewStyle, "width" | "height"> & { width?: number; height?: number }
+  inputDetailStyle?: Omit<ViewStyle, "width" | "height"> & {
+    width?: number
+    height?: number
+  }
 }
 
 interface SwitchInputProps extends BaseToggleInputProps<SwitchToggleProps> {

@@ -1,3 +1,6 @@
+import type { ThemedStyle, ThemedStyleArray } from "@/theme"
+
+import { useAppTheme } from "@/utils/useAppTheme"
 import { ComponentType } from "react"
 import {
   Pressable,
@@ -7,10 +10,9 @@ import {
   TextStyle,
   ViewStyle,
 } from "react-native"
-import type { ThemedStyle, ThemedStyleArray } from "@/theme"
+
 import { $styles } from "../theme"
 import { Text, TextProps } from "./Text"
-import { useAppTheme } from "@/utils/useAppTheme"
 
 type Presets = "default" | "filled" | "reversed"
 

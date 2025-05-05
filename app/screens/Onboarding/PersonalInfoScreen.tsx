@@ -1,20 +1,18 @@
-import { FC, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { TextStyle, View, ViewStyle } from "react-native"
-import { AppStackScreenProps } from "@/navigators"
 import { Button, Screen, Text, TextField } from "@/components"
-import { spacing, ThemedStyle } from "@/theme"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { Gender, Profile } from "@/services/api"
-import { useIsConnected } from "react-native-offline"
-import { MaterialIcons } from "@expo/vector-icons"
-import { renderToast } from "@/utils/toastNotification"
-import { api } from "@/services/api"
-import { logEverything, saveString } from "@/utils/storage"
-import { Dropdown } from "react-native-element-dropdown"
 import { useStores } from "@/models"
+import { AppStackScreenProps } from "@/navigators"
+import { Gender, Profile } from "@/services/api"
+import { ThemedStyle, spacing } from "@/theme"
+import { clear, logEverything } from "@/utils/storage"
+import { renderToast } from "@/utils/toastNotification"
+import { useAppTheme } from "@/utils/useAppTheme"
+import { MaterialIcons } from "@expo/vector-icons"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { setOptions } from "expo-splash-screen"
+import { observer } from "mobx-react-lite"
+import { FC, useState } from "react"
+import { TextStyle, View, ViewStyle } from "react-native"
+import { Dropdown } from "react-native-element-dropdown"
+import { useIsConnected } from "react-native-offline"
 
 interface PersonalInfoScreenProps extends AppStackScreenProps<"PersonalInfo"> {}
 
@@ -28,7 +26,7 @@ export const PersonalInfoScreen: FC<PersonalInfoScreenProps> = observer(
     } = useAppTheme()
 
     const {
-      profileStore: { createProfile, setProfileId },
+      profileStore: { createProfile },
       authenticationStore: { userID },
     } = useStores()
 
@@ -100,7 +98,7 @@ export const PersonalInfoScreen: FC<PersonalInfoScreenProps> = observer(
         safeAreaEdges={["top"]}
         contentContainerStyle={themed($screenContentContainer)}
       >
-        <Text text="Let’s Get You Started" preset="heading" style={{ marginBottom: spacing.lg }} />
+        <Text text="Let's Get You Started" preset="heading" style={{ marginBottom: spacing.lg }} />
 
         <TextField
           label="First Name"
@@ -156,6 +154,8 @@ export const PersonalInfoScreen: FC<PersonalInfoScreenProps> = observer(
           onPress={onNext}
           style={{ marginBottom: spacing.lg, borderRadius: 120 }}
         />
+
+        <Button onPress={() => clear()} preset="reversed" text="Skip" />
       </Screen>
     )
   },
