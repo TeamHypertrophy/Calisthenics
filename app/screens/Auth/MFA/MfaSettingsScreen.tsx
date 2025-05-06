@@ -103,14 +103,17 @@ export const MfaSettingsScreen: FC<MfaSettingsScreenProps> = observer(
     }
 
     const confirmEnableMfa = () => {
+      console.log("[AUTH] Enabling Multi-Factor Authentication")
       enableMfaMutation.mutate()
     }
 
     const confirmDisableMfa = () => {
+      console.log("[AUTH] Disabling Multi-Factor Authentication")
       disableMfaMutation.mutate()
     }
 
     const openEmailClient = async () => {
+      console.log("[AUTH] Opening Local Email Client")
       openInbox({
         title: "Open Verification Email",
         cancelLabel: "Go Back to MFA Settings",

@@ -76,7 +76,7 @@ export type AppStackParamList = {
   EditWorkoutPlanLog: undefined
   ViewWorkoutPlanLogs: undefined
   ForgotPasswordMfa: { emailAddress: string }
-	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+  // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
 
 const exitRoutes = Config.exitRoutes

@@ -1,13 +1,13 @@
 import { Button, Screen, Text, TextField } from "@/components"
+import { Loading } from "@/components/Loader"
 import { AppStackScreenProps } from "@/navigators"
+import { api } from "@/services/api"
 import { ThemedStyle } from "@/theme"
+import { renderToast } from "@/utils/toastNotification"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { observer } from "mobx-react-lite"
 import { FC, useState } from "react"
 import { TextStyle, ViewStyle } from "react-native"
-import { api } from "@/services/api"
-import { renderToast } from "@/utils/toastNotification"
-import { Loading } from "@/components/Loader"
 
 interface ForgotPasswordScreenProps extends AppStackScreenProps<"ForgotPassword"> {}
 
@@ -18,7 +18,6 @@ export const ForgotPasswordScreen: FC<ForgotPasswordScreenProps> = observer(
     const [email, setEmail] = useState("")
     const [error, setError] = useState("")
     const [isSubmitting, setIsSubmitting] = useState(false)
-
 
     const handleForgotPasswordRequest = async () => {
       setError("")
@@ -33,8 +32,8 @@ export const ForgotPasswordScreen: FC<ForgotPasswordScreenProps> = observer(
         const response = await api.requestPasswordReset(email)
 
         if (response.ok && response.data?.status == 200) {
-          renderToast("Success", "Email Sent Successfully", "success")        
-          
+          renderToast("Success", "Email Sent Successfully", "success")
+
           return navigation.navigate("ForgotPasswordMfa", {
             emailAddress: email,
           })
@@ -125,7 +124,7 @@ const $textField: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 
 const $button: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   marginTop: spacing.md,
-  borderRadius: 120
+  borderRadius: 120,
 })
 
 const $errorText: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({

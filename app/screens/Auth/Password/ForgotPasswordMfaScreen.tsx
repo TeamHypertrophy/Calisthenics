@@ -1,13 +1,13 @@
-import { FC, useMemo, useRef, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { TextStyle, ViewStyle } from "react-native"
-import { AppStackScreenProps } from "@/navigators"
 import { Button, Icon, Screen, Text, TextField, TextFieldAccessoryProps } from "@/components"
+import { Loading } from "@/components/Loader"
+import { AppStackScreenProps } from "@/navigators"
+import { api } from "@/services/api"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
+import { observer } from "mobx-react-lite"
+import { FC, useMemo, useRef, useState } from "react"
+import { TextStyle, ViewStyle } from "react-native"
 import { TextInput } from "react-native-gesture-handler"
-import { api } from "@/services/api"
-import { Loading } from "@/components/Loader"
 
 interface ForgotPasswordMfaScreenProps extends AppStackScreenProps<"ForgotPasswordMfa"> {}
 
@@ -43,7 +43,6 @@ export const ForgotPasswordMfaScreen: FC<ForgotPasswordMfaScreenProps> = observe
         setError("Please Fill in all Fields")
         return
       }
-
 
       if (newPassword !== confirmPassword) {
         setError("Passwords do not match")

@@ -133,15 +133,12 @@ export class Api {
     return response
   }
 
-  async resetPassword(
-    password: string,
-    email: string
-  ): Promise<ApiResponse<UserResponse>> {
+  async resetPassword(password: string, email: string): Promise<ApiResponse<UserResponse>> {
     const response: ApiResponse<UserResponse> = await this.apisauce.post(
       `/users/auth/reset-password`,
       {
         password,
-        email
+        email,
       },
     )
     return response
