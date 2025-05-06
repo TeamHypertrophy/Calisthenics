@@ -7,19 +7,23 @@ import { loadString } from "@/utils/storage"
  * documentation for more details.
  */
 import { ApiResponse, ApisauceInstance, create } from "apisauce"
+import { SleepLogs } from "schema"
 
 import type {
   ApiConfig,
+  CalorieLog,
   DeleteResponse,
   HealthResponse,
   LoginResponse,
   MFACheckResponse,
   MFAResendResponse,
   Profile,
+  ProteinLog,
   SignupResponse,
   User,
   UserResponse,
   VersionResponse,
+  WaterLog,
 } from "./api.types"
 
 import Config from "../../config"
@@ -290,6 +294,44 @@ export class Api {
   async checkPostgres(): Promise<ApiResponse<HealthResponse>> {
     await this.ensureAuthLoaded()
     const response: ApiResponse<HealthResponse> = await this.apisauce.get("/health/postgres")
+    return response
+  }
+
+  // Log Functions
+
+  async getProteinLogs(): Promise<ApiResponse<ProteinLog[]>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<ProteinLog[]> = await this.apisauce.get(
+      `/protein/user/all?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async getCalorieLogs(): Promise<ApiResponse<CalorieLog[]>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<CalorieLog[]> = await this.apisauce.get(
+      `/calories/user/all?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async getWaterLogs(): Promise<ApiResponse<WaterLog[]>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<WaterLog[]> = await this.apisauce.get(
+      `/water/user/all?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async getSleepLogs(): Promise<ApiResponse<SleepLogs[]>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<SleepLogs[]> = await this.apisauce.get(
+      `/sleep/user/all?user_id=${this.user_id}`,
+    )
     return response
   }
 }

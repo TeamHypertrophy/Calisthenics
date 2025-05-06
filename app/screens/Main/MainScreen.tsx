@@ -52,7 +52,6 @@ export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function Main
       <Text text="Hypertrophy" preset="heading" />
 
       <Text text="Welcome!" />
-      <Button text="Go to Onboarding" onPress={() => navigation.navigate("PersonalInfo")} />
       <Button text="Clear Local Stoage" onPress={() => storage.clearAll()} />
       <Button
         text="Set Avatar"

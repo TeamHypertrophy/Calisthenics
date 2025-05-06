@@ -52,7 +52,7 @@ export type AppStackParamList = {
   CreateCustomExercise: undefined
   ViewExerciseLogs: undefined
   CreateExerciseLog: undefined
-  ViewLog: undefined
+  ViewLog: { logID: number; logType: string }
   CreateLog: undefined
   EditLog: undefined
   EditCustomExercise: undefined
