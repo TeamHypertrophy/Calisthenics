@@ -18,6 +18,7 @@ import type {
   Profile,
   SignupResponse,
   User,
+  UserResponse,
   VersionResponse,
 } from "./api.types"
 
@@ -106,6 +107,41 @@ export class Api {
       {
         old_password: oldPassword,
         new_password: newPassword,
+      },
+    )
+    return response
+  }
+
+  async getUserByEmail(email: string): Promise<ApiResponse<UserResponse>> {
+    const response: ApiResponse<UserResponse> = await this.apisauce.get(
+      `/users/auth/email?email=${email}`,
+    )
+    return response
+  }
+
+  async requestPasswordReset(email: string): Promise<ApiResponse<UserResponse>> {
+    const response: ApiResponse<UserResponse> = await this.apisauce.get(
+      `/users/auth/request-password-reset?email=${email}`,
+    )
+    return response
+  }
+
+  async checkPasswordResetCode(code: string, user_id: string): Promise<ApiResponse<UserResponse>> {
+    const response: ApiResponse<UserResponse> = await this.apisauce.get(
+      `/users/mfa/request/${code}?user_id=${user_id}`,
+    )
+    return response
+  }
+
+  async resetPassword(
+    password: string,
+    email: string
+  ): Promise<ApiResponse<UserResponse>> {
+    const response: ApiResponse<UserResponse> = await this.apisauce.post(
+      `/users/auth/reset-password`,
+      {
+        password,
+        email
       },
     )
     return response

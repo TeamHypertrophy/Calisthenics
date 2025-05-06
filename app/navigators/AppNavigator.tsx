@@ -75,7 +75,8 @@ export type AppStackParamList = {
   ViewWorkoutPlanLog: undefined
   EditWorkoutPlanLog: undefined
   ViewWorkoutPlanLogs: undefined
-  // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+  ForgotPasswordMfa: { emailAddress: string }
+	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
 
 const exitRoutes = Config.exitRoutes
@@ -115,6 +116,7 @@ const AppStack = observer(function AppStack() {
           <Stack.Screen name="MFA" component={Screens.MfaScreen} />
           <Stack.Screen name="Signup" component={Screens.SignupScreen} />
           <Stack.Screen name="ForgotPassword" component={Screens.ForgotPasswordScreen} />
+          <Stack.Screen name="ForgotPasswordMfa" component={Screens.ForgotPasswordMfaScreen} />
         </>
       ) : !isOnboarded ? (
         <Stack.Screen name="PersonalInfo" component={Screens.PersonalInfoScreen} />

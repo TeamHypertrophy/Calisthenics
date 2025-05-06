@@ -295,3 +295,9 @@ export interface DeleteResponse {
   message: string
   user: User
 }
+
+export interface UserResponse {
+  status: number
+  message: string
+  user_id: string
+}
