@@ -95,6 +95,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       setIsLoading(false)
       return
     } else {
+      console.log("[AUTH] Set User ID:", response.data?.user_id)
       setUserID(response.data?.user_id)
     }
 

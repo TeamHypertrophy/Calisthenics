@@ -147,9 +147,9 @@ export class Api {
     return response
   }
 
-  async validateMFA(code: string): Promise<ApiResponse<MFACheckResponse>> {
+  async validateMFA(code: string, user_id: string): Promise<ApiResponse<MFACheckResponse>> {
     const response: ApiResponse<MFACheckResponse> = await this.apisauce.get(
-      `/users/mfa/check/${code}?user_id=${this.user_id}`,
+      `/users/mfa/check/${code}?user_id=${user_id}`,
     )
     return response
   }

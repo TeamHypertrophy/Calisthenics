@@ -24,7 +24,7 @@ export const MfaScreen: FC<MfaScreenProps> = observer(function MfaScreen(_props)
   const [isVerifying, setIsVerifying] = useState(false)
 
   const {
-    authenticationStore: { setAuthToken, distributeAuthToken, setUserData },
+    authenticationStore: { setAuthToken, distributeAuthToken, setUserData, userID },
     profileStore: { updateStoreFromProfileData },
   } = useStores()
 
@@ -44,8 +44,7 @@ export const MfaScreen: FC<MfaScreenProps> = observer(function MfaScreen(_props)
 
   async function validateMFA(text: string) {
     setIsVerifying(true)
-    api.user_id = "47c1f63e-adb6-4fe8-be69-6b079f2d9baf"
-    const response = await api.validateMFA(text)
+    const response = await api.validateMFA(text, userID)
 
     if (!response.ok) {
       setIsVerifying(false)
