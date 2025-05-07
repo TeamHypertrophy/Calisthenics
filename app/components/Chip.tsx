@@ -3,7 +3,7 @@ import { useAppTheme } from "@/utils/useAppTheme"
 import React, { FC } from "react"
 import { TouchableOpacity, TouchableOpacityProps, ViewStyle, TextStyle } from "react-native"
 
-import { Text, TextProps } from "./Text" // Assuming Text component exists
+import { Text, TextProps } from "./Text"
 
 type ChipPreset = "filled" | "outlined"
 

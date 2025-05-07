@@ -1,17 +1,14 @@
 import { loadString } from "@/utils/storage"
-/**
- * This Api class lets you define an API endpoint and methods to request
- * data and process it.
- *
- * See the [Backend API Integration](https://docs.infinite.red/ignite-cli/boilerplate/app/services/#backend-api-integration)
- * documentation for more details.
- */
 import { ApiResponse, ApisauceInstance, create } from "apisauce"
 import { SleepLogs } from "schema"
 
 import type {
   ApiConfig,
   CalorieLog,
+  CreateCalorieLog,
+  CreateProteinLog,
+  CreateSleepLog,
+  CreateWaterLog,
   DeleteResponse,
   HealthResponse,
   LoginResponse,
@@ -20,6 +17,7 @@ import type {
   Profile,
   ProteinLog,
   SignupResponse,
+  SleepLog,
   User,
   UserResponse,
   VersionResponse,
@@ -27,28 +25,17 @@ import type {
 } from "./api.types"
 
 import Config from "../../config"
-import { GeneralApiProblem, getGeneralApiProblem } from "./apiProblem"
 
-/**
- * Configuring the apisauce instance.
- */
 export const DEFAULT_API_CONFIG: ApiConfig = {
   url: Config.API_URL,
   timeout: 10000,
 }
 
-/**
- * Manages all requests to the API. You can use this class to build out
- * various requests that you need to call from your backend API.
- */
 export class Api {
   apisauce: ApisauceInstance
   config: ApiConfig
   user_id: string
 
-  /**
-   * Set up our API instance. Keep this lightweight!
-   */
   constructor(config: ApiConfig = DEFAULT_API_CONFIG) {
     this.user_id = ""
     this.config = config
@@ -331,6 +318,74 @@ export class Api {
 
     const response: ApiResponse<SleepLogs[]> = await this.apisauce.get(
       `/sleep/user/all?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async createProteinLog(log: CreateProteinLog): Promise<ApiResponse<ProteinLog>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<ProteinLog> = await this.apisauce.post(
+      `/protein/create?user_id=${this.user_id}`,
+      log,
+    )
+    return response
+  }
+
+  async createCalorieLog(log: CreateCalorieLog): Promise<ApiResponse<CalorieLog>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<CalorieLog> = await this.apisauce.post(
+      `/calories/create?user_id=${this.user_id}`,
+      log,
+    )
+    return response
+  }
+
+  async createWaterLog(log: CreateWaterLog): Promise<ApiResponse<WaterLog>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<WaterLog> = await this.apisauce.post(
+      `/water/create?user_id=${this.user_id}`,
+      log,
+    )
+    return response
+  }
+
+  async createSleepLog(log: CreateSleepLog): Promise<ApiResponse<SleepLog>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<SleepLog> = await this.apisauce.post(
+      `/sleep/create?user_id=${this.user_id}`,
+      log,
+    )
+    return response
+  }
+
+  async getLog(logType: string, logID: number): Promise<ApiResponse<any>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<any> = await this.apisauce.get(
+      `/${logType}/get/${logID}?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async deleteLog(logType: string, logID: number): Promise<ApiResponse<any>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<any> = await this.apisauce.get(
+      `/${logType}/delete/${logID}?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async updateLog(logType: string, logID: number, data: any): Promise<ApiResponse<any>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<any> = await this.apisauce.post(
+      `/${logType}/update/${logID}?user_id=${this.user_id}`,
+      data,
     )
     return response
   }

@@ -54,7 +54,7 @@ export type AppStackParamList = {
   CreateExerciseLog: undefined
   ViewLog: { logID: number; logType: string }
   CreateLog: undefined
-  EditLog: undefined
+  EditLog: { logID: number; logType: string }
   EditCustomExercise: undefined
   EditExerciseLog: undefined
   ForgotPassword: undefined

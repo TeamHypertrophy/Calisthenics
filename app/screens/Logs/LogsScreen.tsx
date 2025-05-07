@@ -13,7 +13,7 @@ import { observer } from "mobx-react-lite"
 import { FC, useMemo, useState } from "react"
 import { FlatList, TextStyle, View, ViewStyle } from "react-native"
 
-type LogType = "protein" | "sleep" | "water" | "calorie"
+export type LogType = "protein" | "sleep" | "water" | "calories"
 interface AppBaseLog {
   id: number
   user_id: string
@@ -41,13 +41,13 @@ interface AppWaterLog extends AppBaseLog, Omit<WaterLog, "log_id" | "date" | "up
 }
 
 interface AppCalorieLog extends AppBaseLog, Omit<CalorieLog, "log_id" | "date" | "updated_at"> {
-  type: "calorie"
+  type: "calories"
   date: Date
 }
 
 type AppLog = AppProteinLog | AppSleepLog | AppWaterLog | AppCalorieLog
 
-const LOG_TYPES: LogType[] = ["protein", "sleep", "water", "calorie"]
+export const LOG_TYPES: LogType[] = ["protein", "sleep", "water", "calories"]
 
 export const LogsScreen: FC<HomeTabScreenProps<"Logs">> = observer(function LogsScreen(_props) {
   const { navigation } = _props
@@ -98,7 +98,7 @@ export const LogsScreen: FC<HomeTabScreenProps<"Logs">> = observer(function Logs
                 .map((log) => ({
                   ...log,
                   id: log.log_id!,
-                  type: "calorie",
+                  type: "calories",
                   date: safeNewDate(log.date)!,
                   updated_at: safeNewDate(log.updated_at),
                 }))
@@ -190,7 +190,7 @@ export const LogsScreen: FC<HomeTabScreenProps<"Logs">> = observer(function Logs
       case "water":
         details = `${item.amount}ml`
         break
-      case "calorie":
+      case "calories":
         details = `${item.amount}kcal`
         break
       case "sleep":
@@ -230,7 +230,6 @@ export const LogsScreen: FC<HomeTabScreenProps<"Logs">> = observer(function Logs
 
   return (
     <Screen style={$root} preset="fixed" safeAreaEdges={["top"]}>
-      {/* Header */}
       <View style={themed($headerContainer)}>
         <Text preset="heading" text="Logs" />
         <Button
@@ -238,6 +237,14 @@ export const LogsScreen: FC<HomeTabScreenProps<"Logs">> = observer(function Logs
           preset="default"
           onPress={handleCreateLog}
           style={themed($createButton)}
+          LeftAccessory={() => (
+            <MaterialIcons
+              name="add"
+              size={20}
+              color={colors.palette.secondary500}
+              style={{ marginRight: 4 }}
+            />
+          )}
         />
       </View>
 
@@ -329,6 +336,8 @@ const $listContentContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 
 const $logCard: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   marginBottom: spacing.sm,
+  overflow: "hidden",
+  elevation: 2,
 })
 
 const $emptyStateContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({

@@ -58,24 +58,6 @@ console.print(
 
 print_line(console=console)
 
-vmem = psutil.virtual_memory()
-
-console.print(
-    f"[blue3]Total Memory[/blue3]: [purple]{humanize.naturalsize(vmem.total)}[/purple]"
-)
-console.print(
-    f"[blue3]Available[/blue3]: [purple]{humanize.naturalsize(vmem.available)}[/purple]"
-)
-console.print(f"[blue3]Percent[/blue3]: [purple]{vmem.percent}%[/purple]")
-console.print(
-    f"[blue3]Used[/blue3]: [purple]{humanize.naturalsize(vmem.used)}[/purple]"
-)
-console.print(
-    f"[blue3]Free[/blue3]: [purple]{humanize.naturalsize(vmem.free)}[/purple]"
-)
-
-print_line(console=console)
-
 console.print(PSQL_LOGO, justify="full")
 
 console.print("[blue3] Checking IF PSQL Service is Running[/blue3]")

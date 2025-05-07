@@ -301,3 +301,46 @@ export interface UserResponse {
   message: string
   user_id: string
 }
+
+export interface CreateProteinLog {
+  user_id: string
+  amount: number
+}
+
+export interface CreateWaterLog {
+  user_id: string
+  amount: number
+}
+
+export interface CreateCalorieLog {
+  user_id: string
+  amount: number
+}
+
+export interface CreateSleepLog {
+  user_id: string
+  beginning: Date
+  end: Date
+  amount: number
+}
+
+export interface UpdateCalorieLog {
+  amount?: number
+  date?: Date
+}
+
+export interface UpdateProteinLog {
+  amount?: number
+  date?: Date
+}
+
+export interface UpdateSleepLog {
+  beginning?: Date
+  end?: Date
+  amount?: number
+}
+
+export interface UpdateWaterLog {
+  amount?: number
+  date?: Date
+}

@@ -35,3 +35,10 @@ export const formatDate = (date: string, dateFormat?: string, options?: Options)
   }
   return format(parseISO(date), dateFormat ?? "MMM dd, yyyy", dateOptions)
 }
+
+export const createProteinDate = (date: Date) => {
+  return date.toISOString().slice(0, -1)
+}
+
+export const capitalize = (s: string) =>
+  (s && String(s[0]).toUpperCase() + String(s).slice(1)) || ""

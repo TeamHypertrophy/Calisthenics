@@ -5,8 +5,8 @@ import { MaterialIcons } from "@expo/vector-icons"
 import React, { FC } from "react"
 import { TextInput, TextInputProps, TextStyle, View, ViewStyle } from "react-native"
 
-import { Icon, IconTypes } from "./Icon" // Assuming Icon component exists
-import { Text } from "./Text" // Assuming Text component exists for tx support
+import { Icon, IconTypes } from "./Icon"
+import { Text } from "./Text"
 
 export interface SearchBarProps extends Omit<TextInputProps, "placeholder"> {
   /**
