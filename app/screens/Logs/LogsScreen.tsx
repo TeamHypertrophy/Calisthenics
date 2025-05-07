@@ -5,6 +5,7 @@ import { useStores } from "@/models"
 import { HomeTabScreenProps } from "@/navigators/HomeNavigator"
 import { api, type CalorieLog, type ProteinLog, type SleepLog, type WaterLog } from "@/services/api"
 import { ThemedStyle } from "@/theme"
+import { capitalize } from "@/utils/formatDate"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { MaterialIcons } from "@expo/vector-icons"
 import { useQuery } from "@tanstack/react-query"
@@ -183,31 +184,34 @@ export const LogsScreen: FC<HomeTabScreenProps<"Logs">> = observer(function Logs
 
   const renderLogItem = ({ item }: { item: AppLog }) => {
     let details = ""
+    let emoji = ""
+
+
     switch (item.type) {
       case "protein":
         details = `${item.amount}g`
+        emoji = "🥩"
         break
       case "water":
         details = `${item.amount}ml`
+        emoji = "💧"
         break
       case "calories":
         details = `${item.amount}kcal`
+        emoji = "🔥" 
         break
       case "sleep":
-        if (item.duration != null) {
-          const hours = Math.floor(item.duration / 60)
-          const minutes = item.duration % 60
-          details = `${hours}h ${minutes}m`
-        } else {
-          details = `${format(item.beginning, "p")} - ${format(item.end, "p")}`
-        }
+        emoji = "💤"
+        details = `${format(item.beginning, "p")} - ${format(item.end, "p")}`
         break
     }
+
+    const heading = `${emoji} ${capitalize(item.type)}`
 
     return (
       <Card
         style={themed($logCard)}
-        heading={item.type.charAt(0).toUpperCase() + item.type.slice(1)}
+        heading={heading}
         content={`${details} - ${format(item.date, "PPP")}`}
         onPress={() => handleViewLog(item.id, item.type)}
         RightComponent={<Icon icon="caretRight" size={20} color={colors.palette.primary200} />}
@@ -218,7 +222,7 @@ export const LogsScreen: FC<HomeTabScreenProps<"Logs">> = observer(function Logs
   if (isLoading) return <Loading />
 
   if (isError) {
-    console.log("Error fetching logs:", error)
+    console.log("Error Fetching Logs:", error)
     return (
       <ErrorScreen
         title="Error"
@@ -265,7 +269,7 @@ export const LogsScreen: FC<HomeTabScreenProps<"Logs">> = observer(function Logs
         {LOG_TYPES.map((type) => (
           <Chip
             key={type}
-            text={type.charAt(0).toUpperCase() + type.slice(1)}
+            text={capitalize(type)}
             preset={selectedFilter === type ? "filled" : "outlined"}
             onPress={() => setSelectedFilter(type)}
             style={themed($chip)}

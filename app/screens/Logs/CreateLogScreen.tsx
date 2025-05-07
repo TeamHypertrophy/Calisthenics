@@ -9,7 +9,7 @@ import {
   CreateWaterLog,
 } from "@/services/api"
 import { ThemedStyle } from "@/theme"
-import { createProteinDate } from "@/utils/formatDate"
+import { capitalize, createProteinDate } from "@/utils/formatDate"
 import { renderToast } from "@/utils/toastNotification"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
@@ -164,7 +164,7 @@ export const CreateLogScreen: FC<CreateLogScreenProps> = observer(function Creat
           {LOG_TYPES.map((type) => (
             <Chip
               key={type}
-              text={type.charAt(0).toUpperCase() + type.slice(1)}
+              text={capitalize(type)}
               preset={selectedType === type ? "filled" : "outlined"}
               onPress={() => setSelectedType(type)}
               style={themed($chip)}
