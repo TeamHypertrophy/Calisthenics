@@ -1,7 +1,7 @@
 import { translate } from "@/i18n" // Assuming i18n setup
 import { ThemedStyle, typography } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
-import { MaterialIcons } from "@expo/vector-icons"
+import { Ionicons, MaterialIcons } from "@expo/vector-icons"
 import React, { FC } from "react"
 import { TextInput, TextInputProps, TextStyle, View, ViewStyle } from "react-native"
 
@@ -25,11 +25,6 @@ export interface SearchBarProps extends Omit<TextInputProps, "placeholder"> {
    * Style overrides for the input element.
    */
   inputStyle?: TextStyle | TextStyle[]
-  /**
-   * Icon to display on the left.
-   * @default "search"
-   */
-  leftIcon?: IconTypes
 }
 
 export const SearchBar: FC<SearchBarProps> = (props) => {
@@ -38,7 +33,6 @@ export const SearchBar: FC<SearchBarProps> = (props) => {
     placeholder: placeholderProp,
     style: styleOverride,
     inputStyle: inputStyleOverride,
-    leftIcon = "search",
     ...rest
   } = props
 
@@ -46,7 +40,7 @@ export const SearchBar: FC<SearchBarProps> = (props) => {
 
   return (
     <View style={[themed($container), styleOverride]}>
-      {leftIcon && <MaterialIcons icon={leftIcon} style={themed($icon)} size={20} />}
+      <Ionicons name="search" style={themed($icon)} size={20} />
       <TextInput
         placeholder={placeholderProp}
         placeholderTextColor={themed($placeholder).color}
@@ -58,7 +52,6 @@ export const SearchBar: FC<SearchBarProps> = (props) => {
   )
 }
 
-// --- Styles ---
 const $container: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   flexDirection: "row",
   alignItems: "center",
@@ -72,7 +65,7 @@ const $container: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
 
 const $icon: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   marginRight: spacing.sm,
-  color: colors.palette.primary300,
+  color: colors.palette.primary500,
 })
 
 const $input: ThemedStyle<TextStyle> = ({ colors, typography }) => ({
@@ -80,7 +73,7 @@ const $input: ThemedStyle<TextStyle> = ({ colors, typography }) => ({
   fontFamily: typography.primary.normal,
   fontSize: 16,
   color: colors.text,
-  paddingVertical: 0, // Remove default padding
+  paddingVertical: 0,
 })
 
 const $placeholder: ThemedStyle<TextStyle> = ({ colors }) => ({
