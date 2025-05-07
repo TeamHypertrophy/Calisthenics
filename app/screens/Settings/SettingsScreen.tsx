@@ -22,7 +22,7 @@ export const SettingsScreen: FC<HomeTabScreenProps<"Settings">> = observer(
     const { navigation } = _props
 
     const {
-      authenticationStore: { logout, deleteAccount },
+      authenticationStore: { logout, deleteAccount, role },
       profileStore: { clear: clearProfileStore },
     } = useStores()
 
@@ -229,6 +229,17 @@ Network Status: ${isConnected ? "Online" : "Offline"}
                 />
               )}
             </View>
+
+            {role === "Admin" && (
+              <View style={themed($settingsSection)}>
+                <Text text="Admin Settings" preset="subheading" style={themed($sectionTitle)} />
+                <Button
+                  text="Debug Corner"
+                  onPress={() => navigation.navigate("Developer")}
+                  style={themed($button)}
+                />
+              </View>
+            )}
           </View>
         </Screen>
 

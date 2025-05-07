@@ -48,7 +48,6 @@ export type AppStackParamList = {
   Goals: undefined
   SearchExercises: undefined
   ViewExercise: undefined
-  ViewSavedExercises: undefined
   CreateCustomExercise: undefined
   ViewExerciseLogs: undefined
   CreateExerciseLog: undefined
@@ -76,7 +75,10 @@ export type AppStackParamList = {
   EditWorkoutPlanLog: undefined
   ViewWorkoutPlanLogs: undefined
   ForgotPasswordMfa: { emailAddress: string }
-  // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+  Developer: undefined
+	TrainerStatus: undefined
+	TrainerAnnouncements: undefined
+	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
 
 const exitRoutes = Config.exitRoutes
@@ -137,7 +139,6 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="Goals" component={Screens.GoalsScreen} />
       <Stack.Screen name="SearchExercises" component={Screens.SearchExercisesScreen} />
       <Stack.Screen name="ViewExercise" component={Screens.ViewExerciseScreen} />
-      <Stack.Screen name="ViewSavedExercises" component={Screens.ViewSavedExercisesScreen} />
       <Stack.Screen name="CreateCustomExercise" component={Screens.CreateCustomExerciseScreen} />
       <Stack.Screen name="ViewExerciseLogs" component={Screens.ViewExerciseLogsScreen} />
       <Stack.Screen name="CreateExerciseLog" component={Screens.CreateExerciseLogScreen} />
@@ -163,7 +164,10 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="ViewWorkoutPlanLog" component={Screens.ViewWorkoutPlanLogScreen} />
       <Stack.Screen name="EditWorkoutPlanLog" component={Screens.EditWorkoutPlanLogScreen} />
       <Stack.Screen name="ViewWorkoutPlanLogs" component={Screens.ViewWorkoutPlanLogsScreen} />
-      {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
+      <Stack.Screen name="Developer" component={Screens.DeveloperScreen} />
+			<Stack.Screen name="TrainerStatus" component={Screens.TrainerStatusScreen} />
+			<Stack.Screen name="TrainerAnnouncements" component={Screens.TrainerAnnouncementsScreen} />
+			{/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>
   )
 })
