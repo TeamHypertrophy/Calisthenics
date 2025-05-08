@@ -24,7 +24,7 @@ export const TrainerRequestScreen: FC<TrainerRequestScreenProps> = observer(
         safeAreaEdges={["top"]}
         contentContainerStyle={themed($screenContentContainer)}
       >
-        <Text text="trainerRequest" />
+        <Text text="Trainer Request" preset="heading" />
       </Screen>
     )
   },

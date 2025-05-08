@@ -18,6 +18,9 @@ import type {
   ProteinLog,
   SignupResponse,
   SleepLog,
+  Trainer,
+  TrainerAnnouncement,
+  TrainerIsFollowedResponse,
   User,
   UserResponse,
   VersionResponse,
@@ -386,6 +389,79 @@ export class Api {
     const response: ApiResponse<any> = await this.apisauce.post(
       `/${logType}/update/${logID}?user_id=${this.user_id}`,
       data,
+    )
+    return response
+  }
+
+  async getTrainersForUser(): Promise<ApiResponse<Trainer[]>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<Trainer[]> = await this.apisauce.get(
+      `/trainers/for?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async getAllTrainers(): Promise<ApiResponse<Trainer[]>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<Trainer[]> = await this.apisauce.get(`/trainers/all`)
+    return response
+  }
+
+  async getTrainerIsFollowedByUser(
+    trainerID: string,
+    userID: string,
+  ): Promise<ApiResponse<TrainerIsFollowedResponse>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<TrainerIsFollowedResponse> = await this.apisauce.get(
+      `/trainers/is-followed-by/${trainerID}?user_id=${userID}`,
+    )
+    return response
+  }
+
+  async followTrainer(trainerID: string, userID: string): Promise<ApiResponse<Trainer>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<Trainer> = await this.apisauce.get(
+      `/trainers/add-client/${trainerID}?user_id=${userID}`,
+    )
+    return response
+  }
+
+  async unfollowTrainer(trainerID: string, userID: string): Promise<ApiResponse<Trainer>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<Trainer> = await this.apisauce.get(
+      `/trainers/remove-client/${trainerID}?user_id=${userID}`,
+    )
+    return response
+  }
+
+  async getTrainerByID(user: string): Promise<ApiResponse<Trainer>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<Trainer> = await this.apisauce.get(
+      `/trainers/by?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async getAnnouncementsForUser(): Promise<ApiResponse<TrainerAnnouncement[]>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<TrainerAnnouncement[]> = await this.apisauce.get(
+      `/trainers/announcement/for?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async getAllTrainerAnnouncements(trainer: number): Promise<ApiResponse<TrainerAnnouncement[]>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<TrainerAnnouncement[]> = await this.apisauce.get(
+      `/trainers/announcement/all?trainer_id=${trainer}`,
     )
     return response
   }

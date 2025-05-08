@@ -60,7 +60,7 @@ export type AppStackParamList = {
   UpdatePassword: undefined
   MfaSettings: undefined
   ListTrainers: undefined
-  TrainerProfile: undefined
+  TrainerProfile: { trainerID: string }
   TrainerRequest: undefined
   ViewWorkout: undefined
   Workouts: undefined
@@ -76,9 +76,9 @@ export type AppStackParamList = {
   ViewWorkoutPlanLogs: undefined
   ForgotPasswordMfa: { emailAddress: string }
   Developer: undefined
-	TrainerStatus: undefined
-	TrainerAnnouncements: undefined
-	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+  TrainerStatus: undefined
+  TrainerAnnouncements: undefined
+  // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
 
 const exitRoutes = Config.exitRoutes
@@ -131,7 +131,6 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="Profile" component={Screens.ProfileScreen} />
       <Stack.Screen name="Logs" component={Screens.LogsScreen} />
       <Stack.Screen name="Trainer" component={Screens.TrainerScreen} />
-      <Stack.Screen name="TrainerAnnouncement" component={Screens.TrainerAnnouncementScreen} />
       <Stack.Screen name="Settings" component={Screens.SettingsScreen} />
       <Stack.Screen name="EditProfile" component={Screens.EditProfileScreen} />
       <Stack.Screen name="Preferences" component={Screens.PreferencesScreen} />
@@ -165,9 +164,8 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="EditWorkoutPlanLog" component={Screens.EditWorkoutPlanLogScreen} />
       <Stack.Screen name="ViewWorkoutPlanLogs" component={Screens.ViewWorkoutPlanLogsScreen} />
       <Stack.Screen name="Developer" component={Screens.DeveloperScreen} />
-			<Stack.Screen name="TrainerStatus" component={Screens.TrainerStatusScreen} />
-			<Stack.Screen name="TrainerAnnouncements" component={Screens.TrainerAnnouncementsScreen} />
-			{/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
+      <Stack.Screen name="TrainerStatus" component={Screens.TrainerStatusScreen} />
+      {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>
   )
 })

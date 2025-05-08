@@ -4,7 +4,7 @@ import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { observer } from "mobx-react-lite"
 import { FC } from "react"
-import { ViewStyle } from "react-native"
+import { ImageStyle, TextStyle, ViewStyle } from "react-native"
 
 interface TrainerProfileScreenProps extends AppStackScreenProps<"TrainerProfile"> {}
 
@@ -24,7 +24,7 @@ export const TrainerProfileScreen: FC<TrainerProfileScreenProps> = observer(
         safeAreaEdges={["top"]}
         contentContainerStyle={themed($screenContentContainer)}
       >
-        <Text text="trainerProfile" />
+        <Text text="Trainer Profile" preset="heading" />
       </Screen>
     )
   },

@@ -344,3 +344,9 @@ export interface UpdateWaterLog {
   amount?: number
   date?: Date
 }
+
+export interface TrainerIsFollowedResponse {
+  status: number
+  message: string
+  followed: boolean
+}

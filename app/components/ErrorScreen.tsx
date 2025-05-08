@@ -34,7 +34,7 @@ export const ErrorScreen: FC<ErrorScreenProps> = ({
         paddingHorizontal: $.spacing.lg,
       }))}
     >
-      <Text text={title} preset="heading" />
+      <Text text={title} preset="heading" style={themed($errorHeader)} />
       <View style={themed($errorContainer)}>
         <Icon icon="view" size={50} color={colors.error} />
         <Text text={message} style={themed($errorText)} />
@@ -57,7 +57,16 @@ const $errorText: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
   marginVertical: spacing.md,
 })
 
+const $errorHeader: ThemedStyle<TextStyle> = ({ colors }) => ({
+  textAlign: "center",
+  color: colors.error,
+  fontSize: 30,
+  fontWeight: "bold",
+})
+
 const $button: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   paddingHorizontal: spacing.md,
+  backgroundColor: colors.background,
   marginTop: spacing.md,
+  borderRadius: 120,
 })

@@ -139,6 +139,7 @@ export const ProfileScreen: FC<HomeTabScreenProps<"Profile">> = observer(
           {isOwnProfile && (
             <Button
               text="Edit Profile"
+              preset="filled"
               onPress={navigateToEditProfile}
               style={themed($editButton)}
               LeftAccessory={() => (

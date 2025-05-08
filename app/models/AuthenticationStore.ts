@@ -28,6 +28,9 @@ export const AuthenticationStoreModel = types
   })
   .views((store) => ({
     get isAuthenticated() {
+      console.log(
+        `[AUTH] Authentication Status: ${store.authToken ? "Authenticated" : "Not Authenticated"}`,
+      )
       return !!store.authToken
     },
     get validationError() {

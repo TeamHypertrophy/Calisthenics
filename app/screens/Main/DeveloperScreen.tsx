@@ -1,30 +1,28 @@
-import { FC } from "react"
-import { observer } from "mobx-react-lite" 
-import { ViewStyle } from "react-native"
-import { AppStackScreenProps } from "@/navigators"
 import { Button, Screen, Text } from "@/components"
-import { ThemedStyle } from "@/theme"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { logEverything, storage } from "@/utils/storage"
-import notifee from "@notifee/react-native"
 import { useStores } from "@/models"
+import { AppStackScreenProps } from "@/navigators"
+import { ThemedStyle } from "@/theme"
+import { logEverything, storage } from "@/utils/storage"
+import { useAppTheme } from "@/utils/useAppTheme"
+import notifee from "@notifee/react-native"
+import { observer } from "mobx-react-lite"
+import { FC } from "react"
+import { ViewStyle } from "react-native"
 
 interface DeveloperScreenProps extends AppStackScreenProps<"Developer"> {}
 
-
 export const DeveloperScreen: FC<DeveloperScreenProps> = observer(function DeveloperScreen(_props) {
-  
   // Pull in one of our MST stores
   // const { someStore, anotherStore } = useStores()
-  const  { navigation } = _props
+  const { navigation } = _props
 
   const {
     profileStore: { updateSpecific },
   } = useStores()
 
   const {
-      themed,
-      theme: { colors },
+    themed,
+    theme: { colors },
   } = useAppTheme()
 
   async function onDisplayNotification() {
@@ -46,7 +44,6 @@ export const DeveloperScreen: FC<DeveloperScreenProps> = observer(function Devel
       },
     })
   }
-  
 
   // Pull in navigation via hook
   // const navigation = useNavigation()
@@ -79,7 +76,6 @@ export const DeveloperScreen: FC<DeveloperScreenProps> = observer(function Devel
       />
     </Screen>
   )
-
 })
 
 const $root: ViewStyle = {

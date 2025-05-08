@@ -134,7 +134,7 @@ export const LogsScreen: FC<HomeTabScreenProps<"Logs">> = observer(function Logs
         const sleepLogs: AppSleepLog[] =
           sleepRes.ok && sleepRes.data
             ? sleepRes.data
-                .filter((log) => log.log_id != null && log.beginning != null && log.end != null) // Check required sleep fields
+                .filter((log) => log.log_id != null && log.beginning != null && log.end != null)
                 .map((log) => ({
                   ...log,
                   id: log.log_id!,
@@ -186,7 +186,6 @@ export const LogsScreen: FC<HomeTabScreenProps<"Logs">> = observer(function Logs
     let details = ""
     let emoji = ""
 
-
     switch (item.type) {
       case "protein":
         details = `${item.amount}g`
@@ -198,7 +197,7 @@ export const LogsScreen: FC<HomeTabScreenProps<"Logs">> = observer(function Logs
         break
       case "calories":
         details = `${item.amount}kcal`
-        emoji = "🔥" 
+        emoji = "🔥"
         break
       case "sleep":
         emoji = "💤"
@@ -238,14 +237,14 @@ export const LogsScreen: FC<HomeTabScreenProps<"Logs">> = observer(function Logs
         <Text preset="heading" text="Logs" />
         <Button
           text="Create"
-          preset="default"
+          preset="filled"
           onPress={handleCreateLog}
           style={themed($createButton)}
           LeftAccessory={() => (
             <MaterialIcons
               name="add"
               size={20}
-              color={colors.palette.secondary500}
+              color={colors.palette.secondary400}
               style={{ marginRight: 4 }}
             />
           )}
@@ -308,8 +307,9 @@ const $headerContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   paddingBottom: spacing.sm,
 })
 
-const $createButton: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+const $createButton: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
   borderRadius: 120,
+  backgroundColor: colors.palette.primary500,
 })
 
 const $searchBar: ThemedStyle<ViewStyle> = ({ spacing }) => ({
