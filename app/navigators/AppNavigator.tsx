@@ -66,7 +66,7 @@ export type AppStackParamList = {
   Workouts: undefined
   EditWorkout: undefined
   WorkoutPlans: undefined
-  ViewWorkoutPlan: undefined
+  ViewWorkoutPlan: { planID: string }
   EditWorkoutPlan: undefined
   CreateWorkoutLog: undefined
   ViewWorkoutLog: undefined

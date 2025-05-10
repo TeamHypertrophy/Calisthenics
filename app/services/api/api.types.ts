@@ -171,7 +171,7 @@ export interface TrainerAnnouncement {
   visibility?: boolean
   content?: string
   pinned?: boolean
-  created_at?: Date
+  created_at: string
   updated_at?: Date
 }
 
@@ -231,7 +231,7 @@ export interface WorkoutPlan {
   name: string
   description?: string
   workouts?: string[]
-  created_at?: Date
+  created_at: string
   updated_at?: Date
   start_time?: Date
   repeats?: WorkoutInterval

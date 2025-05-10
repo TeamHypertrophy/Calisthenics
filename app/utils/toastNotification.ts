@@ -4,7 +4,7 @@ export function renderToast(
   title: string,
   text: string,
   type: "success" | "error" | "info" = "success",
-  visibilityTime: number = 4000,
+  visibilityTime: number = 2500,
   position: "top" | "bottom" = "top",
 ) {
   Toast.show({

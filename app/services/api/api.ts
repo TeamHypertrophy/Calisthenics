@@ -25,6 +25,7 @@ import type {
   UserResponse,
   VersionResponse,
   WaterLog,
+  WorkoutPlan,
 } from "./api.types"
 
 import Config from "../../config"
@@ -457,11 +458,24 @@ export class Api {
     return response
   }
 
-  async getAllTrainerAnnouncements(trainer: number): Promise<ApiResponse<TrainerAnnouncement[]>> {
+  async getAllTrainerAnnouncements(trainer: string): Promise<ApiResponse<TrainerAnnouncement[]>> {
+    if (trainer === "") {
+      throw new Error("Trainer ID is NULL")
+    }
+
     await this.ensureAuthLoaded()
 
     const response: ApiResponse<TrainerAnnouncement[]> = await this.apisauce.get(
       `/trainers/announcement/all?trainer_id=${trainer}`,
+    )
+    return response
+  }
+
+  async getAllUserWorkoutPlans(user: string): Promise<ApiResponse<WorkoutPlan[]>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<WorkoutPlan[]> = await this.apisauce.get(
+      `/workout/plans/user/all?user_id=${user}`,
     )
     return response
   }

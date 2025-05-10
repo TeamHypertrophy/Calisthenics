@@ -13,12 +13,13 @@ import { FC } from "react"
 import { FlatList, ImageStyle, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
 
 export interface AppAnnouncement {
-  id: string
+  id?: number
   title: string
-  content: string
-  created_at: Date
+  content?: string
+  created_at?: Date
   trainer: {
     id: string
+    user_id: string
     first_name: string
     last_name: string
     avatar_url?: string
@@ -58,6 +59,7 @@ export const TrainerScreen: FC<HomeTabScreenProps<"Trainer">> = observer(
               let trainerFirstName = "Unknown"
               let trainerLastName = "Trainer"
               let avatar_url: string | undefined = undefined
+              let user_id = ""
 
               try {
                 const [trainerResponse, profileResponse] = await Promise.all([
@@ -67,6 +69,7 @@ export const TrainerScreen: FC<HomeTabScreenProps<"Trainer">> = observer(
 
                 if (trainerResponse.ok && trainerResponse.data) {
                   trainerID = trainerResponse.data.trainer_id
+                  user_id = trainerResponse.data.user_id
                 } else {
                   throw new Error("Failed Fetching Trainer Details")
                 }
@@ -90,6 +93,7 @@ export const TrainerScreen: FC<HomeTabScreenProps<"Trainer">> = observer(
                 created_at: parseISO(raw.created_at),
                 trainer: {
                   id: trainerID,
+                  user_id: user_id,
                   first_name: trainerFirstName,
                   last_name: trainerLastName,
                   avatar_url: avatar_url,
@@ -122,7 +126,7 @@ export const TrainerScreen: FC<HomeTabScreenProps<"Trainer">> = observer(
           <View style={themed($cardHeader)}>
             <TouchableOpacity
               style={themed($avatarContainer)}
-              onPress={() => navigateToTrainerProfile(item.trainer.id)}
+              onPress={() => navigateToTrainerProfile(item.trainer.user_id)}
             >
               {item.trainer.avatar_url ? (
                 <AutoImage
@@ -141,7 +145,7 @@ export const TrainerScreen: FC<HomeTabScreenProps<"Trainer">> = observer(
                   preset="subheading"
                   style={themed($trainerName)}
                 />
-                <Text text={item.created_at.toDateString()} style={themed($timestamp)} />
+                <Text text={item.created_at?.toDateString()} style={themed($timestamp)} />
               </View>
             </TouchableOpacity>
           </View>
