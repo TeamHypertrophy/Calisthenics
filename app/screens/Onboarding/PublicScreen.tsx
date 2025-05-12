@@ -124,15 +124,7 @@ export const PublicScreen: FC<PublicScreenProps> = observer(function PublicScree
         value={activityLevel}
         onChange={(item) => setActivityLevel(item.value as ActivityLevel)}
         containerStyle={{ marginBottom: spacing.lg }}
-        style={{
-          backgroundColor: colors.background,
-          borderColor: colors.border,
-          borderWidth: 1,
-          borderRadius: 4,
-          paddingHorizontal: spacing.md,
-          height: 48,
-          marginBottom: spacing.md,
-        }}
+        style={themed($dropdown)}
         placeholderStyle={{ color: colors.textDim }}
         selectedTextStyle={{ color: colors.text }}
       />
@@ -189,4 +181,14 @@ const $avatarText: ThemedStyle<TextStyle> = ({ colors }) => ({
 const $fieldLabel: ThemedStyle<TextStyle> = ({ spacing, colors }) => ({
   marginBottom: spacing.xs,
   color: colors.textDim,
+})
+
+const $dropdown: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
+  backgroundColor: colors.background,
+  borderColor: colors.border,
+  borderWidth: 1,
+  borderRadius: 4,
+  paddingHorizontal: spacing.md,
+  height: 48,
+  marginBottom: spacing.md,
 })

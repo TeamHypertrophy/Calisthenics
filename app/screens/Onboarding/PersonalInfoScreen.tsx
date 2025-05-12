@@ -136,15 +136,7 @@ export const PersonalInfoScreen: FC<PersonalInfoScreenProps> = observer(
           value={gender}
           onChange={(item) => setGender(item.value as Gender)}
           containerStyle={{ marginBottom: spacing.lg }}
-          style={{
-            backgroundColor: colors.background,
-            borderColor: colors.border,
-            borderWidth: 1,
-            borderRadius: 4,
-            paddingHorizontal: spacing.md,
-            height: 48,
-            marginBottom: spacing.md,
-          }}
+          style={themed($dropdown)}
           placeholderStyle={{ color: colors.textDim }}
           selectedTextStyle={{ color: colors.text }}
         />
@@ -197,4 +189,14 @@ const $privacyTitle: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
 const $fieldLabel: ThemedStyle<TextStyle> = ({ spacing, colors }) => ({
   marginBottom: spacing.xs,
   color: colors.textDim,
+})
+
+const $dropdown: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
+  backgroundColor: colors.background,
+  borderColor: colors.border,
+  borderWidth: 1,
+  borderRadius: 4,
+  paddingHorizontal: spacing.md,
+  height: 48,
+  marginBottom: spacing.md,
 })

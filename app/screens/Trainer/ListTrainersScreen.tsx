@@ -59,8 +59,10 @@ export const ListTrainersScreen: FC<ListTrainersScreenProps> = observer(
           throw new Error("Failed Fetching Trainers")
         }
 
+        const verifiedTrainers = response.data.filter(trainer => trainer.verified === true)
+
         const trainers = await Promise.all(
-          response.data.map(async (trainer) => {
+          verifiedTrainers.map(async (trainer) => {
             try {
               const followResponse = await api.getTrainerIsFollowedByUser(trainer.user_id, userID)
               const profileResponse = await api.getProfileByID(trainer.user_id)
@@ -206,6 +208,7 @@ export const ListTrainersScreen: FC<ListTrainersScreenProps> = observer(
     if (isLoading) return <Loading />
 
     if (isError) {
+      console.error("[List Trainers] Error Loading Trainers", error)
       return (
         <ErrorScreen
           message="Error Fetching Trainers"
@@ -247,7 +250,7 @@ export const ListTrainersScreen: FC<ListTrainersScreenProps> = observer(
           contentContainerStyle={themed($listContentContainer)}
           ListEmptyComponent={
             <View style={themed($emptyStateContainer)}>
-              <Text text="No Trainers Found." style={themed($emptyStateText)} />
+              <Text text="No Trainers Found" style={themed($emptyStateText)} />
             </View>
           }
           onRefresh={refetch}

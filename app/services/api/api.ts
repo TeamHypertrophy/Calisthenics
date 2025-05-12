@@ -449,6 +449,16 @@ export class Api {
     return response
   }
 
+  async requestTrainer(data: any): Promise<ApiResponse<Trainer>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<Trainer> = await this.apisauce.post(
+      `/trainers/request/apply?user_id=${this.user_id}`,
+      data,
+    )
+    return response
+  }
+
   async getAnnouncementsForUser(): Promise<ApiResponse<TrainerAnnouncement[]>> {
     await this.ensureAuthLoaded()
 

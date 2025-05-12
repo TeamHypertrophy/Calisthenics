@@ -142,10 +142,10 @@ export const MfaSettingsScreen: FC<MfaSettingsScreenProps> = observer(
           safeAreaEdges={["top"]}
           contentContainerStyle={themed($screenContentContainer)}
         >
-          <Text text="MFA Settings" preset="heading" style={themed($title)} />
+          <Text text="MFA" preset="heading" style={themed($title)} />
 
           <View style={themed($section)}>
-            <Text text="Enable Multi-Factor Authentication" preset="subheading" />
+            <Text text="Multi-Factor Authentication" preset="subheading" />
             <View style={themed($settingRow)}>
               <Text
                 style={themed($settingLabel)}

@@ -107,15 +107,7 @@ export const GoalsScreen: FC<GoalsScreenProps> = observer(function GoalsScreen(_
         value={fitnessGoal}
         onChange={(item) => setFitnessGoal(item.value as FitnessGoal)}
         containerStyle={{ marginBottom: spacing.md }}
-        style={{
-          backgroundColor: colors.background,
-          borderColor: colors.border,
-          borderWidth: 1,
-          borderRadius: 4,
-          paddingHorizontal: spacing.md,
-          height: 48,
-          marginBottom: spacing.md,
-        }}
+        style={themed($dropdown)}
         placeholderStyle={{ color: colors.textDim }}
         selectedTextStyle={{ color: colors.text }}
       />
@@ -129,15 +121,7 @@ export const GoalsScreen: FC<GoalsScreenProps> = observer(function GoalsScreen(_
         value={diet}
         onChange={(item) => setDiet(item.value as Diet)}
         containerStyle={{ marginBottom: spacing.lg }}
-        style={{
-          backgroundColor: colors.background,
-          borderColor: colors.border,
-          borderWidth: 1,
-          borderRadius: 4,
-          paddingHorizontal: spacing.md,
-          height: 48,
-          marginBottom: spacing.md,
-        }}
+        style={themed($dropdown)}
         placeholderStyle={{ color: colors.textDim }}
         selectedTextStyle={{ color: colors.text }}
       />
@@ -169,4 +153,14 @@ const $screenContentContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 const $fieldLabel: ThemedStyle<TextStyle> = ({ spacing, colors }) => ({
   marginBottom: spacing.xs,
   color: colors.textDim,
+})
+
+const $dropdown: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
+  backgroundColor: colors.background,
+  borderColor: colors.border,
+  borderWidth: 1,
+  borderRadius: 4,
+  paddingHorizontal: spacing.md,
+  height: 48,
+  marginBottom: spacing.md,
 })

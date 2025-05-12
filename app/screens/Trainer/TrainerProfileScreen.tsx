@@ -52,7 +52,7 @@ export const TrainerProfileScreen: FC<TrainerProfileScreenProps> = observer(
       isError: trainerIsError,
       error: trainerError,
     } = useQuery({
-      queryKey: ["trainerProfile", trainerID],
+      queryKey: ["trainer", trainerID],
       queryFn: async () => {
         const response = await api.getTrainerByID(trainerID)
 
