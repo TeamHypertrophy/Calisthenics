@@ -30,7 +30,6 @@ export const TrainerStatusScreen: FC<TrainerStatusScreenProps> = observer(
       queryKey: ["trainer", userID],
       queryFn: async () => {
         const response = await api.getTrainerByID(userID)
-        console.log(response)
 
         if (response.ok && response.data) {
           return response.data

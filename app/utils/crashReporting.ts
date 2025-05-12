@@ -17,7 +17,7 @@ export enum ErrorType {
    */
   FATAL = "Fatal",
   /**
-   * An error caught by try/catch where defined using Reactotron.tron.error.
+   * An error caught by try/catch
    */
   HANDLED = "Handled",
 }

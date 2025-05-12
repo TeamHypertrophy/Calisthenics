@@ -10,7 +10,7 @@ module.exports = {
     "plugin:react/jsx-runtime",
     "prettier",
   ],
-  plugins: ["reactotron", "prettier", "perfectionist"],
+  plugins: ["prettier", "perfectionist"],
   rules: {
     "prettier/prettier": "error",
     // typescript-eslint
@@ -46,8 +46,6 @@ module.exports = {
     "react/prop-types": 0,
     // react-native
     "react-native/no-raw-text": 0,
-    // reactotron
-    "reactotron/no-tron-in-production": "error",
     // eslint-config-standard overrides
     "comma-dangle": 0,
     "no-global-assign": 0,

@@ -22,10 +22,6 @@ import { customFontsToLoad } from "./theme"
 import { loadDateFnsLocale } from "./utils/formatDate"
 import * as storage from "./utils/storage"
 
-if (__DEV__) {
-  require("./devtools/ReactotronConfig.ts")
-}
-
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
 export function App() {
