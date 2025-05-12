@@ -181,7 +181,7 @@ export const UpdatePasswordScreen: FC<UpdatePasswordScreenProps> = observer(
         <Button
           text="Change Password"
           style={themed($button)}
-          preset="reversed"
+          preset="filled"
           onPress={updatePassword}
           disabled={isSubmitting}
         />

@@ -197,7 +197,7 @@ export const ForgotPasswordMfaScreen: FC<ForgotPasswordMfaScreenProps> = observe
         <Button
           text="Reset Password"
           style={themed($button)}
-          preset="reversed"
+          preset="filled"
           onPress={handlePasswordReset}
           disabled={!canSubmit || isSubmitting}
         />

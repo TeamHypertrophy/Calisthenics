@@ -389,7 +389,7 @@ export const EditLogScreen: FC<EditLogScreenProps> = observer(function EditLogSc
               text="Cancel"
               style={themed($modalCancelButton)}
               textStyle={themed($modalCancelButtonText)}
-              preset="default"
+              preset="filled"
               onPress={() => deleteModalRef.current?.close()}
             />
             <Button

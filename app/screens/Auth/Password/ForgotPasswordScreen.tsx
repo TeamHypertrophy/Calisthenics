@@ -89,7 +89,7 @@ export const ForgotPasswordScreen: FC<ForgotPasswordScreenProps> = observer(
         <Button
           text="Request Password Reset"
           style={themed($button)}
-          preset="reversed"
+          preset="filled"
           onPress={handleForgotPasswordRequest}
           disabled={isSubmitting || !email}
         />

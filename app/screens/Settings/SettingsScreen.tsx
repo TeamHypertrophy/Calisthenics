@@ -265,7 +265,7 @@ Network Status: ${isConnected ? "Online" : "Offline"}
                 text="Cancel"
                 style={themed($cancelButton)}
                 textStyle={themed($cancelButtonText)}
-                preset="default"
+                preset="filled"
                 onPress={() => logoutModalRef.current?.close()}
               />
 
@@ -273,7 +273,7 @@ Network Status: ${isConnected ? "Online" : "Offline"}
                 text="Log Out"
                 style={themed($confirmButton)}
                 textStyle={$confirmButtonText}
-                preset="default"
+                preset="filled"
                 onPress={handleLogout}
               />
             </View>
@@ -302,7 +302,7 @@ Network Status: ${isConnected ? "Online" : "Offline"}
                 text="Cancel"
                 style={themed($cancelButton)}
                 textStyle={themed($cancelButtonText)}
-                preset="default"
+                preset="filled"
                 onPress={() => deleteAccountRef.current?.close()}
               />
 
@@ -310,7 +310,7 @@ Network Status: ${isConnected ? "Online" : "Offline"}
                 text="Delete Account"
                 style={themed($confirmButton)}
                 textStyle={$confirmButtonText}
-                preset="default"
+                preset="filled"
                 onPress={handleDeleteAccount}
               />
             </View>

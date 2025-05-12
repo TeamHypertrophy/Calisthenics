@@ -27,6 +27,42 @@ export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function Main
       <Text text="Hypertrophy" preset="heading" />
 
       <Text text="Welcome!" />
+
+      <Button
+        text="Exercises"
+        style={themed($button)}
+        preset="filled"
+        onPress={() => {
+          navigation.navigate("SearchExercises")
+        }}
+      />
+
+      <Button
+        text="Custom Exercises"
+        style={themed($button)}
+        preset="filled"
+        onPress={() => {
+          navigation.navigate("SearchExercises")
+        }}
+      />
+
+      <Button
+        text="Workout Plans"
+        style={themed($button)}
+        preset="filled"
+        onPress={() => {
+          navigation.navigate("WorkoutPlans")
+        }}
+      />
+
+      <Button
+        text="Workouts"
+        style={themed($button)}
+        preset="filled"
+        onPress={() => {
+          navigation.navigate("Workouts")
+        }}
+      />
     </Screen>
   )
 })
@@ -34,6 +70,13 @@ export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function Main
 const $screenContentContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   paddingVertical: spacing.xl,
   paddingHorizontal: spacing.lg,
+})
+
+const $button: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
+  backgroundColor: colors.palette.primary500,
+  borderRadius: 120,
+  marginTop: spacing.lg,
+  marginBottom: spacing.lg,
 })
 
 const $root: ViewStyle = {

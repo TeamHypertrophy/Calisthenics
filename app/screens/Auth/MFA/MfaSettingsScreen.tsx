@@ -189,7 +189,7 @@ export const MfaSettingsScreen: FC<MfaSettingsScreenProps> = observer(
                     text="Open Email Client"
                     onPress={openEmailClient}
                     style={themed($verifyButton)}
-                    preset="reversed"
+                    preset="filled"
                     LeftAccessory={() => (
                       <MaterialIcons
                         icon="mail"
@@ -208,7 +208,7 @@ export const MfaSettingsScreen: FC<MfaSettingsScreenProps> = observer(
             text="Back to Settings"
             onPress={() => navigation.goBack()}
             style={themed($backButton)}
-            preset="default"
+            preset="filled"
           />
 
           <Modalize
@@ -231,14 +231,14 @@ export const MfaSettingsScreen: FC<MfaSettingsScreenProps> = observer(
                   text="Cancel"
                   style={themed($cancelButton)}
                   textStyle={themed($cancelButtonText)}
-                  preset="default"
+                  preset="filled"
                   onPress={() => enableModalRef.current?.close()}
                 />
                 <Button
                   text="Enable MFA"
                   style={themed($confirmButton(colors.palette.primary500))}
                   textStyle={$confirmButtonText}
-                  preset="default"
+                  preset="filled"
                   onPress={confirmEnableMfa}
                   disabled={enableMfaMutation.isPending}
                 />
@@ -266,14 +266,14 @@ export const MfaSettingsScreen: FC<MfaSettingsScreenProps> = observer(
                   text="Cancel"
                   style={themed($cancelButton)}
                   textStyle={themed($cancelButtonText)}
-                  preset="default"
+                  preset="filled"
                   onPress={() => disableModalRef.current?.close()}
                 />
                 <Button
                   text="Disable MFA"
                   style={themed($confirmButton(colors.error))}
                   textStyle={$confirmButtonText}
-                  preset="default"
+                  preset="filled"
                   onPress={confirmDisableMfa}
                   disabled={disableMfaMutation.isPending}
                 />

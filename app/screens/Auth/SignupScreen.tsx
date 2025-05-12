@@ -234,7 +234,7 @@ export const SignupScreen: FC<SignupScreenProps> = observer(function SignupScree
         testID="login-button"
         text="Sign Up"
         style={themed($tapButton)}
-        preset="reversed"
+        preset="filled"
         onPress={signup}
       />
     </Screen>

@@ -78,7 +78,8 @@ export type AppStackParamList = {
   Developer: undefined
   TrainerStatus: undefined
   TrainerAnnouncements: undefined
-  // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+  ViewCustomExercises: undefined
+	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
 
 const exitRoutes = Config.exitRoutes
@@ -165,7 +166,8 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="ViewWorkoutPlanLogs" component={Screens.ViewWorkoutPlanLogsScreen} />
       <Stack.Screen name="Developer" component={Screens.DeveloperScreen} />
       <Stack.Screen name="TrainerStatus" component={Screens.TrainerStatusScreen} />
-      {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
+      <Stack.Screen name="ViewCustomExercises" component={Screens.ViewCustomExercisesScreen} />
+			{/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>
   )
 })

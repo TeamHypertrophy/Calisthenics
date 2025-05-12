@@ -234,7 +234,7 @@ export const LogsScreen: FC<HomeTabScreenProps<"Logs">> = observer(function Logs
   return (
     <Screen style={$root} preset="fixed" safeAreaEdges={["top"]}>
       <View style={themed($headerContainer)}>
-        <Text preset="heading" text="Logs" />
+        <Text preset="heading" text="Nutrition" />
         <Button
           text="Create"
           preset="filled"
@@ -310,6 +310,7 @@ const $headerContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 const $createButton: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
   borderRadius: 120,
   backgroundColor: colors.palette.primary500,
+  paddingVertical: spacing.xxs,
 })
 
 const $searchBar: ThemedStyle<ViewStyle> = ({ spacing }) => ({
