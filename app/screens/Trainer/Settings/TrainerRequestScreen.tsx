@@ -85,7 +85,7 @@ export const TrainerRequestScreen: FC<TrainerRequestScreenProps> = observer(
       >
         <Text text="Request Trainer Verification" preset="heading" />
         <Text
-          text="Please Provide Your Specialization and Experience As A Trainer" 
+          text="Please Provide Your Specialization and Experience As A Trainer"
           style={themed($subheading)}
         />
 
@@ -174,7 +174,7 @@ const $textFieldContainer: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
 })
 
 const $textInputStyle: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
-  minHeight: 100, 
+  minHeight: 100,
   textAlignVertical: "top",
   padding: spacing.sm,
   color: colors.text,

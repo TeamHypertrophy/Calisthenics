@@ -37,7 +37,6 @@ export type AppStackParamList = {
   Logs: undefined
   Main: undefined
   Trainer: undefined
-  TrainerAnnouncement: undefined
   Settings: undefined
   MFA: undefined
   Signup: undefined
@@ -47,39 +46,39 @@ export type AppStackParamList = {
   Public: undefined
   Goals: undefined
   SearchExercises: undefined
-  ViewExercise: undefined
+  ViewExercise: { exerciseID: number }
   CreateCustomExercise: undefined
   ViewExerciseLogs: undefined
-  CreateExerciseLog: undefined
+  CreateExerciseLog: { exerciseID: number }
   ViewLog: { logID: number; logType: string }
   CreateLog: undefined
   EditLog: { logID: number; logType: string }
-  EditCustomExercise: undefined
-  EditExerciseLog: undefined
+  EditCustomExercise: { exerciseID: number }
+  EditExerciseLog: { exerciseID: number; logID: number }
   ForgotPassword: undefined
   UpdatePassword: undefined
   MfaSettings: undefined
   ListTrainers: undefined
   TrainerProfile: { trainerID: string }
   TrainerRequest: undefined
-  ViewWorkout: undefined
+  ViewWorkout: { workoutID: number }
   Workouts: undefined
-  EditWorkout: undefined
+  EditWorkout: { workoutID: number }
   WorkoutPlans: undefined
   ViewWorkoutPlan: { planID: string }
-  EditWorkoutPlan: undefined
+  EditWorkoutPlan: { planID: string }
   CreateWorkoutLog: undefined
-  ViewWorkoutLog: undefined
-  EditWorkoutLog: undefined
-  ViewWorkoutPlanLog: undefined
-  EditWorkoutPlanLog: undefined
+  ViewWorkoutLog: { logID: number }
+  EditWorkoutLog: { logID: number }
+  ViewWorkoutPlanLog: { logID: number }
+  EditWorkoutPlanLog: { logID: number }
   ViewWorkoutPlanLogs: undefined
   ForgotPasswordMfa: { emailAddress: string }
   Developer: undefined
   TrainerStatus: undefined
-  TrainerAnnouncements: undefined
   ViewCustomExercises: undefined
-	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+  ViewCustomExercise: { exerciseID: number }
+  // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
 
 const exitRoutes = Config.exitRoutes
@@ -167,7 +166,8 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="Developer" component={Screens.DeveloperScreen} />
       <Stack.Screen name="TrainerStatus" component={Screens.TrainerStatusScreen} />
       <Stack.Screen name="ViewCustomExercises" component={Screens.ViewCustomExercisesScreen} />
-			{/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
+      <Stack.Screen name="ViewCustomExercise" component={Screens.ViewCustomExerciseScreen} />
+      {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>
   )
 })

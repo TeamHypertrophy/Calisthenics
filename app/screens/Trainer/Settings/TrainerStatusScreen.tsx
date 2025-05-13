@@ -60,33 +60,32 @@ export const TrainerStatusScreen: FC<TrainerStatusScreenProps> = observer(
     const renderStatusContent = () => {
       if (data === null) {
         return (
-        <View style={$contentWrapper}>
-          <Ionicons
-            name="person-circle-sharp" 
-            size={spacing.xxxl}
-            color={colors.palette.neutral500}
-            style={themed($iconStyle)}
-          />
-          <Text
-            text="Trainer Profile Not Found"
-            preset="subheading"
-            style={themed($statusTextUnverified)}
-          />
-          <Text
-            text="No Trainer Profile Found. Please Request Verification To Become A Trainer"
-            style={themed($statusSubText)}
-          />
-          <Button
-          text="Request Trainer Verification"
-          onPress={() => navigation.navigate("TrainerRequest")}
-          style={themed($requestButton)}
-          preset="filled"
-          textStyle={themed($requestButtonText)}
-          /> 
+          <View style={$contentWrapper}>
+            <Ionicons
+              name="person-circle-sharp"
+              size={spacing.xxxl}
+              color={colors.palette.neutral500}
+              style={themed($iconStyle)}
+            />
+            <Text
+              text="Trainer Profile Not Found"
+              preset="subheading"
+              style={themed($statusTextUnverified)}
+            />
+            <Text
+              text="No Trainer Profile Found. Please Request Verification To Become A Trainer"
+              style={themed($statusSubText)}
+            />
+            <Button
+              text="Request Trainer Verification"
+              onPress={() => navigation.navigate("TrainerRequest")}
+              style={themed($requestButton)}
+              preset="filled"
+              textStyle={themed($requestButtonText)}
+            />
           </View>
         )
       }
-
 
       if (data?.verified) {
         return (
@@ -137,11 +136,7 @@ export const TrainerStatusScreen: FC<TrainerStatusScreenProps> = observer(
           contentContainerStyle={themed($scrollViewContainer)}
           showsVerticalScrollIndicator={false}
           refreshControl={
-            <RefreshControl
-              refreshing={isFetching}
-              onRefresh={refetch}
-              colors={[colors.tint]}
-            />
+            <RefreshControl refreshing={isFetching} onRefresh={refetch} colors={[colors.tint]} />
           }
         >
           <Text text="Trainer Status" preset="heading" style={themed($heading)} />

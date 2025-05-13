@@ -59,7 +59,7 @@ export const ListTrainersScreen: FC<ListTrainersScreenProps> = observer(
           throw new Error("Failed Fetching Trainers")
         }
 
-        const verifiedTrainers = response.data.filter(trainer => trainer.verified === true)
+        const verifiedTrainers = response.data.filter((trainer) => trainer.verified === true)
 
         const trainers = await Promise.all(
           verifiedTrainers.map(async (trainer) => {

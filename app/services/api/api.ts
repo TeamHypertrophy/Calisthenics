@@ -9,11 +9,17 @@ import type {
   CreateProteinLog,
   CreateSleepLog,
   CreateWaterLog,
+  CustomExercise,
   DeleteResponse,
+  Difficulty,
+  Equipment,
+  Exercise,
+  ExerciseType,
   HealthResponse,
   LoginResponse,
   MFACheckResponse,
   MFAResendResponse,
+  MuscleGroup,
   Profile,
   ProteinLog,
   SignupResponse,
@@ -486,6 +492,73 @@ export class Api {
 
     const response: ApiResponse<WorkoutPlan[]> = await this.apisauce.get(
       `/workout/plans/user/all?user_id=${user}`,
+    )
+    return response
+  }
+
+  // EXERCISES
+  async getAllExercises(): Promise<ApiResponse<Exercise[]>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<Exercise[]> = await this.apisauce.get("exercises/all")
+    return response
+  }
+
+  async getExerciseByID(exerciseID: number): Promise<ApiResponse<Exercise>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<Exercise> = await this.apisauce.get(`exercises/get/${exerciseID}`)
+    return response
+  }
+
+  async searchExercises(search: {
+    name?: string
+    equipment?: Equipment
+    difficulty?: Difficulty
+    muscle_group?: MuscleGroup
+    exercise_type?: ExerciseType
+  }): Promise<ApiResponse<Exercise[]>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<Exercise[]> = await this.apisauce.post("exercises/search", search)
+    return response
+  }
+
+  // Custom Exercises
+  async getCustomExercises(): Promise<ApiResponse<CustomExercise[]>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<CustomExercise[]> = await this.apisauce.get(
+      `/exercises/custom/user/all?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async searchCustomExercises(search: {
+    name?: string
+    equipment?: Equipment
+    difficulty?: Difficulty
+    muscle_group?: MuscleGroup
+    exercise_type?: ExerciseType
+  }): Promise<ApiResponse<CustomExercise[]>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<CustomExercise[]> = await this.apisauce.post(
+      "exercises/custom/search",
+      search,
+    )
+    return response
+  }
+
+  async getCustomExerciseByID(exerciseID: number): Promise<ApiResponse<CustomExercise>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<CustomExercise> = await this.apisauce.get(
+      `exercises/custom/get/${exerciseID}?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async deleteCustomExercise(exerciseID: number): Promise<ApiResponse<any>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<any> = await this.apisauce.get(
+      `exercises/custom/delete/${exerciseID}?user_id=${this.user_id}`,
     )
     return response
   }
