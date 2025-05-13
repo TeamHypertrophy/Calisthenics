@@ -116,7 +116,7 @@ export interface Exercise {
 }
 
 export interface ExerciseLog {
-  log_id?: number
+  log_id: number
   user_id: string
   exercise_id: number
   sets_completed: number
@@ -349,4 +349,16 @@ export interface TrainerIsFollowedResponse {
   status: number
   message: string
   followed: boolean
+}
+
+export interface CreateExerciseLog {
+  user_id: string
+  exercise_id: number
+  sets_completed: number
+  reps_completed: number
+}
+
+export interface UpdateExerciseLog {
+  sets_completed: number
+  reps_completed: number
 }

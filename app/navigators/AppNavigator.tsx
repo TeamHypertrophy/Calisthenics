@@ -49,12 +49,12 @@ export type AppStackParamList = {
   ViewExercise: { exerciseID: number }
   CreateCustomExercise: undefined
   ViewExerciseLogs: undefined
-  CreateExerciseLog: { exerciseID: number }
+  CreateExerciseLog: { exerciseID: number, exerciseName: string }
   ViewLog: { logID: number; logType: string }
   CreateLog: undefined
   EditLog: { logID: number; logType: string }
   EditCustomExercise: { exerciseID: number }
-  EditExerciseLog: { exerciseID: number; logID: number }
+  EditExerciseLog: { logID: number, exerciseName: string, setsCompleted: number, repsCompleted: number }
   ForgotPassword: undefined
   UpdatePassword: undefined
   MfaSettings: undefined

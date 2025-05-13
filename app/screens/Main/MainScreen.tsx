@@ -47,6 +47,15 @@ export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function Main
       />
 
       <Button
+        text="Exercise Logs"
+        style={themed($button)}
+        preset="filled"
+        onPress={() => {
+          navigation.navigate("ViewExerciseLogs")
+        }}
+      />
+
+      <Button
         text="Workout Plans"
         style={themed($button)}
         preset="filled"

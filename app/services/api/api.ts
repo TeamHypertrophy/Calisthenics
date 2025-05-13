@@ -6,6 +6,7 @@ import type {
   ApiConfig,
   CalorieLog,
   CreateCalorieLog,
+  CreateExerciseLog,
   CreateProteinLog,
   CreateSleepLog,
   CreateWaterLog,
@@ -14,6 +15,7 @@ import type {
   Difficulty,
   Equipment,
   Exercise,
+  ExerciseLog,
   ExerciseType,
   HealthResponse,
   LoginResponse,
@@ -579,6 +581,43 @@ export class Api {
     const response: ApiResponse<CustomExercise> = await this.apisauce.post(
       `/exercises/custom/create?user_id=${this.user_id}`,
       data,
+    )
+    return response
+  }
+
+  // EXERCISE LOGS
+  async createExerciseLog(data: CreateExerciseLog): Promise<ApiResponse<ExerciseLog>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<any> = await this.apisauce.post(
+      `/logs/exercise/create?user_id=${this.user_id}`,
+      data,
+    )
+    return response
+  }
+
+  async getExerciseLogs(): Promise<ApiResponse<ExerciseLog[]>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<ExerciseLog[]> = await this.apisauce.get(
+      `/logs/exercise/user/all?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async editExerciseLog(logID: number, data: any): Promise<ApiResponse<ExerciseLog>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<ExerciseLog> = await this.apisauce.post(
+      `/logs/exercise/update/${logID}?user_id=${this.user_id}`,
+      data,
+    )
+    return response 
+  }
+
+  async deleteExerciseLog(logID: number): Promise<ApiResponse<any>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<any> = await this.apisauce.get(
+      `/logs/exercise/delete/${logID}?user_id=${this.user_id}`,
     )
     return response
   }

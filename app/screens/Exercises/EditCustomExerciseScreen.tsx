@@ -411,6 +411,7 @@ const $fieldLabel: ThemedStyle<TextStyle> = ({ spacing, colors }) => ({
 
 const $submitButton: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
   marginTop: spacing.lg,
+  borderRadius: 120,
   backgroundColor: colors.palette?.primary500,
 })
 

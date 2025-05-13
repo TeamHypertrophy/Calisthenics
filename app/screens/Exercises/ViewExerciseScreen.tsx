@@ -65,6 +65,7 @@ export const ViewExerciseScreen: FC<ViewExerciseScreenProps> = observer(
 
       navigation.navigate("CreateExerciseLog", {
         exerciseID: exercise.exercise_id,
+        exerciseName: exercise.name,
       })
     }
 
