@@ -17,12 +17,15 @@ import {
   exerciseTypeOptions,
   muscleGroupOptions,
 } from "./SearchExercisesScreen"
+import { useStores } from "@/models"
 
 interface ViewCustomExercisesScreenProps extends AppStackScreenProps<"ViewCustomExercises"> {}
 
 export const ViewCustomExercisesScreen: FC<ViewCustomExercisesScreenProps> = observer(
   function ViewCustomExercisesScreen(_props) {
     const { navigation } = _props
+
+    const { authenticationStore: { userID } } = useStores()
 
     const {
       themed,
@@ -56,7 +59,7 @@ export const ViewCustomExercisesScreen: FC<ViewCustomExercisesScreenProps> = obs
       error,
       refetch,
     } = useQuery({
-      queryKey: ["customExercises", searchQuery, activeFilters],
+      queryKey: ["customExercises", userID],
       queryFn: async () => {
         const params: any = {}
         if (debouncedQuery.trim()) params.name = searchQuery.trim()
@@ -72,6 +75,7 @@ export const ViewCustomExercisesScreen: FC<ViewCustomExercisesScreenProps> = obs
         } else {
           response = await api.getCustomExercises()
         }
+
 
         if (!response.ok && !response.data) {
           console.error("Error Fetching Custom Exercises: ", response.problem)

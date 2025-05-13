@@ -110,7 +110,7 @@ export interface Exercise {
   rest_time?: number
   exercise_type: ExerciseType
   image_url?: string
-  video_url?: string
+  video_url: string
   created_at?: Date
   updated_at?: Date
 }

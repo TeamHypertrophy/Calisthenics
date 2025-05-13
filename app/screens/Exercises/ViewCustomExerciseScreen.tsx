@@ -1,4 +1,4 @@
-import { Button, Loading, Screen, Text } from "@/components"
+import { Button, InfoChip, Loading, Screen, Text } from "@/components"
 import { ErrorScreen } from "@/components/ErrorScreen"
 import { useStores } from "@/models"
 import { AppStackScreenProps } from "@/navigators"
@@ -62,7 +62,7 @@ export const ViewCustomExerciseScreen: FC<ViewCustomExerciseScreenProps> = obser
         deleteModalRef.current?.close()
         renderToast("Success", "Custom Exercise Deleted Successfully.", "success")
         queryClient.removeQueries({ queryKey: ["customExercise", exerciseID] })
-        queryClient.invalidateQueries({ queryKey: ["customExercises"] })
+        queryClient.invalidateQueries({ queryKey: ["customExercises", userID] })
         navigation.goBack()
       },
       onError: (e: Error) => {
@@ -110,21 +110,6 @@ export const ViewCustomExerciseScreen: FC<ViewCustomExerciseScreenProps> = obser
       )
     }
 
-    const InfoChip: FC<{ label: string; value?: string | number | null }> = ({ label, value }) => {
-      if (!value) return null
-      return (
-        <View style={themed($infoChipContainer)}>
-          <Text text={label} style={themed($infoChipLabel)} preset="formLabel" />
-          <Text
-            text={String(value)
-              .replace(/_/g, " ")
-              .replace(/\b\w/g, (l) => l.toUpperCase())}
-            style={themed($infoChipValue)}
-          />
-        </View>
-      )
-    }
-
     return (
       <>
         <Screen style={$root} preset="scroll" safeAreaEdges={["top"]}>
@@ -139,16 +124,28 @@ export const ViewCustomExerciseScreen: FC<ViewCustomExerciseScreenProps> = obser
             <View style={themed($headerButtonsContainer)}>
               <Button
                 preset="filled"
-                text="Edit"
                 onPress={handleEdit}
                 style={themed($actionButton)}
+                LeftAccessory={() => (
+                  <MaterialIcons
+                    name="edit"
+                    size={25}
+                    color={colors.palette.secondary400}
+                  />
+                )}
               />
               <Button
                 preset="filled"
-                text="Delete"
                 onPress={openDeleteModal}
                 style={themed([$actionButton, $deleteButton])}
                 textStyle={themed($deleteButtonText)}
+                LeftAccessory={() => (
+                  <MaterialIcons
+                    name="delete-forever"
+                    size={25}
+                    color={colors.palette.secondary400}
+                  />
+                )}
               />
             </View>
           </View>
@@ -247,12 +244,16 @@ const $headerButtonsContainer: ThemedStyle<ViewStyle> = ({}) => ({
 })
 
 const $actionButton: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
-  padding: spacing.xs,
-  marginLeft: spacing.sm,
+  width: 50,
+  height: 50,
+  padding: spacing.xxs,
+  marginLeft: spacing.xs,
   borderWidth: 1,
   borderColor: colors.border,
-  borderRadius: spacing.xxl,
+  borderRadius: 50,
   backgroundColor: colors.palette.primary500,
+  justifyContent: "center",
+  alignItems: "center",
 })
 
 const $deleteButton: ThemedStyle<ViewStyle> = ({ colors }) => ({
@@ -282,33 +283,6 @@ const $detailRow: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   flexDirection: "row",
   justifyContent: "space-between",
   marginBottom: spacing.md,
-})
-
-const $infoChipContainer: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
-  backgroundColor: colors.background,
-  paddingVertical: spacing.sm,
-  paddingHorizontal: spacing.md,
-  borderRadius: spacing.sm,
-  borderWidth: 1,
-  borderColor: colors.border,
-  alignItems: "center",
-  flex: 1,
-  marginHorizontal: spacing.xs,
-  minHeight: 70,
-  justifyContent: "center",
-})
-
-const $infoChipLabel: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
-  color: colors.textDim,
-  fontSize: 12,
-  marginBottom: spacing.xxs,
-})
-
-const $infoChipValue: ThemedStyle<TextStyle> = ({ colors }) => ({
-  color: colors.text,
-  fontWeight: "bold",
-  fontSize: 14,
-  textAlign: "center",
 })
 
 const $separator: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({

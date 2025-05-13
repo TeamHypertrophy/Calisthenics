@@ -1,4 +1,4 @@
-import { AutoImage, Button, Loading, Screen, Text } from "@/components"
+import { Button, InfoChip, Loading, Screen, Text } from "@/components"
 import { ErrorScreen } from "@/components/ErrorScreen"
 import { AppStackScreenProps } from "@/navigators"
 import { api } from "@/services/api"
@@ -8,8 +8,10 @@ import { useAppTheme } from "@/utils/useAppTheme"
 import { MaterialIcons } from "@expo/vector-icons"
 import { useQuery } from "@tanstack/react-query"
 import { observer } from "mobx-react-lite"
-import { FC } from "react"
+import { FC, useCallback, useRef, useState } from "react"
 import { ImageStyle, TextStyle, View, ViewStyle } from "react-native"
+import YoutubePlayer from "react-native-youtube-iframe"
+import { getYoutubeID } from "@/utils/video"
 
 interface ViewExerciseScreenProps extends AppStackScreenProps<"ViewExercise"> {}
 
@@ -18,6 +20,8 @@ export const ViewExerciseScreen: FC<ViewExerciseScreenProps> = observer(
     const { navigation } = _props
 
     const exerciseID = _props.route.params?.exerciseID
+
+    const [playing, setPlaying] = useState(false)
 
     const {
       themed,
@@ -41,6 +45,16 @@ export const ViewExerciseScreen: FC<ViewExerciseScreenProps> = observer(
         }
       },
     })
+
+    const onStateChange = useCallback((state: any) => {
+      if (state === "ended") {
+        setPlaying(false)
+      }
+    }, [])
+
+    const togglePlaying = useCallback(() => {
+      setPlaying((prev) => !prev)
+    }, [])
 
     const handleCreateLog = () => {
       if (!exercise) {
@@ -66,21 +80,6 @@ export const ViewExerciseScreen: FC<ViewExerciseScreenProps> = observer(
           message="Failed Loading Exercise Data"
           onBack={() => navigation.goBack()}
         />
-      )
-    }
-
-    const InfoChip: FC<{ label: string; value?: string | number | null }> = ({ label, value }) => {
-      if (!value) return null
-      return (
-        <View style={themed($infoChipContainer)}>
-          <Text text={label} style={themed($infoChipLabel)} preset="formLabel" />
-          <Text
-            text={String(value)
-              .replace(/_/g, " ")
-              .replace(/\b\w/g, (l) => l.toUpperCase())}
-            style={themed($infoChipValue)}
-          />
-        </View>
       )
     }
 
@@ -120,11 +119,15 @@ export const ViewExerciseScreen: FC<ViewExerciseScreenProps> = observer(
           />
         </View>
 
-        <AutoImage
-          source={{ uri: exercise.image_url || process.env.PLACEHOLDER_EXERCISE_IMAGE }}
-          style={themed($exerciseImage)}
-          resizeMode="cover"
-        />
+        {exercise.video_url && (
+          <YoutubePlayer
+            webViewStyle={themed($video)}
+            height={300}
+            play={playing}
+            videoId={getYoutubeID(exercise.video_url) || ""}
+            onChangeState={onStateChange}
+          />
+        )}
 
         <View style={themed($detailsContainer)}>
           {exercise.description && (
@@ -229,33 +232,16 @@ const $detailRow: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   marginBottom: spacing.md,
 })
 
-const $infoChipContainer: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
-  backgroundColor: colors.background,
-  paddingVertical: spacing.xs,
-  paddingHorizontal: spacing.sm,
-  borderRadius: spacing.sm,
-  borderWidth: 1,
-  borderColor: colors.border,
-  alignItems: "center",
-  flex: 1,
-  marginHorizontal: spacing.xs,
-})
-
-const $infoChipLabel: ThemedStyle<TextStyle> = ({ colors }) => ({
-  color: colors.textDim,
-  fontSize: 12,
-  marginBottom: 2,
-})
-
-const $infoChipValue: ThemedStyle<TextStyle> = ({ colors }) => ({
-  color: colors.text,
-  fontWeight: "bold",
-  fontSize: 14,
-  textAlign: "center",
-})
-
 const $separator: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
   height: 1,
   backgroundColor: colors.border,
   marginVertical: spacing.lg,
+})
+
+const $video: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+  width: "100%",
+  height: 200,
+  borderRadius: spacing.sm,
+  overflow: "hidden",
+  marginBottom: spacing.lg,
 })

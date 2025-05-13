@@ -43,6 +43,7 @@
     },
     "plugins": [
       "expo-localization",
+      "expo-video",
       "expo-font",
       [
         "expo-splash-screen",

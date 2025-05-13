@@ -562,6 +562,26 @@ export class Api {
     )
     return response
   }
+
+  async editCustomExercise(exerciseID: number, data: any): Promise<ApiResponse<CustomExercise>> {
+    await this.ensureAuthLoaded()
+    
+    const response: ApiResponse<CustomExercise> = await this.apisauce.post(
+      `exercises/custom/update/${exerciseID}?user_id=${this.user_id}`,
+      data,
+    )
+    return response
+  }
+
+  async createCustomExercise(data: any): Promise<ApiResponse<CustomExercise>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<CustomExercise> = await this.apisauce.post(
+      `/exercises/custom/create?user_id=${this.user_id}`,
+      data,
+    )
+    return response
+  }
 }
 
 // Singleton instance of the API for convenience
