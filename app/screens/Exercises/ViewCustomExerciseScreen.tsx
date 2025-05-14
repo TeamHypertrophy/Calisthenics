@@ -239,8 +239,8 @@ const $exerciseNameHeader: ThemedStyle<TextStyle> = ({ spacing }) => ({
 })
 
 const $headerButtonsContainer: ThemedStyle<ViewStyle> = ({}) => ({
+  justifyContent: "space-between",
   flexDirection: "row",
-  alignItems: "center",
 })
 
 const $actionButton: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({

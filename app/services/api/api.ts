@@ -1,6 +1,5 @@
 import { loadString } from "@/utils/storage"
 import { ApiResponse, ApisauceInstance, create } from "apisauce"
-import { SleepLogs } from "schema"
 
 import type {
   ApiConfig,
@@ -33,7 +32,10 @@ import type {
   UserResponse,
   VersionResponse,
   WaterLog,
+  Workout,
+  WorkoutLog,
   WorkoutPlan,
+  WorkoutPlanLog,
 } from "./api.types"
 
 import Config from "../../config"
@@ -96,7 +98,13 @@ export class Api {
     }
   }
 
-  // AUTH FUNCTIONS
+
+  // -----------------------------------------------------------------
+  // -----------------------------------------------------------------
+
+  // Users
+
+  // -----------------------------------------------------------------
 
   async getUser(): Promise<ApiResponse<User>> {
     const response: ApiResponse<User> = await this.apisauce.get(`/users/?user_id=${this.user_id}`)
@@ -206,7 +214,10 @@ export class Api {
     return response
   }
 
-  // PROFILE FUNCTIONS
+  // -----------------------------------------------------------------
+  // -----------------------------------------------------------------
+
+  // Profiles
   async getProfile(): Promise<ApiResponse<Profile>> {
     await this.ensureAuthLoaded()
     const response: ApiResponse<Profile> = await this.apisauce.get(
@@ -276,8 +287,11 @@ export class Api {
       return response
     }
   }
+  
+  // -----------------------------------------------------------------
+  // -----------------------------------------------------------------
 
-  // SYSTEM FUNCTIONS
+  // Health Checks
   async getVersionInfo(): Promise<ApiResponse<VersionResponse>> {
     await this.ensureAuthLoaded()
     const response: ApiResponse<VersionResponse> = await this.apisauce.get("/health/version")
@@ -296,7 +310,10 @@ export class Api {
     return response
   }
 
-  // Log Functions
+  // -----------------------------------------------------------------
+  // -----------------------------------------------------------------
+
+  // Nutrition Logs
 
   async getProteinLogs(): Promise<ApiResponse<ProteinLog[]>> {
     await this.ensureAuthLoaded()
@@ -325,10 +342,10 @@ export class Api {
     return response
   }
 
-  async getSleepLogs(): Promise<ApiResponse<SleepLogs[]>> {
+  async getSleepLogs(): Promise<ApiResponse<SleepLog[]>> {
     await this.ensureAuthLoaded()
 
-    const response: ApiResponse<SleepLogs[]> = await this.apisauce.get(
+    const response: ApiResponse<SleepLog[]> = await this.apisauce.get(
       `/sleep/user/all?user_id=${this.user_id}`,
     )
     return response
@@ -402,6 +419,11 @@ export class Api {
     return response
   }
 
+  // -----------------------------------------------------------------
+  // -----------------------------------------------------------------
+
+  // Trainers
+
   async getTrainersForUser(): Promise<ApiResponse<Trainer[]>> {
     await this.ensureAuthLoaded()
 
@@ -467,6 +489,11 @@ export class Api {
     return response
   }
 
+  // -----------------------------------------------------------------
+  // -----------------------------------------------------------------
+
+  // Trainer Announcements
+
   async getAnnouncementsForUser(): Promise<ApiResponse<TrainerAnnouncement[]>> {
     await this.ensureAuthLoaded()
 
@@ -489,16 +516,11 @@ export class Api {
     return response
   }
 
-  async getAllUserWorkoutPlans(user: string): Promise<ApiResponse<WorkoutPlan[]>> {
-    await this.ensureAuthLoaded()
+  // -----------------------------------------------------------------
+  // -----------------------------------------------------------------
 
-    const response: ApiResponse<WorkoutPlan[]> = await this.apisauce.get(
-      `/workout/plans/user/all?user_id=${user}`,
-    )
-    return response
-  }
+  // Exercises
 
-  // EXERCISES
   async getAllExercises(): Promise<ApiResponse<Exercise[]>> {
     await this.ensureAuthLoaded()
 
@@ -524,7 +546,11 @@ export class Api {
     return response
   }
 
+  // -----------------------------------------------------------------
+  // -----------------------------------------------------------------
+
   // Custom Exercises
+
   async getCustomExercises(): Promise<ApiResponse<CustomExercise[]>> {
     await this.ensureAuthLoaded()
 
@@ -585,7 +611,11 @@ export class Api {
     return response
   }
 
-  // EXERCISE LOGS
+  // -----------------------------------------------------------------
+  // -----------------------------------------------------------------
+
+  // Exercise Logs
+
   async createExerciseLog(data: CreateExerciseLog): Promise<ApiResponse<ExerciseLog>> {
     await this.ensureAuthLoaded()
 
@@ -621,6 +651,256 @@ export class Api {
     )
     return response
   }
+
+  // -----------------------------------------------------------------
+  // -----------------------------------------------------------------
+
+  // Workouts
+
+  async getAllWorkouts(): Promise<ApiResponse<Workout[]>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<Workout[]> = await this.apisauce.get(`/workouts/user/all?user_id=${this.user_id}`)
+    return response
+  }
+
+  async getWorkout(workoutID: string): Promise<ApiResponse<Workout>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<Workout> = await this.apisauce.get(
+      `/workouts/get/${workoutID}?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async updateWorkout(workoutID: string, data: any): Promise<ApiResponse<Workout>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<Workout> = await this.apisauce.post(
+      `/workouts/update/${workoutID}?user_id=${this.user_id}`,
+      data,
+    )
+    return response
+  }
+
+  async createWorkout(data: any): Promise<ApiResponse<Workout>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<Workout> = await this.apisauce.post(
+      `/workouts/create?user_id=${this.user_id}`,
+      data,
+    )
+    return response
+  }
+
+  async deleteWorkout(workoutID: string): Promise<ApiResponse<any>> {
+    await this.ensureAuthLoaded()
+    
+    const response: ApiResponse<any> = await this.apisauce.get(
+      `/workouts/delete/${workoutID}?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async addExerciseToWorkout(workoutID: string, exerciseID: number): Promise<ApiResponse<Workout>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<Workout> = await this.apisauce.post(
+      `/workouts/add-exercise/${workoutID}?user_id=${this.user_id}`,
+      {
+        exercise_id: exerciseID,
+      }
+    )
+    return response
+  }
+
+  async removeExerciseFromWorkout(workoutID: string, exerciseID: number): Promise<ApiResponse<Workout>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<Workout> = await this.apisauce.post(
+      `/workouts/remove-exercise/${workoutID}?user_id=${this.user_id}`,
+      {
+        exercise_id: exerciseID,
+      }
+    )
+    return response
+  }
+
+  // -----------------------------------------------------------------
+  // -----------------------------------------------------------------
+
+  // Workout Logs
+
+  async getWorkoutLogs(): Promise<ApiResponse<WorkoutLog[]>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<WorkoutLog[]> = await this.apisauce.get(
+      `/logs/workout/user/all?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async createWorkoutLog(data: any): Promise<ApiResponse<WorkoutLog>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<WorkoutLog> = await this.apisauce.post(
+      `/logs/workout/create?user_id=${this.user_id}`,
+      data,
+    )
+    return response
+  }
+
+  async editWorkoutLog(logID: number, data: any): Promise<ApiResponse<WorkoutLog>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<WorkoutLog> = await this.apisauce.post(
+      `/logs/workout/update/${logID}?user_id=${this.user_id}`,
+      data,
+    )
+    return response 
+  }
+
+  async deleteWorkoutLog(logID: number): Promise<ApiResponse<any>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<any> = await this.apisauce.get(
+      `/logs/workout/delete/${logID}?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async getWorkoutLog(logID: number): Promise<ApiResponse<WorkoutLog>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<WorkoutLog> = await this.apisauce.get(
+      `/logs/workout/get/${logID}?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  // -----------------------------------------------------------------
+  // -----------------------------------------------------------------
+
+  // Workout Plans
+
+  async getAllUserWorkoutPlans(user: string): Promise<ApiResponse<WorkoutPlan[]>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<WorkoutPlan[]> = await this.apisauce.get(
+      `/workout/plans/user/all?user_id=${user}`,
+    )
+    return response
+  }
+
+  async getWorkoutPlan(planID: string): Promise<ApiResponse<WorkoutPlan>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<WorkoutPlan> = await this.apisauce.get(
+      `/workout/plans/get/${planID}?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async updateWorkoutPlan(planID: string, data: any): Promise<ApiResponse<WorkoutPlan>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<WorkoutPlan> = await this.apisauce.post(
+      `/workout/plans/update/${planID}?user_id=${this.user_id}`,
+      data,
+    )
+    return response
+  }
+
+  async createWorkoutPlan(data: any): Promise<ApiResponse<WorkoutPlan>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<WorkoutPlan> = await this.apisauce.post(
+      `/workout/plans/create?user_id=${this.user_id}`,
+      data,
+    )
+    return response
+  }
+
+  async deleteWorkoutPlan(workoutID: string): Promise<ApiResponse<any>> {
+    await this.ensureAuthLoaded()
+    
+    const response: ApiResponse<any> = await this.apisauce.get(
+      `/workout/plans/delete/${workoutID}?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async addWorkoutToPlan(planID: string, workoutID: string): Promise<ApiResponse<WorkoutPlan>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<WorkoutPlan> = await this.apisauce.post(
+      `/workout/plans/add-workout/${planID}?user_id=${this.user_id}`,
+      {
+        workout_id: workoutID,
+      }
+    )
+    return response
+  }
+
+  async removeWorkoutFromPlan(planID: string, workoutID: string): Promise<ApiResponse<WorkoutPlan>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<WorkoutPlan> = await this.apisauce.post(
+      `/workout/plans/remove-workout/${planID}?user_id=${this.user_id}`,
+      {
+        workout_id: workoutID,
+      }
+    )
+    return response
+  }
+
+  // -----------------------------------------------------------------
+  // -----------------------------------------------------------------
+
+  // Workout Plan Logs
+
+  async getWorkoutPlanlogs(): Promise<ApiResponse<WorkoutPlanLog[]>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<WorkoutPlanLog[]> = await this.apisauce.get(
+      `/workout/plans/log/user/all?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async createWorkoutPlanLog(data: any): Promise<ApiResponse<WorkoutPlanLog>> {
+    await this.ensureAuthLoaded()
+
+    const response: ApiResponse<WorkoutPlanLog> = await this.apisauce.post(
+      `/workout/plans/log/create?user_id=${this.user_id}`,
+      data,
+    )
+    return response
+  }
+
+  async editWorkoutPlanLog(logID: number, data: any): Promise<ApiResponse<WorkoutPlanLog>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<WorkoutPlanLog> = await this.apisauce.post(
+      `/workout/plans/log/update/${logID}?user_id=${this.user_id}`,
+      data,
+    )
+    return response 
+  }
+
+  async deleteWorkoutPlanLog(logID: number): Promise<ApiResponse<any>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<any> = await this.apisauce.get(
+      `/workout/plans/log/delete/${logID}?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async getWorkoutPlanLog(logID: number): Promise<ApiResponse<WorkoutPlanLog>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<WorkoutPlanLog> = await this.apisauce.get(
+      `/workout/plans/log/get/${logID}?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  // -----------------------------------------------------------------
+  // -----------------------------------------------------------------
 }
 
 // Singleton instance of the API for convenience

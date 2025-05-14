@@ -176,7 +176,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
       <Text testID="login-heading" tx="loginScreen:logIn" preset="heading" style={themed($logIn)} />
 
       <AutoImage
-        source={{ uri: "https://files.catbox.moe/025e3m.png" }}
+        source={{ uri: process.env.HYPERTROPHY_LOGO }}
         maxHeight={200}
         maxWidth={200}
         style={themed($loginLogo)}

@@ -11,14 +11,14 @@ import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 import { NetworkProvider } from "react-native-offline"
 import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context"
-import Toast from "react-native-toast-message"
+import Toast, { BaseToast, BaseToastProps, ErrorToast } from "react-native-toast-message"
 
 import Config from "./config"
 import { initI18n } from "./i18n"
 import { useInitialRootStore } from "./models"
 import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary"
-import { customFontsToLoad } from "./theme"
+import { customFontsToLoad, colors } from "./theme"
 import { loadDateFnsLocale } from "./utils/formatDate"
 import * as storage from "./utils/storage"
 
@@ -55,6 +55,40 @@ export function App() {
 
   const queryClient = new QueryClient()
 
+  const toastConfig = {
+    success: (props: BaseToastProps) => (
+      <BaseToast
+        {...props}
+        style={{ borderLeftColor: "green" }}
+        text1Style={{
+          fontSize: 15,
+          fontWeight: "bold",
+          color: colors.palette.primary500,
+        }}
+        text2Style={{
+          fontSize: 13,
+          color: colors.text,
+        }}
+      />
+    ),
+
+    error: (props: BaseToastProps) => (
+      <ErrorToast
+        {...props}
+        style={{ borderLeftColor: "red" }}
+        text1Style={{
+          fontSize: 15,
+          fontWeight: "bold",
+          color: colors.palette.primary500,
+        }}
+        text2Style={{
+          fontSize: 13,
+          color: colors.text,
+        }}
+      />
+    ),
+  }
+
   return (
     <GestureHandlerRootView>
       <QueryClientProvider client={queryClient}>
@@ -66,7 +100,7 @@ export function App() {
                   initialState={initialNavigationState}
                   onStateChange={onNavigationStateChange}
                 />
-                <Toast />
+                <Toast config={toastConfig}/>
               </KeyboardProvider>
             </ErrorBoundary>
           </SafeAreaProvider>

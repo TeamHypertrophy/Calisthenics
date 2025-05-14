@@ -3,14 +3,16 @@ import { ErrorScreen } from "@/components/ErrorScreen"
 import { AppStackScreenProps } from "@/navigators"
 import { api, Difficulty, Equipment, Exercise, ExerciseType, MuscleGroup } from "@/services/api"
 import { ThemedStyle } from "@/theme"
+import { renderToast } from "@/utils/toastNotification"
 import { useAppTheme } from "@/utils/useAppTheme"
-import { MaterialIcons } from "@expo/vector-icons"
+import { AntDesign, MaterialIcons } from "@expo/vector-icons"
 import { useQuery } from "@tanstack/react-query"
 import { observer } from "mobx-react-lite"
 import { FC, useEffect, useState } from "react"
 import {
   FlatList,
   ImageBackground,
+  SafeAreaView,
   ScrollView,
   TextStyle,
   TouchableOpacity,
@@ -109,6 +111,12 @@ export const SearchExercisesScreen: FC<SearchExercisesScreenProps> = observer(
       difficulty: null,
     })
 
+    const workoutID = _props.route.params?.workoutID
+    const sourceScreen = _props.route.params?.source
+    const isSelectionMode = _props.route.params?.selectionMode || false
+    const existingExerciseIds = _props.route.params?.existingExcercises || []
+    const [selectedForWorkout, setSelectedForWorkout] = useState<Set<number>>(new Set())
+
     useEffect(() => {
       const handler = setTimeout(() => {
         setDebouncedQuery(searchQuery)
@@ -127,7 +135,7 @@ export const SearchExercisesScreen: FC<SearchExercisesScreenProps> = observer(
       error,
       refetch,
     } = useQuery({
-      queryKey: ["exercises", searchQuery, activeFilters],
+      queryKey: ["exercises", debouncedQuery, activeFilters],
       queryFn: async () => {
         const params: any = {}
         if (debouncedQuery.trim()) params.name = searchQuery.trim()
@@ -167,27 +175,132 @@ export const SearchExercisesScreen: FC<SearchExercisesScreenProps> = observer(
       })
     }
 
-    const renderExerciseItem = ({ item }: { item: Exercise }) => (
-      <TouchableOpacity
-        style={themed($exerciseCard)}
-        onPress={() => navigation.navigate("ViewExercise", { exerciseID: item.exercise_id })}
-      >
-        <ImageBackground
-          source={item.image_url ? { uri: item.image_url } : { uri: placeholderExerciseImage }}
-          style={themed($exerciseImage)}
-          resizeMode="cover"
+    const handleExercisePress = (item: Exercise) => {
+      if (isSelectionMode) {
+        if (existingExerciseIds.includes(item.exercise_id)) {
+          renderToast("Info", `${item.name} is already in the workout.`, "info")
+          return
+        }
+        setSelectedForWorkout((prev) => {
+          const newSet = new Set(prev)
+          if (newSet.has(item.exercise_id)) {
+            newSet.delete(item.exercise_id)
+          } else {
+            newSet.add(item.exercise_id)
+          }
+          return newSet
+        })
+      } else {
+        navigation.navigate("ViewExercise", { exerciseID: item.exercise_id })
+      }
+    }
+
+    const handleDoneSelection = () => {
+      const exercisesToReturn = exercises.filter((ex) => selectedForWorkout.has(ex.exercise_id))
+      
+      if (sourceScreen === "EditWorkout") {
+        navigation.navigate("EditWorkout", {
+          workoutID: workoutID || "",
+          selectedExercises: exercisesToReturn,
+        })
+      } else if (sourceScreen === "CreateWorkout") {
+        navigation.navigate("CreateWorkout", {
+          selectedExercises: exercisesToReturn,
+        })
+      } else {
+        renderToast("Error", "Unexpected Error When Selecting Exercises, Please Reset The Application", "error")
+        navigation.goBack()
+      }
+    }
+
+    const renderExerciseItem = ({ item }: { item: Exercise }) => {
+      const isSelected = selectedForWorkout.has(item.exercise_id)
+      const isExisting = existingExerciseIds.includes(item.exercise_id)
+
+      return (
+        <TouchableOpacity
+          style={[
+            themed($exerciseCard),
+            isSelectionMode && isSelected && themed($selectedCard),
+            isSelectionMode && isExisting && themed($existingCard),
+          ]}
+          onPress={() => handleExercisePress(item)}
+          disabled={isSelectionMode && isExisting}
         >
-          <View style={themed($exerciseNameOverlay)}>
-            <Text
-              text={item.name}
-              preset="subheading"
-              style={themed($exerciseNameText)}
-              numberOfLines={2}
+          <ImageBackground
+            source={item.image_url ? { uri: item.image_url } : { uri: placeholderExerciseImage }}
+            style={themed($exerciseImage)}
+            resizeMode="cover"
+          >
+            {isSelectionMode && (
+              <View style={themed($selectionIconContainer)}>
+                {isExisting ? (
+                  <AntDesign name="checkcircle" size={24} color={"green"} />
+                ) : isSelected ? (
+                  <AntDesign name="checkcircle" size={24} color={colors.tint || "blue"} />
+                ) : (
+                  <AntDesign name="pluscircleo" size={24} color={colors.textDim || "grey"} />
+                )}
+              </View>
+            )}
+            <View style={themed($exerciseNameOverlay)}>
+              <Text
+                text={item.name}
+                preset="subheading"
+                style={themed($exerciseNameText)}
+                numberOfLines={2}
+              />
+            </View>
+          </ImageBackground>
+        </TouchableOpacity>
+      )
+    }
+
+    const CustomHeader = () => {
+      if (isSelectionMode) {
+        return (
+            <View style={themed($headerContainer)}>
+              <Text
+                preset="subheading"
+                text="Select Exercises"
+                style={themed($customHeaderTitle)}
+              />
+              <Button
+                text="Cancel"
+                preset="filled"
+                style={themed([$customHeaderButton, $cancelButton])}
+                onPress={() => navigation.goBack()}
+              />
+              <Button
+                text="Done"
+                preset="filled"
+                style={themed([$customHeaderButton, $doneButton])}
+                onPress={handleDoneSelection}
+              />
+            </View>
+        )
+      }
+
+      return (
+          <View style={themed($headerContainer)}>
+            <Text preset="heading" text="Exercises" style={themed($customHeaderTitle)} />
+            <Button
+              text="Custom"
+              preset="filled"
+              onPress={() => navigation.navigate("ViewCustomExercises")}
+              style={themed($customButton)}
+              LeftAccessory={() => (
+                <MaterialIcons
+                  name="list-alt"
+                  size={20}
+                  color={colors.text}
+                  style={{ marginRight: spacing.xs }}
+                />
+              )}
             />
           </View>
-        </ImageBackground>
-      </TouchableOpacity>
-    )
+      )
+    }
 
     if (isLoading && !isFetching && !exercises.length) {
       return <Loading />
@@ -206,23 +319,7 @@ export const SearchExercisesScreen: FC<SearchExercisesScreenProps> = observer(
 
     return (
       <Screen style={$root} preset="fixed" safeAreaEdges={["top"]}>
-        <View style={themed($headerContainer)}>
-          <Text preset="heading" text="Exercises" />
-          <Button
-            text="Custom"
-            preset="filled"
-            onPress={() => navigation.navigate("ViewCustomExercises")}
-            style={themed($customButton)}
-            LeftAccessory={() => (
-              <MaterialIcons
-                name="list-alt"
-                size={20}
-                color={colors.text}
-                style={{ marginRight: spacing.xs }}
-              />
-            )}
-          />
-        </View>
+        <CustomHeader />
 
         <SearchBar
           placeholder="Search Exercises"
@@ -311,11 +408,13 @@ const $headerContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 })
 
 const $customButton: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
-  paddingVertical: spacing.xxs,
+  paddingVertical: spacing.sm,
   paddingHorizontal: spacing.sm,
-  marginTop: spacing.md,
   borderRadius: 120,
   backgroundColor: colors.palette.primary500,
+  alignSelf: "center",
+  flexShrink: 0,
+  minWidth: spacing.xxl + spacing.lg, 
 })
 
 const $searchBar: ThemedStyle<ViewStyle> = ({ spacing }) => ({
@@ -391,4 +490,48 @@ const $emptyStateText: ThemedStyle<TextStyle> = ({ colors }) => ({
   color: colors.textDim,
   textAlign: "center",
   fontSize: 16,
+})
+
+const $customHeaderTitle: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
+  textAlign: "center",
+  fontWeight: "600",
+  color: colors.text,
+  marginHorizontal: spacing.xs,
+})
+
+const $customHeaderButton: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+  flexGrow: 0,
+  flexShrink: 0,
+  paddingHorizontal: spacing.md,
+  minWidth: spacing.xxl,
+  borderRadius: 120,
+})
+
+const $cancelButton: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
+  backgroundColor: colors.palette.angry500
+})
+
+const $doneButton: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
+  backgroundColor: colors.palette.primary500
+})
+
+const $selectedCard: ThemedStyle<ViewStyle> = ({ colors}) => ({
+  borderColor: colors.tint || "blue",
+  borderWidth: 2,
+})
+
+const $existingCard: ThemedStyle<ViewStyle> = ({}) => ({
+  borderColor: "lightgreen",
+  borderWidth: 1,
+  opacity: 0.7,
+})
+
+const $selectionIconContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+  position: "absolute",
+  top: spacing.xs,
+  right: spacing.xs,
+  backgroundColor: "rgba(255,255,255,0.7)",
+  borderRadius: 12,
+  padding: spacing.xxs,
+  zIndex: 1,
 })

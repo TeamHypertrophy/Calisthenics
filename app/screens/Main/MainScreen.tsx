@@ -8,6 +8,7 @@ import { useAppTheme } from "@/utils/useAppTheme"
 import { observer } from "mobx-react-lite"
 import { FC } from "react"
 import { ViewStyle } from "react-native"
+import { renderToast } from "@/utils/toastNotification"
 
 export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function MainScreen(_props) {
   const { navigation } = _props
@@ -33,7 +34,7 @@ export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function Main
         style={themed($button)}
         preset="filled"
         onPress={() => {
-          navigation.navigate("SearchExercises")
+          navigation.navigate("SearchExercises", {})
         }}
       />
 
@@ -65,11 +66,29 @@ export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function Main
       />
 
       <Button
+        text="Workout Plan Logs"
+        style={themed($button)}
+        preset="filled"
+        onPress={() => {
+          navigation.navigate("ViewWorkoutPlanLogs")
+        }}
+      />
+
+      <Button
         text="Workouts"
         style={themed($button)}
         preset="filled"
         onPress={() => {
           navigation.navigate("Workouts")
+        }}
+      />
+
+      <Button
+        text="Workout Logs"
+        style={themed($button)}
+        preset="filled"
+        onPress={() => {
+          navigation.navigate("ViewWorkoutLogs")
         }}
       />
     </Screen>

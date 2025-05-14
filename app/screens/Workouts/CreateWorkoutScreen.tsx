@@ -1,14 +1,12 @@
-import { Button, Loading, Screen, Text, TextField } from "@/components"
-import { ErrorScreen } from "@/components/ErrorScreen"
+import { FC, useEffect, useRef, useState } from "react"
+import { observer } from "mobx-react-lite"
 import { AppStackScreenProps } from "@/navigators"
+import { Button, Loading, Screen, Text, TextField } from "@/components"
 import { api, Difficulty, Exercise } from "@/services/api"
 import { ThemedStyle } from "@/theme"
-import { renderToast } from "@/utils/toastNotification"
 import { useAppTheme } from "@/utils/useAppTheme"
-import { MaterialIcons } from "@expo/vector-icons"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { observer } from "mobx-react-lite"
-import { FC, useEffect, useRef, useState } from "react"
+import { useStores } from "@/models"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import {
   FlatList,
   ImageBackground,
@@ -18,78 +16,39 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import { Dropdown } from "react-native-element-dropdown"
 import { Modalize } from "react-native-modalize"
+import { renderToast } from "@/utils/toastNotification"
+import { MaterialIcons } from "@expo/vector-icons"
 import { DIFFICULTY_OPTIONS } from "../Exercises/EditCustomExerciseScreen"
-import { useStores } from "@/models"
+import { Dropdown } from "react-native-element-dropdown"
 
-interface EditWorkoutScreenProps extends AppStackScreenProps<"EditWorkout"> {}
+interface CreateWorkoutScreenProps extends AppStackScreenProps<"CreateWorkout"> {}
 
-export const EditWorkoutScreen: FC<EditWorkoutScreenProps> = observer(
-  function EditWorkoutScreen(_props) {
+export const CreateWorkoutScreen: FC<CreateWorkoutScreenProps> = observer(
+  function CreateWorkoutScreen(_props) {
     const { navigation } = _props
+    const queryClient = useQueryClient()
+
+    const {
+      authenticationStore: { userID },
+    } = useStores()
 
     const {
       themed,
       theme: { colors, spacing },
     } = useAppTheme()
 
-    const { authenticationStore: { userID} } = useStores()
-
-    const workoutID = _props.route.params?.workoutID
-    const exercisesToAdd = _props.route.params?.selectedExercises
-
-    const queryClient = useQueryClient()
     const removeExerciseModalRef = useRef<Modalize>(null)
 
-    const [name, setName] = useState<string>("")
-    const [description, setDescription] = useState<string>("")
-    const [duration, setDuration] = useState<string>("")
+    const [name, setName] = useState("")
+    const [description, setDescription] = useState("")
     const [difficulty, setDifficulty] = useState<Difficulty | null>(null)
+    const [duration, setDuration] = useState("")
     const [focusDifficulty, setFocusDifficulty] = useState<boolean>(false)
     const [currentExercises, setCurrentExercises] = useState<Exercise[]>([])
     const [exerciseToRemove, setExerciseToRemove] = useState<Exercise | null>(null)
 
-    const {
-      data,
-      isLoading,
-      isError,
-      error,
-    } = useQuery({
-      queryKey: ["workout", workoutID],
-      queryFn: async () => {
-        const workoutResponse = await api.getWorkout(workoutID)
-
-        if (!workoutResponse.data) {
-          throw new Error("Failed Fetching Workout")
-        }
-
-        const exerciseIDs = workoutResponse.data.exercises || []
-
-        const exercisePromises = exerciseIDs.map((id) =>
-          api.getExerciseByID(id).then((res) => {
-            if (res.ok && res.data) return res.data
-            console.error(`Failed Fetching Exercise ${id}: ${res.problem} ${res.status}`)
-            return null
-          }),
-        )
-
-        let exercises = await Promise.all(exercisePromises)
-        exercises = exercises.filter((ex) => ex !== null) as Exercise[]
-
-        if (exercises.length !== exerciseIDs.length) {
-          console.error("Not all exercises were fetched successfully")
-          renderToast("Error", "Not all exercises were fetched successfully", "error")
-        }
-
-        setCurrentExercises(exercises?.filter((exercise) => exercise !== null) ?? [])
-        setName(workoutResponse.data.name)
-        setDescription(workoutResponse.data.description || "")
-        setDifficulty((workoutResponse.data.difficulty as Difficulty) || null)
-
-        return { ...workoutResponse.data, fullExercises: exercises }
-      },
-    })
+    const exercisesToAdd = _props.route.params?.selectedExercises
 
     useEffect(() => {
       if (exercisesToAdd && exercisesToAdd.length > 0) {
@@ -104,71 +63,24 @@ export const EditWorkoutScreen: FC<EditWorkoutScreenProps> = observer(
       }
     }, [exercisesToAdd, navigation])
 
-    const addExerciseMutation = useMutation({
-      mutationFn: async (exerciseID: number) => {
-        const response = await api.addExerciseToWorkout(workoutID, exerciseID)
+    const createWorkoutMutation = useMutation({
+      mutationFn: async (data: any) => {
+        const response = await api.createWorkout(data)
 
-        if (!response.ok) {
-          throw new Error("Failed Adding Exercise")
+        if (!response.ok && !response.data) {
+          throw new Error("Failed Creating Workout")
         }
 
         return response.data
       },
-      onSuccess: (_, exerciseID) => {
-        const exerciseToAdd = exercisesToAdd?.find((ex) => ex.exercise_id === exerciseID)
-        if (exerciseToAdd) {
-          setCurrentExercises((prev) => {
-            if (!prev.find((e) => e.exercise_id === exerciseID)) {
-              return [...prev, exerciseToAdd]
-            }
-            return prev
-          })
-        }
-        queryClient.invalidateQueries({ queryKey: ["workout", workoutID] })
-        renderToast("Success", "Exercise Added To Workout", "success")
+      onSuccess: () => {
+        renderToast("Success", "Workout Created Successfully", "success")
+        queryClient.invalidateQueries({ queryKey: ["workouts", userID] })
+        navigation.navigate("Workouts", {})
       },
-      onError: (error: Error) => {
-        console.error("Error Adding Exercise:", error)
-        renderToast("Error", "Failed Adding Exercise", "error")
-      },
-    })
-
-    useEffect(() => {
-      if (exercisesToAdd && exercisesToAdd.length > 0 && workoutID) {
-        const exercisesActuallyAdded: Exercise[] = []
-        exercisesToAdd.forEach((exercise) => {
-          if (
-            !currentExercises.some((existingEx) => existingEx.exercise_id === exercise.exercise_id)
-          ) {
-            addExerciseMutation.mutate(exercise.exercise_id)
-            exercisesActuallyAdded.push(exercise)
-          }
-        })
-        navigation.setParams({ selectedExercises: undefined })
-      }
-    }, [exercisesToAdd, workoutID, navigation, currentExercises])
-
-    const removeExerciseMutation = useMutation({
-      mutationFn: async (exerciseId: number) => {
-        const response = await api.removeExerciseFromWorkout(workoutID, exerciseId)
-
-        if (!response.ok) {
-          throw new Error("Failed Removing Exercise")
-        }
-
-        return response.data
-      },
-      onSuccess: (_, exerciseId) => {
-        setCurrentExercises((prev) => prev.filter((ex) => ex.exercise_id !== exerciseId))
-        queryClient.invalidateQueries({ queryKey: ["workout", workoutID] })
-        renderToast("Success", "Exercise Removed From Workout", "success")
-        removeExerciseModalRef.current?.close()
-        setExerciseToRemove(null)
-      },
-      onError: (error: Error) => {
-        console.error("Error Removing Exercise:", error)
-        renderToast("Error", "Failed Removing Exercise", "error")
-        removeExerciseModalRef.current?.close()
+      onError: (error) => {
+        console.error("Error Creating Workout:", error)
+        renderToast("Error", "Failed Creating Workout", "error")
       },
     })
 
@@ -179,60 +91,41 @@ export const EditWorkoutScreen: FC<EditWorkoutScreenProps> = observer(
 
     const confirmRemoveExercise = () => {
       if (exerciseToRemove) {
-        removeExerciseMutation.mutate(exerciseToRemove.exercise_id)
+        setCurrentExercises((prev) =>
+          prev.filter((ex) => ex.exercise_id !== exerciseToRemove.exercise_id),
+        )
+        removeExerciseModalRef.current?.close()
+        setExerciseToRemove(null)
+        renderToast("Success", `${exerciseToRemove.name} Removed Successfully`, "success")
       }
     }
 
-    const editWorkoutMutation = useMutation({
-      mutationFn: async (payload: any) => {
-        const updatePayload: any = {
-          ...payload,
-        }
-
-        const response = await api.updateWorkout(workoutID, updatePayload)
-
-        if (!response.ok) {
-          throw new Error("Failed Updating Workout")
-        }
-
-        return response.data
-      },
-      onSuccess: () => {
-        renderToast("Success", "Workout Updated Successfully!", "success")
-        queryClient.invalidateQueries({ queryKey: ["workouts", userID] })
-        queryClient.invalidateQueries({ queryKey: ["workout", workoutID] })
-        navigation.goBack()
-      },
-      onError: (error: Error) => {
-        console.error("Error Updating Workout:", error)
-        renderToast("Error", "Failed Updating Workout", "error")
-      },
-    })
-
-    const handleSaveChanges = () => {
+    const handleCreateWorkout = () => {
       if (!name.trim()) {
         renderToast("Error", "Workout Name Cannot Be Empty.", "error")
         return
       }
+
       if (!difficulty) {
         renderToast("Error", "Please Select A Difficulty.", "error")
         return
       }
 
-      const payload: any = {
+      const payload = {
         name: name.trim(),
         description: description.trim(),
-        difficulty: difficulty,
+        difficulty,
         duration: Number(duration),
+        user_id: userID,
+        exercises: currentExercises.map((ex) => ex.exercise_id),
       }
-      editWorkoutMutation.mutate(payload)
+      createWorkoutMutation.mutate(payload)
     }
 
     const navigateToSearchExercises = () => {
       navigation.navigate("SearchExercises", {
-        source: "EditWorkout",
+        source: "CreateWorkout",
         selectionMode: true,
-        workoutID: workoutID,
         existingExcercises: currentExercises.map((ex) => ex.exercise_id),
       })
     }
@@ -263,24 +156,8 @@ export const EditWorkoutScreen: FC<EditWorkoutScreenProps> = observer(
       </View>
     )
 
-    if (
-      isLoading ||
-      editWorkoutMutation.isPending ||
-      addExerciseMutation.isPending ||
-      removeExerciseMutation.isPending
-    ) {
+    if (createWorkoutMutation.isPending) {
       return <Loading />
-    }
-
-    if (isError) {
-      console.error("Error Fetching Workout:", error)
-      return (
-        <ErrorScreen
-          title="Error"
-          message="Failed Loading Workout"
-          onBack={() => navigation.goBack()}
-        />
-      )
     }
 
     return (
@@ -289,26 +166,25 @@ export const EditWorkoutScreen: FC<EditWorkoutScreenProps> = observer(
           style={$root}
           preset="fixed"
           safeAreaEdges={["top"]}
-          contentContainerStyle={themed($screenContentContainerFixed)}
+          contentContainerStyle={themed($screenContentContainer)}
         >
           <View style={themed($headerSectionView)}>
-            <Text preset="heading" text="Edit" style={themed($titleStyle)} />
+            <Text preset="heading" text="Create" style={themed($titleStyle)} />
             <TextField
               label="Workout Name"
-              placeholder="e.g., Push Day"
+              placeholder="e.g., Pull Day"
               value={name}
               onChangeText={setName}
               containerStyle={themed($textField)}
             />
             <TextField
               label="Description"
-              placeholder="e.g., A Workout For Upper Body"
+              placeholder="e.g., A Workout Focused on Pulling Muscles"
               value={description}
               onChangeText={setDescription}
               containerStyle={themed($textField)}
               multiline
             />
-
             <TextField
               label="Duration (seconds)"
               placeholder="e.g., 3600"
@@ -324,7 +200,7 @@ export const EditWorkoutScreen: FC<EditWorkoutScreenProps> = observer(
               ])}
               placeholderStyle={themed($placeholderStyle)}
               selectedTextStyle={themed($selectedTextStyle)}
-              iconStyle={themed($iconStyle)}
+              iconStyle={$iconStyle}
               itemContainerStyle={themed($itemContainerStyle)}
               itemTextStyle={themed($itemTextStyle)}
               data={DIFFICULTY_OPTIONS}
@@ -359,28 +235,24 @@ export const EditWorkoutScreen: FC<EditWorkoutScreenProps> = observer(
               data={currentExercises}
               renderItem={renderExerciseItem}
               keyExtractor={(item) => item.exercise_id.toString()}
-              style={themed($exerciseList)}
+              style={themed($exerciseListFixed)}
               contentContainerStyle={themed($exerciseListContentContainer)}
             />
           ) : (
-            <View style={themed($emptyStateContainer)}>
+            <View style={themed($emptyStateContainerFixed)}>
               <Text style={themed($noExercisesText)}>
-                No Exercises Added. Click "Add Exercise" To Get Started.
+                No exercises added yet. Click "Add Exercise" to get started.
               </Text>
             </View>
           )}
 
-          <View style={themed($footerSection)}>
+          <View style={themed($footerSectionFixed)}>
             <Button
-              text="Save Workout"
+              text="Create Workout"
               preset="filled"
-              onPress={handleSaveChanges}
+              onPress={handleCreateWorkout}
               style={themed($saveButton)}
-              disabled={
-                editWorkoutMutation.isPending ||
-                addExerciseMutation.isPending ||
-                removeExerciseMutation.isPending
-              }
+              disabled={createWorkoutMutation.isPending}
             />
           </View>
         </Screen>
@@ -399,13 +271,13 @@ export const EditWorkoutScreen: FC<EditWorkoutScreenProps> = observer(
                 preset="filled"
                 onPress={() => removeExerciseModalRef.current?.close()}
                 style={themed($modalButton)}
+                textStyle={{ color: colors.text }}
               />
               <Button
                 text="Remove"
                 preset="filled"
                 onPress={confirmRemoveExercise}
-                style={themed([$modalButton, $cancelButton])}
-                disabled={removeExerciseMutation.isPending}
+                style={themed($modalButton)}
               />
             </View>
           </View>
@@ -418,6 +290,18 @@ export const EditWorkoutScreen: FC<EditWorkoutScreenProps> = observer(
 const $root: ViewStyle = {
   flex: 1,
 }
+
+const $screenContentContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+  flex: 1,
+  flexDirection: "column",
+})
+
+const $headerSectionView: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+  paddingHorizontal: spacing.lg,
+  paddingTop: spacing.xl,
+  paddingBottom: spacing.sm,
+  flexShrink: 0,
+})
 
 const $titleStyle: ThemedStyle<TextStyle> = ({ spacing }) => ({
   marginBottom: spacing.lg,
@@ -432,13 +316,6 @@ const $fieldLabel: ThemedStyle<TextStyle> = ({ spacing, colors }) => ({
   fontSize: 16,
   marginBottom: spacing.xs,
   color: colors.textDim,
-})
-
-const $headerSectionView: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-  paddingHorizontal: spacing.lg,
-  paddingTop: spacing.xl,
-  paddingBottom: spacing.sm,
-  flexShrink: 1,
 })
 
 const $dropdown: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
@@ -461,10 +338,10 @@ const $selectedTextStyle: ThemedStyle<TextStyle> = ({ colors }) => ({
   color: colors.text,
 })
 
-const $iconStyle: ThemedStyle<ImageStyle> = ({}) => ({
+const $iconStyle: ImageStyle = {
   width: 20,
   height: 20,
-})
+}
 
 const $itemContainerStyle: ThemedStyle<ViewStyle> = ({ colors }) => ({
   backgroundColor: colors.background,
@@ -487,6 +364,29 @@ const $addExerciseButton: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
   backgroundColor: colors.palette.primary500,
   borderRadius: 120,
   paddingVertical: spacing.xs,
+})
+
+const $exerciseListFixed: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+  flex: 1,
+  marginHorizontal: spacing.lg,
+})
+
+const $exerciseListContentContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+  paddingBottom: spacing.sm,
+})
+
+const $emptyStateContainerFixed: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+  flex: 1,
+  justifyContent: "center",
+  alignItems: "center",
+  marginHorizontal: spacing.lg,
+})
+
+const $noExercisesText: ThemedStyle<TextStyle> = ({ spacing, colors }) => ({
+  textAlign: "center",
+  marginVertical: spacing.lg,
+  color: colors.textDim,
+  fontSize: 16,
 })
 
 const $exerciseItemContainer: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
@@ -527,15 +427,14 @@ const $removeButton: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   padding: spacing.xs,
 })
 
-const $noExercisesText: ThemedStyle<TextStyle> = ({ spacing, colors }) => ({
-  textAlign: "center",
-  marginVertical: spacing.lg,
-  color: colors.textDim,
-  fontSize: 16,
+const $footerSectionFixed: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+  paddingHorizontal: spacing.lg,
+  paddingTop: spacing.md,
+  paddingBottom: spacing.xl,
+  flexShrink: 0,
 })
 
 const $saveButton: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
-  marginTop: spacing.lg,
   borderRadius: 120,
   backgroundColor: colors.palette.primary500,
 })
@@ -567,36 +466,4 @@ const $modalButton: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   flex: 1,
   marginHorizontal: spacing.xs,
   borderRadius: 120,
-})
-
-const $cancelButton: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
-  backgroundColor: colors.palette.angry500,
-  marginRight: spacing.sm,
-})
-
-const $screenContentContainerFixed: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-  flex: 1,
-  flexDirection: "column",
-})
-
-const $exerciseList: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-  flex: 1,
-  marginHorizontal: spacing.lg,
-})
-
-const $exerciseListContentContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-  paddingBottom: spacing.sm,
-})
-
-const $emptyStateContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-  flex: 1,
-  justifyContent: "center",
-  alignItems: "center",
-  marginHorizontal: spacing.lg,
-})
-
-const $footerSection: ThemedStyle<ViewStyle> = ({ spacing }) => ({
-  paddingHorizontal: spacing.lg,
-  paddingTop: spacing.md,
-  paddingBottom: spacing.xl,
 })

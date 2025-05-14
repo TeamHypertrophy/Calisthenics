@@ -71,11 +71,28 @@ export const SignupScreen: FC<SignupScreenProps> = observer(function SignupScree
     return match
   }
 
+  const isGoodPassword = (password: string) => {
+    const hasUpperCase = /[A-Z]/.test(password)
+    const hasLowerCase = /[a-z]/.test(password)
+    const hasNumber = /\d/.test(password)
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password)
+    const isLongEnough = password.length >= 8
+
+    return (
+      hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar && isLongEnough
+    )
+  }
+
   async function signup() {
     setIsSubmitted(true)
     setAttemptsCount(attemptsCount + 1)
 
     if (validationError) return
+
+    if (!isGoodPassword(authPassword)) {
+      setLoginError("Password must be at least 8 characters long and contain upper/lowercase letters, numbers, and special characters.")
+      return
+    }
 
     if (!validatePasswords()) {
       setLoginError("Passwords don't match")
@@ -147,7 +164,7 @@ export const SignupScreen: FC<SignupScreenProps> = observer(function SignupScree
       <Text testID="login-heading" tx="loginScreen:logIn" preset="heading" style={themed($logIn)} />
 
       <AutoImage
-        source={{ uri: "https://files.catbox.moe/025e3m.png" }}
+        source={{ uri: process.env.HYPERTROPHY_LOGO }}
         maxHeight={200}
         maxWidth={200}
         style={themed($loginLogo)}

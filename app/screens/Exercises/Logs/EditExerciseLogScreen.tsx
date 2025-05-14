@@ -157,7 +157,7 @@ export const EditExerciseLogScreen: FC<EditExerciseLogScreenProps> = observer(
 
           <Modalize ref={deleteModalRef} adjustToContentHeight>
             <View style={themed($modalContainer)}>
-              <Text preset="subheading" text="Confirm Deletion" style={themed($modalTitle)} />
+              <Text preset="subheading" text="Delete Exercise Log" style={themed($modalTitle)} />
               <Text style={themed($modalText)}>
                 Are you sure you want to delete this exercise log? This action cannot be undone.
               </Text>

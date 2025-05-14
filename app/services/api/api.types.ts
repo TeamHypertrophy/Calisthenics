@@ -221,7 +221,7 @@ export interface WorkoutLog {
   log_id?: number
   user_id: string
   workout_id: string
-  date?: Date
+  date: string
   updated_at?: Date
 }
 
@@ -241,7 +241,7 @@ export interface WorkoutPlan {
 }
 
 export interface Workout {
-  workout_id?: string
+  workout_id: string
   name: string
   description?: string
   duration?: number
@@ -361,4 +361,12 @@ export interface CreateExerciseLog {
 export interface UpdateExerciseLog {
   sets_completed: number
   reps_completed: number
+}
+
+export interface WorkoutPlanLog {
+  log_id: number
+  user_id: string
+  plan_id: string
+  date: Date
+  updated_at: Date
 }
