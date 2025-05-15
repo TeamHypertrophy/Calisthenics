@@ -243,15 +243,63 @@ export const TrainerProfileScreen: FC<TrainerProfileScreenProps> = observer(
       return <Card style={themed($announcementCard)} ContentComponent={cardContent} />
     }
 
+    const createPlan = useMutation({
+      mutationFn: async (plan: any) => {
+        const response = await api.createWorkoutPlan(plan)
+        if (!response.ok) {
+          throw new Error("Failed to create workout plan")
+        }
+        return response.data
+      },
+      onSuccess: () => {
+        renderToast("Success", "Workout Plan Created Successfully", "success")
+        queryClient.invalidateQueries({ queryKey: ["workoutPlans", userID] })
+      },
+      onError: (error) => {
+        console.error("Error Creating Workout Plan:", error)
+        renderToast("Error", "Failed Creating Workout Plan", "error")
+      },
+    })
+
+    const handleUsePlan = (plan: WorkoutPlan) => {
+      if (!plan) {
+        console.error("[TrainerProfile] Workout Plan Data Unavailable: ", workoutPlanData)
+        renderToast("Error", "Workout Plan Data Unavailable To Use", "error")
+        return
+      }
+
+      createPlan.mutate({
+        user_id: userID,
+        name: plan.name,
+        description: plan.description,
+        difficulty: plan.difficulty,
+        goal: plan.goal,
+        start_time: plan.start_time,
+        workouts: plan.workouts,
+        repeats: plan.repeats,
+        is_public: false,
+      })
+    }
+
     const renderWorkoutPlanCard = ({ item }: { item: WorkoutPlan }) => {
       const cardContent = (
-        <View>
+        <View style={$workoutPlanCardContent}>
           <View>
-            <Text
-              text={item.name || "No Title"}
-              preset="subheading"
-              style={[themed($trainerName), { marginVertical: spacing.xs }]}
-            />
+            <View style={themed($planNameAndButtonContainer)}>
+              <Text
+                text={item.name || "No Title"}
+                preset="subheading"
+                style={[themed($trainerName), themed($planNameText)]}
+                numberOfLines={2}
+              />
+              <Button
+                text="Use"
+                preset="default"
+                style={themed($usePlanButton)}
+                textStyle={themed($usePlanButtonText)}
+                onPress={() => handleUsePlan(item)}
+              />
+            </View>
             <Text text={`Difficulty: ${item.difficulty}`} style={themed($planDetail)} />
             <Text text={`Goal: ${item.goal}`} style={themed($planDetail)} />
           </View>
@@ -273,7 +321,8 @@ export const TrainerProfileScreen: FC<TrainerProfileScreenProps> = observer(
       announcementLoading ||
       workoutPlanLoading ||
       followMutation.isPending ||
-      unfollowMutation.isPending
+      unfollowMutation.isPending ||
+      createPlan.isPending
     ) {
       return <Loading />
     }
@@ -616,11 +665,38 @@ const $workoutPlanCard: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
   backgroundColor: colors.background,
   borderRadius: 8,
   elevation: 2,
-  maxWidth: 170,
 })
 
 const $planDetail: ThemedStyle<TextStyle> = ({ colors }) => ({
   fontSize: 13,
   color: colors.textDim,
   fontStyle: "italic",
+})
+
+const $planNameAndButtonContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginBottom: spacing.sm,
+})
+
+const $planNameText: ThemedStyle<TextStyle> = ({}) => ({
+  marginRight: 8,
+})
+
+const $workoutPlanCardContent: ViewStyle = {
+  justifyContent: "space-between",
+}
+const $usePlanButton: ThemedStyle<ViewStyle> = ({ colors, spacing }) => ({
+  backgroundColor: colors.palette.primary300,
+  paddingVertical: spacing.xs,
+  paddingHorizontal: spacing.sm,
+  borderRadius: 20,
+})
+
+const $usePlanButtonText: ThemedStyle<TextStyle> = ({ colors }) => ({
+  color: colors.palette.secondary400,
+  fontSize: 12,
+  fontWeight: "bold",
+  textAlign: "center",
 })
