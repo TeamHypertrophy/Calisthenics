@@ -14,7 +14,9 @@
     },
     "newArchEnabled": true,
     "jsEngine": "hermes",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "android": {
       "icon": "./assets/images/app-icon-android-legacy.png",
       "package": "com.ghoul.hypertrophy",
@@ -43,7 +45,6 @@
     },
     "plugins": [
       "expo-localization",
-      "expo-video",
       "expo-font",
       [
         "expo-splash-screen",
@@ -62,7 +63,9 @@
           "android": {
             "compileSdkVersion": 35,
             "targetSdkVersion": 34,
-            "extraMavenRepos": ["../../node_modules/@notifee/react-native/android/libs"]
+            "extraMavenRepos": [
+              "../../node_modules/@notifee/react-native/android/libs"
+            ]
           }
         }
       ]
@@ -72,7 +75,13 @@
     },
     "splash": {
       "backgroundColor": "#FFFFFF"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "085a6f55-4bee-44d4-9a19-983a5088c668"
+      }
+    },
+    "owner": "ghoul-dev"
   },
   "ignite": {
     "version": "10.1.6"

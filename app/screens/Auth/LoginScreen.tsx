@@ -283,9 +283,10 @@ const $textField: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   marginBottom: spacing.lg,
 })
 
-const $tapButton: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+const $tapButton: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
   marginTop: spacing.xs,
   borderRadius: 120,
+  backgroundColor: colors.palette.primary500,
 })
 
 const $errorText: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
