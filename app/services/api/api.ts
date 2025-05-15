@@ -249,6 +249,22 @@ export class Api {
     return response
   }
 
+  async incrementStreak(): Promise<ApiResponse<Profile>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<Profile> = await this.apisauce.get(
+      `/profile/streak/increment?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
+  async resetStreak(): Promise<ApiResponse<Profile>> {
+    await this.ensureAuthLoaded()
+    const response: ApiResponse<Profile> = await this.apisauce.get(
+      `/profile/streak/reset?user_id=${this.user_id}`,
+    )
+    return response
+  }
+
   async uploadAvatar(file: any): Promise<ApiResponse<Profile>> {
     await this.ensureAuthLoaded()
 

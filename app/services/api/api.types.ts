@@ -77,7 +77,7 @@ export interface ApiKey {
 export interface CalorieLog {
   log_id?: number
   user_id: string
-  date?: Date
+  date: string
   amount: number
   updated_at?: Date
 }
@@ -121,7 +121,7 @@ export interface ExerciseLog {
   exercise_id: number
   sets_completed: number
   reps_completed: number
-  date?: Date
+  date: string
   updated_at?: Date
 }
 
@@ -150,7 +150,7 @@ export interface Profile {
 export interface ProteinLog {
   log_id?: number
   user_id: string
-  date?: Date
+  date: string
   amount: number
   updated_at?: Date
 }
@@ -212,7 +212,7 @@ export interface User {
 export interface WaterLog {
   log_id?: number
   user_id: string
-  date?: Date
+  date: string
   amount: number
   updated_at?: Date
 }
