@@ -1,18 +1,19 @@
 import { Button, FilterChip, FilterChipItem, Loading, Screen, SearchBar, Text } from "@/components"
+import { ErrorScreen } from "@/components/ErrorScreen"
+import { useStores } from "@/models"
 import { AppStackScreenProps } from "@/navigators"
+import { api, Workout } from "@/services/api"
 import { ThemedStyle } from "@/theme"
+import { formatDuration } from "@/utils/strings"
+import { renderToast } from "@/utils/toastNotification"
 import { useAppTheme } from "@/utils/useAppTheme"
+import { AntDesign, MaterialIcons } from "@expo/vector-icons"
+import { useQuery } from "@tanstack/react-query"
 import { observer } from "mobx-react-lite"
 import { FC, useMemo, useState } from "react"
 import { FlatList, ScrollView, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
+
 import { difficultyOptions } from "../Exercises/SearchExercisesScreen"
-import { useStores } from "@/models"
-import { useQuery } from "@tanstack/react-query"
-import { api, Workout } from "@/services/api"
-import { ErrorScreen } from "@/components/ErrorScreen"
-import { AntDesign, MaterialIcons } from "@expo/vector-icons"
-import { formatDuration } from "@/utils/strings"
-import { renderToast } from "@/utils/toastNotification"
 import { PlanForm } from "../WorkoutPlan/CreateWorkoutPlanScreen"
 
 interface WorkoutsScreenProps extends AppStackScreenProps<"Workouts"> {}
@@ -104,7 +105,10 @@ export const WorkoutsScreen: FC<WorkoutsScreenProps> = observer(function Workout
     )
 
     if (sourceScreen === "CreateWorkoutPlan") {
-      navigation.navigate("CreateWorkoutPlan", { selectedWorkouts: workoutsToReturn, formData: passedFormData })
+      navigation.navigate("CreateWorkoutPlan", {
+        selectedWorkouts: workoutsToReturn,
+        formData: passedFormData,
+      })
     } else if (sourceScreen === "EditWorkoutPlan" && planID) {
       navigation.navigate("EditWorkoutPlan", { selectedWorkouts: workoutsToReturn, planID: planID })
     } else {

@@ -78,9 +78,7 @@ export const SignupScreen: FC<SignupScreenProps> = observer(function SignupScree
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password)
     const isLongEnough = password.length >= 8
 
-    return (
-      hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar && isLongEnough
-    )
+    return hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar && isLongEnough
   }
 
   async function signup() {
@@ -90,7 +88,9 @@ export const SignupScreen: FC<SignupScreenProps> = observer(function SignupScree
     if (validationError) return
 
     if (!isGoodPassword(authPassword)) {
-      setLoginError("Password must be at least 8 characters long and contain upper/lowercase letters, numbers, and special characters.")
+      setLoginError(
+        "Password must be at least 8 characters long and contain upper/lowercase letters, numbers, and special characters.",
+      )
       return
     }
 

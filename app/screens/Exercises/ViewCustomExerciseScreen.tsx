@@ -9,7 +9,7 @@ import { useAppTheme } from "@/utils/useAppTheme"
 import { MaterialIcons } from "@expo/vector-icons"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { observer } from "mobx-react-lite"
-import { FC, useRef, useState } from "react"
+import { FC, useRef } from "react"
 import { TextStyle, View, ViewStyle } from "react-native"
 import { Modalize } from "react-native-modalize"
 
@@ -127,11 +127,7 @@ export const ViewCustomExerciseScreen: FC<ViewCustomExerciseScreenProps> = obser
                 onPress={handleEdit}
                 style={themed($actionButton)}
                 LeftAccessory={() => (
-                  <MaterialIcons
-                    name="edit"
-                    size={25}
-                    color={colors.palette.secondary400}
-                  />
+                  <MaterialIcons name="edit" size={25} color={colors.palette.secondary400} />
                 )}
               />
               <Button

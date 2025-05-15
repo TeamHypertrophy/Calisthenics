@@ -23,7 +23,7 @@ export const CreateExerciseLogScreen: FC<CreateExerciseLogScreenProps> = observe
     const {
       authenticationStore: { userID },
     } = useStores()
-    
+
     const {
       themed,
       theme: { colors },
@@ -55,10 +55,7 @@ export const CreateExerciseLogScreen: FC<CreateExerciseLogScreenProps> = observe
       const setsCompleted = parseInt(sets, 10)
       const repsCompleted = parseInt(reps, 10)
 
-      if (
-        setsCompleted <= 0 ||
-        repsCompleted <= 0
-      ) {
+      if (setsCompleted <= 0 || repsCompleted <= 0) {
         renderToast("Error", "Please Enter Valid Sets and Reps", "error")
         return
       }
@@ -106,12 +103,7 @@ export const CreateExerciseLogScreen: FC<CreateExerciseLogScreenProps> = observe
           />
         </ScrollView>
 
-        <Button
-          text="Save"
-          preset="filled"
-          onPress={handleCreate}
-          style={themed($saveButton)}
-        />
+        <Button text="Save" preset="filled" onPress={handleCreate} style={themed($saveButton)} />
       </Screen>
     )
   },

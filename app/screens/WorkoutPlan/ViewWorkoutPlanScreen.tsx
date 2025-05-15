@@ -1,39 +1,22 @@
-import { FC, useEffect, useMemo, useRef, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { AppStackScreenProps } from "@/navigators"
-import {
-  Button,
-  FilterChip,
-  FilterChipItem,
-  Loading,
-  Screen,
-  SearchBar,
-  Text,
-  TextField,
-} from "@/components"
-import { api, Difficulty, Exercise, Workout, WorkoutPlan } from "@/services/api"
-import { ThemedStyle } from "@/theme"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { useStores } from "@/models"
-import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query"
-import {
-  FlatList,
-  ImageBackground,
-  ImageStyle,
-  ScrollView,
-  TextStyle,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from "react-native"
-import { Modalize } from "react-native-modalize"
-import { renderToast } from "@/utils/toastNotification"
-import { MaterialIcons } from "@expo/vector-icons"
-import { difficultyOptions } from "../Exercises/SearchExercisesScreen"
+import { Button, Loading, Screen, Text } from "@/components"
 import { ErrorScreen } from "@/components/ErrorScreen"
+import { useStores } from "@/models"
+import { AppStackScreenProps } from "@/navigators"
+import { api, Workout } from "@/services/api"
+import { ThemedStyle } from "@/theme"
+import { createProteinDate } from "@/utils/formatDate"
 import { getLabel } from "@/utils/strings"
-import { goalOptions, intervalOptions } from "./WorkoutPlansScreen"
+import { renderToast } from "@/utils/toastNotification"
+import { useAppTheme } from "@/utils/useAppTheme"
+import { MaterialIcons } from "@expo/vector-icons"
+import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query"
 import { format } from "date-fns/format"
+import { observer } from "mobx-react-lite"
+import { FC, useMemo } from "react"
+import { FlatList, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
+
+import { difficultyOptions } from "../Exercises/SearchExercisesScreen"
+import { goalOptions, intervalOptions } from "./WorkoutPlansScreen"
 
 interface ViewWorkoutPlanScreenProps extends AppStackScreenProps<"ViewWorkoutPlan"> {}
 
@@ -41,7 +24,12 @@ export const ViewWorkoutPlanScreen: FC<ViewWorkoutPlanScreenProps> = observer(
   function ViewWorkoutPlanScreen(_props) {
     const { navigation } = _props
 
+    const queryClient = useQueryClient()
     const planID = _props.route.params.planID
+
+    const {
+      authenticationStore: { userID },
+    } = useStores()
 
     const {
       themed,
@@ -78,6 +66,35 @@ export const ViewWorkoutPlanScreen: FC<ViewWorkoutPlanScreenProps> = observer(
       })),
     })
 
+    const logWorkoutPlan = useMutation({
+      mutationFn: async (data: any) => {
+        const response = await api.createWorkoutPlanLog(data)
+
+        if (!response.ok && !response.data) {
+          throw new Error("Error Logging Workout Plan")
+        }
+
+        return response.data
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["workoutPlanLogs", userID] })
+        renderToast("Success", "Workout Plan Logged Successfully", "success")
+        navigation.goBack()
+      },
+      onError: (error) => {
+        console.log("Error Logging Workout Plan:", error)
+        renderToast("Error", "Failed to log workout plan. Please try again.", "error")
+      },
+    })
+
+    const handleLogWorkoutPlan = () => {
+      logWorkoutPlan.mutate({
+        user_id: userID,
+        plan_id: planID,
+        date: createProteinDate(new Date()),
+      })
+    }
+
     const isLoadingWorkouts = workoutQueries.some((query) => query.isLoading)
     const workoutsDetails = useMemo(() => {
       return workoutQueries
@@ -107,7 +124,7 @@ export const ViewWorkoutPlanScreen: FC<ViewWorkoutPlanScreenProps> = observer(
       </TouchableOpacity>
     )
 
-    if (isLoading || isLoadingWorkouts) {
+    if (isLoading || isLoadingWorkouts || logWorkoutPlan.isPending) {
       return <Loading />
     }
 
@@ -142,6 +159,21 @@ export const ViewWorkoutPlanScreen: FC<ViewWorkoutPlanScreenProps> = observer(
             numberOfLines={2}
             ellipsizeMode="tail"
           />
+          <Button
+            preset="filled"
+            onPress={handleLogWorkoutPlan}
+            style={themed($editButton)}
+            LeftAccessory={() => (
+              <MaterialIcons
+                name="lightbulb-outline"
+                size={18}
+                color={colors.text}
+                style={{ marginRight: spacing.xs }}
+              />
+            )}
+          >
+            <Text text="Log" style={themed($editButtonText)} />
+          </Button>
           <Button
             preset="filled"
             onPress={() => navigation.navigate("EditWorkoutPlan", { planID })}
@@ -195,9 +227,7 @@ export const ViewWorkoutPlanScreen: FC<ViewWorkoutPlanScreenProps> = observer(
               <View style={themed($detailItemRow)}>
                 <MaterialIcons name="repeat" size={20} color={colors.textDim} style={$iconStyle} />
                 <Text style={themed($detailLabel)}>Repeats:</Text>
-                <Text style={themed($detailValue)}>
-                  {getLabel(data.repeats, intervalOptions)}
-                </Text>
+                <Text style={themed($detailValue)}>{getLabel(data.repeats, intervalOptions)}</Text>
               </View>
             )}
 
@@ -224,9 +254,7 @@ export const ViewWorkoutPlanScreen: FC<ViewWorkoutPlanScreenProps> = observer(
                 style={$iconStyle}
               />
               <Text style={themed($detailLabel)}>Visibility:</Text>
-              <Text style={themed($detailValue)}>
-                {data.is_public ? "Public" : "Private"}
-              </Text>
+              <Text style={themed($detailValue)}>{data.is_public ? "Public" : "Private"}</Text>
             </View>
           </View>
 
@@ -372,7 +400,7 @@ const $workoutItemName: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
   marginBottom: 2,
 })
 
-const $workoutItemDescription: ThemedStyle<TextStyle> = ({ colors,spacing }) => ({
+const $workoutItemDescription: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
   color: colors.textDim,
   fontSize: spacing.sm,
   marginBottom: spacing.xs,

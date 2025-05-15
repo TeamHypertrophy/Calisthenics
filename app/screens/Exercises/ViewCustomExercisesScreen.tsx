@@ -1,5 +1,6 @@
 import { Button, FilterChip, FilterChipItem, Loading, Screen, SearchBar, Text } from "@/components"
 import { ErrorScreen } from "@/components/ErrorScreen"
+import { useStores } from "@/models"
 import { AppStackScreenProps } from "@/navigators"
 import { api, CustomExercise } from "@/services/api"
 import { spacing, ThemedStyle } from "@/theme"
@@ -17,7 +18,6 @@ import {
   exerciseTypeOptions,
   muscleGroupOptions,
 } from "./SearchExercisesScreen"
-import { useStores } from "@/models"
 
 interface ViewCustomExercisesScreenProps extends AppStackScreenProps<"ViewCustomExercises"> {}
 
@@ -25,7 +25,9 @@ export const ViewCustomExercisesScreen: FC<ViewCustomExercisesScreenProps> = obs
   function ViewCustomExercisesScreen(_props) {
     const { navigation } = _props
 
-    const { authenticationStore: { userID } } = useStores()
+    const {
+      authenticationStore: { userID },
+    } = useStores()
 
     const {
       themed,
@@ -75,7 +77,6 @@ export const ViewCustomExercisesScreen: FC<ViewCustomExercisesScreenProps> = obs
         } else {
           response = await api.getCustomExercises()
         }
-
 
         if (!response.ok && !response.data) {
           console.error("Error Fetching Custom Exercises: ", response.problem)

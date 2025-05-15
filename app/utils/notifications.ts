@@ -9,6 +9,7 @@ import notifee, {
   TriggerType,
 } from "@notifee/react-native"
 import { Platform } from "react-native"
+
 import { renderToast } from "./toastNotification"
 
 export async function setupNotifee() {
@@ -45,9 +46,9 @@ export async function schedulePlanNotification(plan: WorkoutPlan) {
     }
 
     const trigger: TimestampTrigger = {
-        type: TriggerType.TIMESTAMP,
-        timestamp: new Date(plan.start_time).getTime(),
-        repeatFrequency: repeatFrequency,
+      type: TriggerType.TIMESTAMP,
+      timestamp: new Date(plan.start_time).getTime(),
+      repeatFrequency: repeatFrequency,
     }
 
     const details: Notification = {
@@ -55,8 +56,8 @@ export async function schedulePlanNotification(plan: WorkoutPlan) {
       title: `🏋️ Time For Your Workout: ${plan.name}`,
       body: "Don't Forgot To Log Your Workout!",
       android: {
-        channelId: "workout-plans"
-      }
+        channelId: "workout-plans",
+      },
     }
 
     await notifee.createTriggerNotification(details, trigger)

@@ -1,8 +1,8 @@
-import { Button, EmptyState, Loading, Screen, SearchBar, Text } from "@/components"
+import { Button, Loading, Screen, SearchBar, Text } from "@/components"
 import { ErrorScreen } from "@/components/ErrorScreen"
 import { useStores } from "@/models"
 import { AppStackScreenProps } from "@/navigators"
-import { api, Exercise, ExerciseLog } from "@/services/api"
+import { api, ExerciseLog } from "@/services/api"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { useQuery } from "@tanstack/react-query"
@@ -259,5 +259,5 @@ const $clearButton: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
 
 const $clearButtonText: ThemedStyle<TextStyle> = ({ colors, spacing }) => ({
   fontSize: spacing.md,
-  color: colors.palette.secondary400
+  color: colors.palette.secondary400,
 })

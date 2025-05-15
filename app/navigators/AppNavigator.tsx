@@ -1,4 +1,5 @@
 import * as Screens from "@/screens"
+import { Exercise, Workout } from "@/services/api"
 import { useAppTheme, useThemeProvider } from "@/utils/useAppTheme"
 /**
  * The app navigator (formerly "AppNavigator" and "MainNavigator") is used for the primary
@@ -15,7 +16,6 @@ import Config from "../config"
 import { useStores } from "../models"
 import { HomeNavigator, HomeTabParamList } from "./HomeNavigator"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
-import { Exercise, Workout } from "@/services/api"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -46,16 +46,26 @@ export type AppStackParamList = {
   Preferences: undefined
   Public: undefined
   Goals: undefined
-  SearchExercises: { workoutID?: string, selectionMode?: boolean, existingExcercises?: number[], source?: "CreateWorkout" | "EditWorkout" }
+  SearchExercises: {
+    workoutID?: string
+    selectionMode?: boolean
+    existingExcercises?: number[]
+    source?: "CreateWorkout" | "EditWorkout"
+  }
   ViewExercise: { exerciseID: number }
   CreateCustomExercise: undefined
   ViewExerciseLogs: undefined
-  CreateExerciseLog: { exerciseID: number, exerciseName: string }
+  CreateExerciseLog: { exerciseID: number; exerciseName: string }
   ViewLog: { logID: number; logType: string }
   CreateLog: undefined
   EditLog: { logID: number; logType: string }
   EditCustomExercise: { exerciseID: number }
-  EditExerciseLog: { logID: number, exerciseName: string, setsCompleted: number, repsCompleted: number }
+  EditExerciseLog: {
+    logID: number
+    exerciseName: string
+    setsCompleted: number
+    repsCompleted: number
+  }
   ForgotPassword: undefined
   UpdatePassword: undefined
   MfaSettings: undefined
@@ -63,27 +73,32 @@ export type AppStackParamList = {
   TrainerProfile: { trainerID: string }
   TrainerRequest: undefined
   ViewWorkout: { workoutID: string }
-  Workouts: { source?: "CreateWorkoutPlan" | "EditWorkoutPlan", selectionMode?: boolean, existingWorkouts?: string[], planID?: string, formData?: Screens.PlanForm }
-  EditWorkout: { workoutID: string, selectedExercises?: Exercise[] }
+  Workouts: {
+    source?: "CreateWorkoutPlan" | "EditWorkoutPlan"
+    selectionMode?: boolean
+    existingWorkouts?: string[]
+    planID?: string
+    formData?: Screens.PlanForm
+  }
+  EditWorkout: { workoutID: string; selectedExercises?: Exercise[] }
   WorkoutPlans: undefined
   ViewWorkoutPlan: { planID: string }
-  EditWorkoutPlan: { planID: string, selectedWorkouts?: Workout[], formData?: Screens.PlanForm }
+  EditWorkoutPlan: { planID: string; selectedWorkouts?: Workout[]; formData?: Screens.PlanForm }
   CreateWorkoutLog: { workoutID: string }
-  EditWorkoutLog: { logID: number, workoutName: string, initialDate: string }
+  EditWorkoutLog: { logID: number; workoutName: string; initialDate: string }
   ViewWorkoutPlanLog: { logID: number }
-  EditWorkoutPlanLog: { logID: number }
+  EditWorkoutPlanLog: { logID: number; planName: string; initialDate: string }
   ViewWorkoutPlanLogs: undefined
   ForgotPasswordMfa: { emailAddress: string }
-  Developer: undefined
   TrainerStatus: undefined
   ViewCustomExercises: undefined
   ViewCustomExercise: { exerciseID: number }
   ViewWorkoutLogs: undefined
-	CreateWorkout: { selectedExercises?: Exercise[] }
-	WorkoutPlanTemplates: undefined
-	WorkoutTemplates: undefined
-	CreateWorkoutPlan: { selectedWorkouts?: Workout[], formData?: Screens.PlanForm }
-	// IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
+  CreateWorkout: { selectedExercises?: Exercise[] }
+  WorkoutPlanTemplates: undefined
+  WorkoutTemplates: undefined
+  CreateWorkoutPlan: { selectedWorkouts?: Workout[]; formData?: Screens.PlanForm }
+  // IGNITE_GENERATOR_ANCHOR_APP_STACK_PARAM_LIST
 }
 
 const exitRoutes = Config.exitRoutes
@@ -163,19 +178,17 @@ const AppStack = observer(function AppStack() {
       <Stack.Screen name="ViewWorkoutPlan" component={Screens.ViewWorkoutPlanScreen} />
       <Stack.Screen name="EditWorkoutPlan" component={Screens.EditWorkoutPlanScreen} />
       <Stack.Screen name="EditWorkoutLog" component={Screens.EditWorkoutLogScreen} />
-      <Stack.Screen name="ViewWorkoutPlanLog" component={Screens.ViewWorkoutPlanLogScreen} />
       <Stack.Screen name="EditWorkoutPlanLog" component={Screens.EditWorkoutPlanLogScreen} />
       <Stack.Screen name="ViewWorkoutPlanLogs" component={Screens.ViewWorkoutPlanLogsScreen} />
-      <Stack.Screen name="Developer" component={Screens.DeveloperScreen} />
       <Stack.Screen name="TrainerStatus" component={Screens.TrainerStatusScreen} />
       <Stack.Screen name="ViewCustomExercises" component={Screens.ViewCustomExercisesScreen} />
       <Stack.Screen name="ViewCustomExercise" component={Screens.ViewCustomExerciseScreen} />
       <Stack.Screen name="ViewWorkoutLogs" component={Screens.ViewWorkoutLogsScreen} />
-			<Stack.Screen name="CreateWorkout" component={Screens.CreateWorkoutScreen} />
-			<Stack.Screen name="WorkoutPlanTemplates" component={Screens.WorkoutPlanTemplatesScreen} />
-			<Stack.Screen name="WorkoutTemplates" component={Screens.WorkoutTemplatesScreen} />
-			<Stack.Screen name="CreateWorkoutPlan" component={Screens.CreateWorkoutPlanScreen} />
-			{/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
+      <Stack.Screen name="CreateWorkout" component={Screens.CreateWorkoutScreen} />
+      <Stack.Screen name="WorkoutPlanTemplates" component={Screens.WorkoutPlanTemplatesScreen} />
+      <Stack.Screen name="WorkoutTemplates" component={Screens.WorkoutTemplatesScreen} />
+      <Stack.Screen name="CreateWorkoutPlan" component={Screens.CreateWorkoutPlanScreen} />
+      {/* IGNITE_GENERATOR_ANCHOR_APP_STACK_SCREENS */}
     </Stack.Navigator>
   )
 })

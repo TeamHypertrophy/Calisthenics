@@ -1,5 +1,6 @@
 import { Button, Loading, Screen, Text, TextField } from "@/components"
 import { ErrorScreen } from "@/components/ErrorScreen"
+import { useStores } from "@/models"
 import { AppStackScreenProps } from "@/navigators"
 import { api, Difficulty, Exercise } from "@/services/api"
 import { ThemedStyle } from "@/theme"
@@ -20,8 +21,8 @@ import {
 } from "react-native"
 import { Dropdown } from "react-native-element-dropdown"
 import { Modalize } from "react-native-modalize"
+
 import { DIFFICULTY_OPTIONS } from "../Exercises/EditCustomExerciseScreen"
-import { useStores } from "@/models"
 
 interface EditWorkoutScreenProps extends AppStackScreenProps<"EditWorkout"> {}
 
@@ -34,7 +35,9 @@ export const EditWorkoutScreen: FC<EditWorkoutScreenProps> = observer(
       theme: { colors, spacing },
     } = useAppTheme()
 
-    const { authenticationStore: { userID} } = useStores()
+    const {
+      authenticationStore: { userID },
+    } = useStores()
 
     const workoutID = _props.route.params?.workoutID
     const exercisesToAdd = _props.route.params?.selectedExercises
@@ -50,12 +53,7 @@ export const EditWorkoutScreen: FC<EditWorkoutScreenProps> = observer(
     const [currentExercises, setCurrentExercises] = useState<Exercise[]>([])
     const [exerciseToRemove, setExerciseToRemove] = useState<Exercise | null>(null)
 
-    const {
-      data,
-      isLoading,
-      isError,
-      error,
-    } = useQuery({
+    const { data, isLoading, isError, error } = useQuery({
       queryKey: ["workout", workoutID],
       queryFn: async () => {
         const workoutResponse = await api.getWorkout(workoutID)

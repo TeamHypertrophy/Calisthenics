@@ -1,12 +1,14 @@
-import { FC, useEffect, useRef, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { AppStackScreenProps } from "@/navigators"
 import { Button, Loading, Screen, Text, TextField } from "@/components"
+import { useStores } from "@/models"
+import { AppStackScreenProps } from "@/navigators"
 import { api, Difficulty, Exercise } from "@/services/api"
 import { ThemedStyle } from "@/theme"
+import { renderToast } from "@/utils/toastNotification"
 import { useAppTheme } from "@/utils/useAppTheme"
-import { useStores } from "@/models"
+import { MaterialIcons } from "@expo/vector-icons"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { observer } from "mobx-react-lite"
+import { FC, useEffect, useRef, useState } from "react"
 import {
   FlatList,
   ImageBackground,
@@ -16,11 +18,10 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import { Modalize } from "react-native-modalize"
-import { renderToast } from "@/utils/toastNotification"
-import { MaterialIcons } from "@expo/vector-icons"
-import { DIFFICULTY_OPTIONS } from "../Exercises/EditCustomExerciseScreen"
 import { Dropdown } from "react-native-element-dropdown"
+import { Modalize } from "react-native-modalize"
+
+import { DIFFICULTY_OPTIONS } from "../Exercises/EditCustomExerciseScreen"
 
 interface CreateWorkoutScreenProps extends AppStackScreenProps<"CreateWorkout"> {}
 

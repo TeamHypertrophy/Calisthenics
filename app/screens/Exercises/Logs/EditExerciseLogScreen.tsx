@@ -112,11 +112,7 @@ export const EditExerciseLogScreen: FC<EditExerciseLogScreenProps> = observer(
           contentContainerStyle={themed($screenContentContainer)}
         >
           <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-            <Text
-              preset="heading"
-              text={`Edit Log: ${exerciseName}`}
-              style={themed($title)}
-            />
+            <Text preset="heading" text={`Edit Log: ${exerciseName}`} style={themed($title)} />
 
             <TextField
               label="Sets Completed"
@@ -155,32 +151,32 @@ export const EditExerciseLogScreen: FC<EditExerciseLogScreenProps> = observer(
           </ScrollView>
         </Screen>
 
-          <Modalize ref={deleteModalRef} adjustToContentHeight>
-            <View style={themed($modalContainer)}>
-              <Text preset="subheading" text="Delete Exercise Log" style={themed($modalTitle)} />
-              <Text style={themed($modalText)}>
-                Are you sure you want to delete this exercise log? This action cannot be undone.
-              </Text>
-              <View style={$modalButtonContainer}>
-                <Button
-                  text="Cancel"
-                  preset="filled"
-                  onPress={() => deleteModalRef.current?.close()}
-                  style={themed($modalButton)}
-                  disabled={deleteLog.isPending}
-                />
-                
-                <Button
-                  text="Delete"
-                  preset="filled"
-                  onPress={handleConfirmDelete}
-                  style={themed([$modalButton, $modalDeleteConfirmButton])}
-                  textStyle={$deleteButtonText}
-                  disabled={deleteLog.isPending}
-                />
-              </View>
+        <Modalize ref={deleteModalRef} adjustToContentHeight>
+          <View style={themed($modalContainer)}>
+            <Text preset="subheading" text="Delete Exercise Log" style={themed($modalTitle)} />
+            <Text style={themed($modalText)}>
+              Are you sure you want to delete this exercise log? This action cannot be undone.
+            </Text>
+            <View style={$modalButtonContainer}>
+              <Button
+                text="Cancel"
+                preset="filled"
+                onPress={() => deleteModalRef.current?.close()}
+                style={themed($modalButton)}
+                disabled={deleteLog.isPending}
+              />
+
+              <Button
+                text="Delete"
+                preset="filled"
+                onPress={handleConfirmDelete}
+                style={themed([$modalButton, $modalDeleteConfirmButton])}
+                textStyle={$deleteButtonText}
+                disabled={deleteLog.isPending}
+              />
             </View>
-          </Modalize>
+          </View>
+        </Modalize>
       </>
     )
   },
@@ -205,7 +201,7 @@ const $textField: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   marginBottom: spacing.lg,
 })
 
-const $button: ThemedStyle<ViewStyle> = ({ spacing , colors}) => ({
+const $button: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
   marginTop: spacing.md,
   borderRadius: 120,
   backgroundColor: colors.palette.primary500,
@@ -245,7 +241,7 @@ const $modalButtonContainer: ViewStyle = {
 const $modalButton: ThemedStyle<ViewStyle> = ({ spacing }) => ({
   flex: 1,
   marginHorizontal: spacing.sm,
-  borderRadius: 120
+  borderRadius: 120,
 })
 
 const $modalDeleteConfirmButton: ThemedStyle<ViewStyle> = ({ colors }) => ({

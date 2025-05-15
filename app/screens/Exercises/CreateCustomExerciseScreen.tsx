@@ -5,10 +5,13 @@ import { api, Difficulty, Equipment, ExerciseType, MuscleGroup } from "@/service
 import { ThemedStyle } from "@/theme"
 import { renderToast } from "@/utils/toastNotification"
 import { useAppTheme } from "@/utils/useAppTheme"
+import { AntDesign } from "@expo/vector-icons"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { observer } from "mobx-react-lite"
-import { FC, useEffect, useState } from "react"
+import { FC, useState } from "react"
 import { ImageStyle, TextStyle, ViewStyle } from "react-native"
+import { Dropdown } from "react-native-element-dropdown"
+
 import {
   CustomExerciseData,
   DIFFICULTY_OPTIONS,
@@ -16,8 +19,6 @@ import {
   EXERCISE_TYPE_OPTIONS,
   MUSCLE_GROUP_OPTIONS,
 } from "./EditCustomExerciseScreen"
-import { Dropdown } from "react-native-element-dropdown"
-import { AntDesign } from "@expo/vector-icons"
 
 interface CreateCustomExerciseScreenProps extends AppStackScreenProps<"CreateCustomExercise"> {}
 
@@ -52,7 +53,7 @@ export const CreateCustomExerciseScreen: FC<CreateCustomExerciseScreenProps> = o
       },
       onSuccess: () => {
         renderToast("Success", "Exercise Created Successfully", "success")
-        queryClient.invalidateQueries({queryKey: ["customExercises", userID]})
+        queryClient.invalidateQueries({ queryKey: ["customExercises", userID] })
         navigation.goBack()
       },
       onError: (error) => {

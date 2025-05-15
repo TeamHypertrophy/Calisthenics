@@ -19,7 +19,7 @@ import { FC, useState } from "react"
 import { ScrollView, TextStyle, View, ViewStyle } from "react-native"
 import DateTimePickerModal from "react-native-modal-datetime-picker"
 
-import { LogType, LOG_TYPES } from "./LogsScreen"
+import { LOG_TYPES, LogType } from "./LogsScreen"
 
 interface CreateLogScreenProps extends AppStackScreenProps<"CreateLog"> {}
 

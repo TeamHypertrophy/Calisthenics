@@ -4,11 +4,11 @@ import { Button, Screen, Text } from "@/components"
 import { useStores } from "@/models"
 import { HomeTabScreenProps } from "@/navigators/HomeNavigator"
 import { logEverything, storage } from "@/utils/storage"
+import { renderToast } from "@/utils/toastNotification"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { observer } from "mobx-react-lite"
 import { FC } from "react"
 import { ViewStyle } from "react-native"
-import { renderToast } from "@/utils/toastNotification"
 
 export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function MainScreen(_props) {
   const { navigation } = _props

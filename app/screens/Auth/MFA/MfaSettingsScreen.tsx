@@ -11,7 +11,7 @@ import { MaterialIcons } from "@expo/vector-icons"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { observer } from "mobx-react-lite"
 import { FC, useRef } from "react"
-import { Linking, TextStyle, View, ViewStyle } from "react-native"
+import { TextStyle, View, ViewStyle } from "react-native"
 import { openInbox } from "react-native-email-link"
 import { Modalize } from "react-native-modalize"
 

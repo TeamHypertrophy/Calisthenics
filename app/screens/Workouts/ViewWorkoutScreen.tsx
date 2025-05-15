@@ -28,7 +28,7 @@ export const ViewWorkoutScreen: FC<ViewWorkoutScreenProps> = observer(
 
     const queryClient = useQueryClient()
     const workoutID = _props.route.params?.workoutID
-    
+
     const {
       authenticationStore: { userID },
     } = useStores()
@@ -120,7 +120,7 @@ export const ViewWorkoutScreen: FC<ViewWorkoutScreenProps> = observer(
     const handleCreateLog = async () => {
       createLog.mutate({
         user_id: userID,
-        workout_id: workout?.workout_id
+        workout_id: workout?.workout_id,
       })
     }
 
@@ -210,7 +210,7 @@ export const ViewWorkoutScreen: FC<ViewWorkoutScreenProps> = observer(
                 />
               )}
             >
-              <Text text="Log Workout" style={themed($logButtonText)} onPress={handleCreateLog}/>
+              <Text text="Log Workout" style={themed($logButtonText)} onPress={handleCreateLog} />
             </Button>
           </View>
         </View>

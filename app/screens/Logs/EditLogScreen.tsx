@@ -1,17 +1,17 @@
-import { Button, Icon, Loading, Screen, Text, TextField } from "@/components"
+import { Button, Loading, Screen, Text, TextField } from "@/components"
 import { ErrorScreen } from "@/components/ErrorScreen"
 import { useStores } from "@/models"
 import { AppStackScreenProps } from "@/navigators"
 import {
   api,
-  ProteinLog,
-  WaterLog,
   CalorieLog,
+  ProteinLog,
   SleepLog,
-  UpdateProteinLog,
-  UpdateWaterLog,
   UpdateCalorieLog,
+  UpdateProteinLog,
   UpdateSleepLog,
+  UpdateWaterLog,
+  WaterLog,
 } from "@/services/api"
 import { ThemedStyle } from "@/theme"
 import { createProteinDate } from "@/utils/formatDate"

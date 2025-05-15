@@ -1,8 +1,9 @@
-import { FC } from "react"
-import { View, ViewStyle, TextStyle } from "react-native"
-import { Text } from "./Text"
 import { ThemedStyle, typography } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
+import { FC } from "react"
+import { View, ViewStyle, TextStyle } from "react-native"
+
+import { Text } from "./Text"
 
 interface InfoChipProps {
   label: string

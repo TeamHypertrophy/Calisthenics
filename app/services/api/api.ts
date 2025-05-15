@@ -98,7 +98,6 @@ export class Api {
     }
   }
 
-
   // -----------------------------------------------------------------
   // -----------------------------------------------------------------
 
@@ -287,7 +286,7 @@ export class Api {
       return response
     }
   }
-  
+
   // -----------------------------------------------------------------
   // -----------------------------------------------------------------
 
@@ -593,7 +592,7 @@ export class Api {
 
   async editCustomExercise(exerciseID: number, data: any): Promise<ApiResponse<CustomExercise>> {
     await this.ensureAuthLoaded()
-    
+
     const response: ApiResponse<CustomExercise> = await this.apisauce.post(
       `exercises/custom/update/${exerciseID}?user_id=${this.user_id}`,
       data,
@@ -641,7 +640,7 @@ export class Api {
       `/logs/exercise/update/${logID}?user_id=${this.user_id}`,
       data,
     )
-    return response 
+    return response
   }
 
   async deleteExerciseLog(logID: number): Promise<ApiResponse<any>> {
@@ -660,7 +659,9 @@ export class Api {
   async getAllWorkouts(): Promise<ApiResponse<Workout[]>> {
     await this.ensureAuthLoaded()
 
-    const response: ApiResponse<Workout[]> = await this.apisauce.get(`/workouts/user/all?user_id=${this.user_id}`)
+    const response: ApiResponse<Workout[]> = await this.apisauce.get(
+      `/workouts/user/all?user_id=${this.user_id}`,
+    )
     return response
   }
 
@@ -694,7 +695,7 @@ export class Api {
 
   async deleteWorkout(workoutID: string): Promise<ApiResponse<any>> {
     await this.ensureAuthLoaded()
-    
+
     const response: ApiResponse<any> = await this.apisauce.get(
       `/workouts/delete/${workoutID}?user_id=${this.user_id}`,
     )
@@ -708,19 +709,22 @@ export class Api {
       `/workouts/add-exercise/${workoutID}?user_id=${this.user_id}`,
       {
         exercise_id: exerciseID,
-      }
+      },
     )
     return response
   }
 
-  async removeExerciseFromWorkout(workoutID: string, exerciseID: number): Promise<ApiResponse<Workout>> {
+  async removeExerciseFromWorkout(
+    workoutID: string,
+    exerciseID: number,
+  ): Promise<ApiResponse<Workout>> {
     await this.ensureAuthLoaded()
 
     const response: ApiResponse<Workout> = await this.apisauce.post(
       `/workouts/remove-exercise/${workoutID}?user_id=${this.user_id}`,
       {
         exercise_id: exerciseID,
-      }
+      },
     )
     return response
   }
@@ -755,7 +759,7 @@ export class Api {
       `/logs/workout/update/${logID}?user_id=${this.user_id}`,
       data,
     )
-    return response 
+    return response
   }
 
   async deleteWorkoutLog(logID: number): Promise<ApiResponse<any>> {
@@ -819,7 +823,7 @@ export class Api {
 
   async deleteWorkoutPlan(workoutID: string): Promise<ApiResponse<any>> {
     await this.ensureAuthLoaded()
-    
+
     const response: ApiResponse<any> = await this.apisauce.get(
       `/workout/plans/delete/${workoutID}?user_id=${this.user_id}`,
     )
@@ -833,19 +837,22 @@ export class Api {
       `/workout/plans/add-workout/${planID}?user_id=${this.user_id}`,
       {
         workout_id: workoutID,
-      }
+      },
     )
     return response
   }
 
-  async removeWorkoutFromPlan(planID: string, workoutID: string): Promise<ApiResponse<WorkoutPlan>> {
+  async removeWorkoutFromPlan(
+    planID: string,
+    workoutID: string,
+  ): Promise<ApiResponse<WorkoutPlan>> {
     await this.ensureAuthLoaded()
 
     const response: ApiResponse<WorkoutPlan> = await this.apisauce.post(
       `/workout/plans/remove-workout/${planID}?user_id=${this.user_id}`,
       {
         workout_id: workoutID,
-      }
+      },
     )
     return response
   }
@@ -880,7 +887,7 @@ export class Api {
       `/workout/plans/log/update/${logID}?user_id=${this.user_id}`,
       data,
     )
-    return response 
+    return response
   }
 
   async deleteWorkoutPlanLog(logID: number): Promise<ApiResponse<any>> {

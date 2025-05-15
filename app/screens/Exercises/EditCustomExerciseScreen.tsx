@@ -231,9 +231,7 @@ export const EditCustomExerciseScreen: FC<EditCustomExerciseScreenProps> = obser
           maxHeight={300}
           labelField="label"
           valueField="value"
-          placeholder={
-            exercise?.equipment
-          }
+          placeholder={exercise?.equipment}
           value={data.equipment}
           onFocus={() => setIsFocusEquipment(true)}
           onBlur={() => setIsFocusEquipment(false)}
@@ -263,9 +261,7 @@ export const EditCustomExerciseScreen: FC<EditCustomExerciseScreenProps> = obser
           maxHeight={300}
           labelField="label"
           valueField="value"
-          placeholder={
-            exercise?.muscle_group
-          }
+          placeholder={exercise?.muscle_group}
           value={data.muscle_group}
           onFocus={() => setIsFocusMuscleGroup(true)}
           onBlur={() => setIsFocusMuscleGroup(false)}
@@ -295,9 +291,7 @@ export const EditCustomExerciseScreen: FC<EditCustomExerciseScreenProps> = obser
           maxHeight={300}
           labelField="label"
           valueField="value"
-          placeholder={
-            exercise?.difficulty
-          }
+          placeholder={exercise?.difficulty}
           value={data.difficulty}
           onFocus={() => setIsFocusDifficulty(true)}
           onBlur={() => setIsFocusDifficulty(false)}
@@ -327,9 +321,7 @@ export const EditCustomExerciseScreen: FC<EditCustomExerciseScreenProps> = obser
           maxHeight={300}
           labelField="label"
           valueField="value"
-          placeholder={
-            exercise?.exercise_type
-          }
+          placeholder={exercise?.exercise_type}
           value={data.exercise_type}
           onFocus={() => setIsFocusExerciseType(true)}
           onBlur={() => setIsFocusExerciseType(false)}

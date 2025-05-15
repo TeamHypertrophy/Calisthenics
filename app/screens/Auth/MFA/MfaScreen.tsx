@@ -9,8 +9,7 @@ import { renderToast } from "@/utils/toastNotification"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { observer } from "mobx-react-lite"
 import { FC, useEffect, useState } from "react"
-import { TextStyle, ViewStyle } from "react-native"
-import { View } from "react-native"
+import { TextStyle, View, ViewStyle } from "react-native"
 import { OtpInput } from "react-native-otp-entry"
 
 interface MfaScreenProps extends AppStackScreenProps<"MFA"> {}

@@ -7,7 +7,7 @@ import { api } from "@/services/api"
 import { ThemedStyle } from "@/theme"
 import { clear } from "@/utils/storage"
 import { useAppTheme } from "@/utils/useAppTheme"
-import { AntDesign, Ionicons, MaterialIcons } from "@expo/vector-icons"
+import { AntDesign, MaterialIcons } from "@expo/vector-icons"
 import Clipboard from "@react-native-clipboard/clipboard"
 import { useQuery } from "@tanstack/react-query"
 import Constants from "expo-constants"
@@ -229,17 +229,6 @@ Network Status: ${isConnected ? "Online" : "Offline"}
                 />
               )}
             </View>
-
-            {role === "Admin" && (
-              <View style={themed($settingsSection)}>
-                <Text text="Admin Settings" preset="subheading" style={themed($sectionTitle)} />
-                <Button
-                  text="Debug Corner"
-                  onPress={() => navigation.navigate("Developer")}
-                  style={themed($button)}
-                />
-              </View>
-            )}
           </View>
         </Screen>
 

@@ -1,7 +1,6 @@
 import type { ThemedStyle } from "@/theme"
 
-import { Button, Screen, Switch, Text, TextField } from "@/components"
-import { AutoImage } from "@/components"
+import { AutoImage, Button, Screen, Switch, Text, TextField } from "@/components"
 import { ErrorScreen } from "@/components/ErrorScreen"
 import { Loading } from "@/components/Loader"
 import { useStores } from "@/models"
@@ -13,9 +12,9 @@ import {
   Gender,
   PreferredHeight,
   PreferredWeight,
+  Profile,
   api,
 } from "@/services/api"
-import { Profile } from "@/services/api"
 import { renderToast } from "@/utils/toastNotification"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { AntDesign } from "@expo/vector-icons"

@@ -1,53 +1,27 @@
-import { FC, useEffect, useMemo, useRef, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { AppStackScreenProps } from "@/navigators"
-import {
-  Button,
-  FilterChip,
-  FilterChipItem,
-  Loading,
-  Screen,
-  SearchBar,
-  Switch,
-  Text,
-  TextField,
-} from "@/components"
-import {
-  api,
-  Difficulty,
-  Exercise,
-  FitnessGoal,
-  Workout,
-  WorkoutInterval,
-  WorkoutPlan,
-} from "@/services/api"
-import { ThemedStyle } from "@/theme"
-import { useAppTheme } from "@/utils/useAppTheme"
-import { useStores } from "@/models"
-import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query"
-import {
-  FlatList,
-  ImageBackground,
-  ImageStyle,
-  ScrollView,
-  TextStyle,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from "react-native"
-import { Modalize } from "react-native-modalize"
-import { renderToast } from "@/utils/toastNotification"
-import { MaterialIcons } from "@expo/vector-icons"
-import { difficultyOptions } from "../Exercises/SearchExercisesScreen"
+import { Button, Loading, Screen, Switch, Text, TextField } from "@/components"
 import { ErrorScreen } from "@/components/ErrorScreen"
-import { PlanForm } from "./CreateWorkoutPlanScreen"
+import { useStores } from "@/models"
+import { AppStackScreenProps } from "@/navigators"
+import { api, Difficulty, FitnessGoal, Workout, WorkoutInterval } from "@/services/api"
+import { ThemedStyle } from "@/theme"
 import { createProteinDate } from "@/utils/formatDate"
-import { Dropdown } from "react-native-element-dropdown"
-import { getLabel } from "@/utils/strings"
-import { goalOptions, intervalOptions } from "./WorkoutPlansScreen"
-import { format } from "date-fns/format"
-import DateTimePickerModal from "react-native-modal-datetime-picker"
 import { cancelPlanNotification, schedulePlanNotification } from "@/utils/notifications"
+import { getLabel } from "@/utils/strings"
+import { renderToast } from "@/utils/toastNotification"
+import { useAppTheme } from "@/utils/useAppTheme"
+import { MaterialIcons } from "@expo/vector-icons"
+import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query"
+import { format } from "date-fns/format"
+import { observer } from "mobx-react-lite"
+import { FC, useEffect, useMemo, useRef, useState } from "react"
+import { FlatList, ImageStyle, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
+import { Dropdown } from "react-native-element-dropdown"
+import DateTimePickerModal from "react-native-modal-datetime-picker"
+import { Modalize } from "react-native-modalize"
+
+import { difficultyOptions } from "../Exercises/SearchExercisesScreen"
+import { PlanForm } from "./CreateWorkoutPlanScreen"
+import { goalOptions, intervalOptions } from "./WorkoutPlansScreen"
 
 interface EditWorkoutPlanScreenProps extends AppStackScreenProps<"EditWorkoutPlan"> {}
 

@@ -12,7 +12,6 @@ import { FC, useEffect, useState } from "react"
 import {
   FlatList,
   ImageBackground,
-  SafeAreaView,
   ScrollView,
   TextStyle,
   TouchableOpacity,
@@ -197,7 +196,7 @@ export const SearchExercisesScreen: FC<SearchExercisesScreenProps> = observer(
 
     const handleDoneSelection = () => {
       const exercisesToReturn = exercises.filter((ex) => selectedForWorkout.has(ex.exercise_id))
-      
+
       if (sourceScreen === "EditWorkout") {
         navigation.navigate("EditWorkout", {
           workoutID: workoutID || "",
@@ -208,7 +207,11 @@ export const SearchExercisesScreen: FC<SearchExercisesScreenProps> = observer(
           selectedExercises: exercisesToReturn,
         })
       } else {
-        renderToast("Error", "Unexpected Error When Selecting Exercises, Please Reset The Application", "error")
+        renderToast(
+          "Error",
+          "Unexpected Error When Selecting Exercises, Please Reset The Application",
+          "error",
+        )
         navigation.goBack()
       }
     }
@@ -259,46 +262,42 @@ export const SearchExercisesScreen: FC<SearchExercisesScreenProps> = observer(
     const CustomHeader = () => {
       if (isSelectionMode) {
         return (
-            <View style={themed($headerContainer)}>
-              <Text
-                preset="subheading"
-                text="Select Exercises"
-                style={themed($customHeaderTitle)}
-              />
-              <Button
-                text="Cancel"
-                preset="filled"
-                style={themed([$customHeaderButton, $cancelButton])}
-                onPress={() => navigation.goBack()}
-              />
-              <Button
-                text="Done"
-                preset="filled"
-                style={themed([$customHeaderButton, $doneButton])}
-                onPress={handleDoneSelection}
-              />
-            </View>
+          <View style={themed($headerContainer)}>
+            <Text preset="subheading" text="Select Exercises" style={themed($customHeaderTitle)} />
+            <Button
+              text="Cancel"
+              preset="filled"
+              style={themed([$customHeaderButton, $cancelButton])}
+              onPress={() => navigation.goBack()}
+            />
+            <Button
+              text="Done"
+              preset="filled"
+              style={themed([$customHeaderButton, $doneButton])}
+              onPress={handleDoneSelection}
+            />
+          </View>
         )
       }
 
       return (
-          <View style={themed($headerContainer)}>
-            <Text preset="heading" text="Exercises" style={themed($customHeaderTitle)} />
-            <Button
-              text="Custom"
-              preset="filled"
-              onPress={() => navigation.navigate("ViewCustomExercises")}
-              style={themed($customButton)}
-              LeftAccessory={() => (
-                <MaterialIcons
-                  name="list-alt"
-                  size={20}
-                  color={colors.text}
-                  style={{ marginRight: spacing.xs }}
-                />
-              )}
-            />
-          </View>
+        <View style={themed($headerContainer)}>
+          <Text preset="heading" text="Exercises" style={themed($customHeaderTitle)} />
+          <Button
+            text="Custom"
+            preset="filled"
+            onPress={() => navigation.navigate("ViewCustomExercises")}
+            style={themed($customButton)}
+            LeftAccessory={() => (
+              <MaterialIcons
+                name="list-alt"
+                size={20}
+                color={colors.text}
+                style={{ marginRight: spacing.xs }}
+              />
+            )}
+          />
+        </View>
       )
     }
 
@@ -414,7 +413,7 @@ const $customButton: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
   backgroundColor: colors.palette.primary500,
   alignSelf: "center",
   flexShrink: 0,
-  minWidth: spacing.xxl + spacing.lg, 
+  minWidth: spacing.xxl + spacing.lg,
 })
 
 const $searchBar: ThemedStyle<ViewStyle> = ({ spacing }) => ({
@@ -508,14 +507,14 @@ const $customHeaderButton: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 })
 
 const $cancelButton: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
-  backgroundColor: colors.palette.angry500
+  backgroundColor: colors.palette.angry500,
 })
 
 const $doneButton: ThemedStyle<ViewStyle> = ({ spacing, colors }) => ({
-  backgroundColor: colors.palette.primary500
+  backgroundColor: colors.palette.primary500,
 })
 
-const $selectedCard: ThemedStyle<ViewStyle> = ({ colors}) => ({
+const $selectedCard: ThemedStyle<ViewStyle> = ({ colors }) => ({
   borderColor: colors.tint || "blue",
   borderWidth: 2,
 })

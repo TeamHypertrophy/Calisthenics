@@ -1,15 +1,15 @@
-import { FC, useMemo, useState } from "react"
-import { observer } from "mobx-react-lite"
-import { AppStackScreenProps } from "@/navigators"
 import { Button, Loading, Screen, SearchBar, Text } from "@/components"
-import { api, WorkoutLog } from "@/services/api"
 import { ErrorScreen } from "@/components/ErrorScreen"
+import { useStores } from "@/models"
+import { AppStackScreenProps } from "@/navigators"
+import { api, WorkoutLog } from "@/services/api"
 import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
-import { useStores } from "@/models"
 import { useQuery } from "@tanstack/react-query"
-import { FlatList, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
 import { format } from "date-fns/format"
+import { observer } from "mobx-react-lite"
+import { FC, useMemo, useState } from "react"
+import { FlatList, TextStyle, TouchableOpacity, View, ViewStyle } from "react-native"
 
 interface ViewWorkoutLogsScreenProps extends AppStackScreenProps<"ViewWorkoutLogs"> {}
 
@@ -102,7 +102,7 @@ export const ViewWorkoutLogsScreen: FC<ViewWorkoutLogsScreenProps> = observer(
             navigation.navigate("EditWorkoutLog", {
               logID: item.log_id,
               workoutName: item.workoutName,
-              initialDate: new Date(item.date).toISOString() || "", 
+              initialDate: new Date(item.date).toISOString() || "",
             })
           }
         }}
@@ -122,7 +122,7 @@ export const ViewWorkoutLogsScreen: FC<ViewWorkoutLogsScreenProps> = observer(
     )
 
     if (isLoadingLogs || isLoadingLogs) {
-      return <Loading/>
+      return <Loading />
     }
 
     if (isErrorLogs || isErrorWorkouts) {

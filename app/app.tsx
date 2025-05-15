@@ -20,8 +20,8 @@ import { AppNavigator, useNavigationPersistence } from "./navigators"
 import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary"
 import { customFontsToLoad, colors } from "./theme"
 import { loadDateFnsLocale } from "./utils/formatDate"
-import * as storage from "./utils/storage"
 import { setupNotifee } from "./utils/notifications"
+import * as storage from "./utils/storage"
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
@@ -108,7 +108,7 @@ export function App() {
                   initialState={initialNavigationState}
                   onStateChange={onNavigationStateChange}
                 />
-                <Toast config={toastConfig}/>
+                <Toast config={toastConfig} />
               </KeyboardProvider>
             </ErrorBoundary>
           </SafeAreaProvider>

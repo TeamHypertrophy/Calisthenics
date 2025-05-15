@@ -1,4 +1,4 @@
-import { AutoImage, Button, Card, Icon, Loading, Screen, Text } from "@/components"
+import { AutoImage, Button, Card, Loading, Screen, Text } from "@/components"
 import { ErrorScreen } from "@/components/ErrorScreen"
 import { useStores } from "@/models"
 import { AppStackScreenProps } from "@/navigators"

@@ -3,6 +3,7 @@ import { useStores } from "@/models"
 import { AppStackScreenProps } from "@/navigators"
 import { api } from "@/services/api"
 import { ThemedStyle } from "@/theme"
+import { createProteinDate } from "@/utils/formatDate"
 import { renderToast } from "@/utils/toastNotification"
 import { useAppTheme } from "@/utils/useAppTheme"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
@@ -10,9 +11,8 @@ import { format } from "date-fns/format"
 import { observer } from "mobx-react-lite"
 import { FC, useRef, useState } from "react"
 import { ScrollView, TextStyle, View, ViewStyle } from "react-native"
-import { Modalize } from "react-native-modalize"
 import DateTimePickerModal from "react-native-modal-datetime-picker"
-import { createProteinDate } from "@/utils/formatDate"
+import { Modalize } from "react-native-modalize"
 
 interface EditWorkoutLogScreenProps extends AppStackScreenProps<"EditWorkoutLog"> {}
 
@@ -128,9 +128,7 @@ export const EditWorkoutLogScreen: FC<EditWorkoutLogScreenProps> = observer(
 
             <View style={themed($dateContainer)}>
               <Text preset="formLabel" text="Workout Date" />
-              <Text style={themed($dateText)}>
-                {format(date, "MMM d, yyyy 'at' h:mm a")}
-              </Text>
+              <Text style={themed($dateText)}>{format(date, "MMM d, yyyy 'at' h:mm a")}</Text>
               <Button
                 text="Change Date"
                 preset="filled"

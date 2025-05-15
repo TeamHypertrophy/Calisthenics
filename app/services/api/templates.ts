@@ -1,7 +1,3 @@
-export const WorkoutPlanTemplates = [
+export const WorkoutPlanTemplates = []
 
-]
-
-export const WorkoutTemplates = [   
-
-]
+export const WorkoutTemplates = []

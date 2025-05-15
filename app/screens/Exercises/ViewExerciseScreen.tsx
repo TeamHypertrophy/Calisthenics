@@ -5,13 +5,13 @@ import { api } from "@/services/api"
 import { ThemedStyle } from "@/theme"
 import { renderToast } from "@/utils/toastNotification"
 import { useAppTheme } from "@/utils/useAppTheme"
+import { getYoutubeID } from "@/utils/video"
 import { MaterialIcons } from "@expo/vector-icons"
 import { useQuery } from "@tanstack/react-query"
 import { observer } from "mobx-react-lite"
-import { FC, useCallback, useRef, useState } from "react"
+import { FC, useCallback, useState } from "react"
 import { ImageStyle, TextStyle, View, ViewStyle } from "react-native"
 import YoutubePlayer from "react-native-youtube-iframe"
-import { getYoutubeID } from "@/utils/video"
 
 interface ViewExerciseScreenProps extends AppStackScreenProps<"ViewExercise"> {}
 
