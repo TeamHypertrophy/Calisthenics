@@ -196,6 +196,12 @@ export const WorkoutPlansScreen: FC<WorkoutPlansScreenProps> = observer(
           />
         </ScrollView>
 
+        <View style={themed($templatesComingSoonContainer)}>
+          <Text style={themed($templatesComingSoonText)} preset="formHelper">
+            ✨ Workout Plan Templates: Coming Soon!
+          </Text>
+        </View>
+
         <FlatList
           data={filteredWorkoutPlans}
           renderItem={renderWorkoutPlanItem}
@@ -313,4 +319,16 @@ const $emptyStateContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
 const $emptyStateText: ThemedStyle<TextStyle> = ({ colors }) => ({
   color: colors.textDim,
   textAlign: "center",
+})
+
+const $templatesComingSoonContainer: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+  alignItems: "center",
+  paddingVertical: spacing.sm,
+  paddingHorizontal: spacing.lg,
+  marginBottom: spacing.sm,
+})
+
+const $templatesComingSoonText: ThemedStyle<TextStyle> = ({ colors }) => ({
+  color: colors.textDim,
+  fontStyle: "italic",
 })
