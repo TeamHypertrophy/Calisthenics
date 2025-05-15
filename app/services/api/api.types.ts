@@ -233,7 +233,7 @@ export interface WorkoutPlan {
   workouts?: string[]
   created_at: string
   updated_at?: Date
-  start_time?: Date
+  start_time: string
   repeats?: WorkoutInterval
   goal?: FitnessGoal
   difficulty: Difficulty

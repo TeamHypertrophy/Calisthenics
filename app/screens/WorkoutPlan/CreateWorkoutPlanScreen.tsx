@@ -45,6 +45,7 @@ import { goalOptions, intervalOptions } from "./WorkoutPlansScreen"
 import { createProteinDate } from "@/utils/formatDate"
 import { format } from "date-fns/format"
 import DateTimePickerModal from "react-native-modal-datetime-picker"
+import { schedulePlanNotification } from "@/utils/notifications"
 
 interface CreateWorkoutPlanScreenProps extends AppStackScreenProps<"CreateWorkoutPlan"> {}
 
@@ -55,7 +56,7 @@ export type PlanForm = {
   goal: FitnessGoal | null
   repeats: WorkoutInterval | null
   isPublic: boolean
-  startTime: Date | null
+  startTime: string
 }
 
 export const CreateWorkoutPlanScreen: FC<CreateWorkoutPlanScreenProps> = observer(
@@ -124,7 +125,7 @@ export const CreateWorkoutPlanScreen: FC<CreateWorkoutPlanScreenProps> = observe
         setGoal(returningFormData.goal)
         setRepeats(returningFormData.repeats)
         setIsPublic(returningFormData.isPublic)
-        setStartTime(returningFormData.startTime)
+        setStartTime(startTime ? new Date(returningFormData.startTime) : new Date())
 
         navigation.setParams({ formData: undefined })
       }
@@ -138,11 +139,11 @@ export const CreateWorkoutPlanScreen: FC<CreateWorkoutPlanScreenProps> = observe
         }
         return response.data
       },
-      onSuccess: (newPlan) => {
+      onSuccess: async (newPlan) => {
         queryClient.invalidateQueries({ queryKey: ["workoutPlans", userID] })
         renderToast("Success", "Workout plan created successfully!", "success")
 
-        // Trigger Notification
+        await schedulePlanNotification(newPlan)
 
         navigation.navigate("WorkoutPlans")
       },
@@ -195,7 +196,7 @@ export const CreateWorkoutPlanScreen: FC<CreateWorkoutPlanScreenProps> = observe
         goal,
         repeats,
         isPublic,
-        startTime,
+        startTime: startTime ? startTime.toISOString() : new Date().toISOString(),
       }
 
       navigation.navigate("Workouts", {

@@ -53,3 +53,12 @@ export function formatDuration(seconds: number | undefined): string {
 
   return result.trim()
 }
+
+export const getLabel = (
+  value: string | undefined | null,
+  options: Array<{ label: string; value: string }>,
+): string => {
+  if (!value) return "N/A"
+  const option = options.find((opt) => opt.value.toLowerCase() === value.toLowerCase())
+  return option ? option.label : value
+}

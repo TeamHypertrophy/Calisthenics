@@ -21,6 +21,7 @@ import { ErrorBoundary } from "./screens/ErrorScreen/ErrorBoundary"
 import { customFontsToLoad, colors } from "./theme"
 import { loadDateFnsLocale } from "./utils/formatDate"
 import * as storage from "./utils/storage"
+import { setupNotifee } from "./utils/notifications"
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
@@ -38,6 +39,13 @@ export function App() {
     initI18n()
       .then(() => setIsI18nInitialized(true))
       .then(() => loadDateFnsLocale())
+  }, [])
+
+  useEffect(() => {
+    const initializeNotifications = async () => {
+      await setupNotifee()
+    }
+    initializeNotifications()
   }, [])
 
   const { rehydrated } = useInitialRootStore(() => {

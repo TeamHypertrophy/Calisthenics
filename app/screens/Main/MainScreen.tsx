@@ -79,7 +79,7 @@ export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function Main
         style={themed($button)}
         preset="filled"
         onPress={() => {
-          navigation.navigate("Workouts")
+          navigation.navigate("Workouts", {})
         }}
       />
 

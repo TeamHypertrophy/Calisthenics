@@ -30,6 +30,8 @@ import { Modalize } from "react-native-modalize"
 import { renderToast } from "@/utils/toastNotification"
 import { MaterialIcons } from "@expo/vector-icons"
 import { ErrorScreen } from "@/components/ErrorScreen"
+import DateTimePickerModal from "react-native-modal-datetime-picker"
+
 interface EditWorkoutPlanLogScreenProps extends AppStackScreenProps<"EditWorkoutPlanLog"> {}
 
 export const EditWorkoutPlanLogScreen: FC<EditWorkoutPlanLogScreenProps> = observer(

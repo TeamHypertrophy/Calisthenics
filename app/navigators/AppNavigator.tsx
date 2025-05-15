@@ -67,7 +67,7 @@ export type AppStackParamList = {
   EditWorkout: { workoutID: string, selectedExercises?: Exercise[] }
   WorkoutPlans: undefined
   ViewWorkoutPlan: { planID: string }
-  EditWorkoutPlan: { planID: string, selectedWorkouts?: Workout[] }
+  EditWorkoutPlan: { planID: string, selectedWorkouts?: Workout[], formData?: Screens.PlanForm }
   CreateWorkoutLog: { workoutID: string }
   EditWorkoutLog: { logID: number, workoutName: string, initialDate: string }
   ViewWorkoutPlanLog: { logID: number }
