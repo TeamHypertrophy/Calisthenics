@@ -104,7 +104,7 @@ export const MfaScreen: FC<MfaScreenProps> = observer(function MfaScreen(_props)
   } = useAppTheme()
 
   if (isVerifying) {
-    return <Loading />
+    return <Loading/>
   }
 
   return (

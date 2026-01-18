@@ -75,6 +75,8 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
 
     const response = await api.login(authUsername, authPassword)
 
+    console.log("[AUTH] Login Response:", response)
+
     saveString("authUsername", authUsername)
     saveString("authPassword", authPassword)
 

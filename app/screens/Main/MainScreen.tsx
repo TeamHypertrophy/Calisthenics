@@ -219,6 +219,14 @@ export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function Main
       const today = new Date()
       const todayDateStr = today.toISOString().split("T")[0]
 
+      console.log("[Streak Debug] Current state:")
+      console.log("- Today's date:", todayDateStr)
+      console.log("- Last processed date:", lastProcessedDate)
+      console.log("- Current server streak:", profile.streak)
+      console.log("- User ID:", userID)
+      console.log("- isIncrementingStreak:", isIncrementingStreak)
+      console.log("- isResettingStreak:", isResettingStreak)
+
       if (lastProcessedDate === todayDateStr) {
         // Already Processed For Today
         console.log("[Streak] Already Processed For Today")
@@ -226,11 +234,14 @@ export const MainScreen: FC<HomeTabScreenProps<"Main">> = observer(function Main
       }
 
       if (!lastProcessedDate) {
+        console.log("[Streak] No Last Processed Date Found")
         if ((profile.streak || 0) === 0) {
           // First Time User, Reset Streak
+          console.log("[Streak] Server Streak Is 0 - Resetting Streak")
           resetStreak.mutate()
         } else {
           // User Logged In For The First Time, Increment Streak
+          console.log("[Streak] Incrementing Streak For First Time User")
           incrementStreak.mutate()
         }
       } else {

@@ -1,25 +1,54 @@
-import { Screen } from "@/components"
+import { Screen, Text } from "@/components"
+import { ThemedStyle } from "@/theme"
 import { useAppTheme } from "@/utils/useAppTheme"
 import React, { FC } from "react"
-import { ActivityIndicator } from "react-native"
+import { ActivityIndicator, TextStyle, View, ViewStyle } from "react-native"
 
-export const Loading: FC = () => {
+interface LoaderProps {
+  /**
+   * Optional text to display below the spinner
+   */
+  text?: string
+  /**
+   * Size of the spinner
+   */
+  size?: "small" | "large"
+  /**
+   * Custom style for the container
+   */
+  style?: ViewStyle
+  /**
+   * Color of the spinner (defaults to theme tint color)
+   */
+  color?: string
+}
+
+export const Loading: React.FC<LoaderProps> = ({ text, size = "large", style, color }) => {
   const {
     themed,
-    theme: { colors },
+    theme: { colors, spacing },
   } = useAppTheme()
 
+  const spinnerColor = color || colors.tint
+
   return (
-    <Screen
-      style={{ flex: 1 }}
-      preset="auto"
-      safeAreaEdges={["top"]}
-      contentContainerStyle={themed(($) => ({
-        paddingVertical: $.spacing.lg,
-        paddingHorizontal: $.spacing.lg,
-      }))}
-    >
-      <ActivityIndicator size="large" color={colors.palette.primary500} />
-    </Screen>
+    <View style={[themed($container), style]}>
+      <ActivityIndicator size={size} color={spinnerColor} />
+      {text && <Text text={text} style={themed($loadingText)} preset="formHelper" />}
+    </View>
   )
 }
+
+const $container: ThemedStyle<ViewStyle> = ({ spacing }) => ({
+  flex: 1,
+  justifyContent: "center",
+  alignItems: "center",
+  paddingHorizontal: spacing.lg,
+})
+
+const $loadingText: ThemedStyle<TextStyle> = ({ spacing, colors }) => ({
+  marginTop: spacing.md,
+  textAlign: "center",
+  color: colors.textDim,
+  fontSize: 14,
+})

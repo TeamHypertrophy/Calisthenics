@@ -121,7 +121,7 @@ export const MfaSettingsScreen: FC<MfaSettingsScreenProps> = observer(
     }
 
     if (isLoadingUser) {
-      return <Loading />
+      return <Loading text="Loading Settings"/>
     }
 
     if (isErrorUser) {

@@ -6,5 +6,5 @@
  * https://reactnative.dev/docs/security#storing-sensitive-info
  */
 export default {
-  API_URL: "https://api.hypertrophy.ghouldev.tech/v1",
+  API_URL: "https://in-goshawk-nationally.ngrok-free.app/v1",
 }

@@ -183,7 +183,7 @@ console.print(NGROK_LOGO, justify="full")
 
 console.print("[blue3] Checking If Ngrok Reverse Proxy is Running")
 
-attempt = requests.get("https://live-pig-nearby.ngrok-free.app")
+attempt = requests.get("https://in-goshawk-nationally.ngrok-free.app", verify=False)
 ngrok_running = False
 
 if attempt.status_code == 404:
@@ -199,7 +199,7 @@ if attempt.status_code == 404:
             status.update(f"[yellow] Waiting for NGROK Reverse Proxy to start... ({elapsed_time}/{max_wait_time}s)[/yellow]")
             
             # Check if process is running
-            attempt = requests.get("https://live-pig-nearby.ngrok-free.app")
+            attempt = requests.get("https://in-goshawk-nationally.ngrok-free.app", verify=False)
 
             if attempt.status_code != 404:
                 ngrok_running = True
